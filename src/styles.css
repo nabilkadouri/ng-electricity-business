@@ -1,1 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import 'animate.css';
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-optical-sizing: auto;
+}
+
+section{
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,a {
+  font-family: var(--font-title);
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+:root {
+  --font-title: "Montserrat", sans-serif;
+  --font-text: "Lato", sans-serif;
+  --bleu-electrique: #007BFF;
+  --bleu-foncee:#004080;
+  --vert-clair: #90EE90;
+  --vert-foncee: #2E8B57;
+  --text-color: #050315;
+  --accent: #FD3BA2;
+}
+
+
+.btn-proposer{
+padding: 20px 30px;
+background: var(--bleu-foncee);
+color:#ffffff;
+border-radius: 10px;
+font-weight: bold;
+}
+
+.btn-proposer:hover{
+  background: var(--bleu-electrique);
+  animation-duration: 3s;
+  animation-name: proposer;
+}
+
+.btn-reserver{
+  padding: 20px 30px;
+  background: var(--vert-foncee);
+  color:#ffffff;
+  border-radius: 10px;
+  font-weight: bold;
+  }
+  
+.btn-reserver:hover{
+    background: var(--vert-clair);
+    animation-duration: 3s;
+    animation-name: reserver;
+  }
+
+
+
