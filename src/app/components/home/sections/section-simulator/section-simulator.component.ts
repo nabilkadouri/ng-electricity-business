@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-section-simulator',
+  standalone: true,
   imports: [CommonModule,FormsModule],
   templateUrl: './section-simulator.component.html',
   styleUrl: './section-simulator.component.css'
