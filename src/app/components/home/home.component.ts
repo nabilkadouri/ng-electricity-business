@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { HeroComponent } from './sections/hero/hero.component';
-import { SectionEtapesComponent } from './sections/section-etapes/section-etapes.component';
-import { SectionServicesComponent } from './sections/section-services/section-services.component';
+
 import { SectionSimulatorComponent } from './sections/section-simulator/section-simulator.component';
 import { SectionTestimonialComponent } from './sections/section-testimonial/section-testimonial.component';
+import { SectionReserveChargerComponent } from "./sections/section-reserve-charger/section-reserve-charger.component";
+import { SectionProposeChargerComponent } from "./sections/section-propose-charger/section-propose-charger.component";
+import { SectionSimpleProcessComponent } from "./sections/section-simple-process/section-simple-process.component";
+import { MapsComponent } from "./sections/maps/maps.component";
 
 @Component({
   selector: 'app-home',
-  imports: [HeroComponent,SectionEtapesComponent,SectionServicesComponent,SectionSimulatorComponent,SectionTestimonialComponent],
+  imports: [HeroComponent, SectionSimulatorComponent, SectionTestimonialComponent, SectionReserveChargerComponent, SectionProposeChargerComponent, SectionSimpleProcessComponent, MapsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
