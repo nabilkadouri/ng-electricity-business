@@ -1,82 +1,65 @@
 @import "tailwindcss";
 @import 'animate.css';
-@import "flowbite/src/themes/default";
-@plugin "flowbite/plugin";
-@source "../node_modules/flowbite";
 
-
-body {
-  margin: 0;
-  font-family: var(--font-text);
-  font-optical-sizing: auto;
-}
-
-section{
-  min-height: 100vh;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,a {
-  font-family: var(--font-title);
-  margin: 0;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-img {
-  max-width: 100%;
-}
-
-:root {
+@theme{
   --font-title: "Montserrat", sans-serif;
   --font-text: "Lato", sans-serif;
-  --bleu-electrique: #007BFF;
-  --bleu-foncee:#004080;
-  --vert-clair: #90EE90;
-  --vert-foncee: #2E8B57;
-  --text-color: #050315;
-  --accent: #FD3BA2;
+  --color-bleu-electrique: #007BFF;
+  --color-bleu-foncee:#004080;
+  --color-vert-clair: #90EE90;
+  --color-vert-foncee: #2E8B57;
+  --color-text-gris: #050315;
+  --color-accent: #FD3BA2;
 }
 
 
-.btn-proposer{
-padding: 20px 30px;
-background: var(--bleu-foncee);
-color:#ffffff;
-border-radius: 10px;
-font-weight: bold;
-}
-
-.btn-proposer:hover{
-  background: var(--bleu-electrique);
-  animation-duration: 3s;
-  animation-name: proposer;
-}
-
-.btn-reserver{
-  padding: 20px 30px;
-  background: var(--vert-foncee);
-  color:#ffffff;
-  border-radius: 10px;
-  font-weight: bold;
+  h1{
+    @apply text-5xl text-bleu-foncee font-semibold m-0
   }
-  
-.btn-reserver:hover{
-    background: var(--vert-clair);
-    animation-duration: 3s;
-    animation-name: reserver;
+
+  body {
+    @apply m-0 font-[var(--font-text)];
   }
+
+  * {
+    @apply box-border;
+  }
+
+  ul {
+    @apply list-none pl-0 m-0;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+
+.btn-proposer {
+  @apply px-7 py-5 bg-[var(--color-bleu-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
+}
+
+.btn-proposer:hover {
+  @apply bg-[var(--color-bleu-electrique)] animate-[proposer_3s_linear];
+}
+
+.btn-reserver {
+  @apply px-7 py-5 bg-[var(--color-vert-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
+}
+
+.btn-reserver:hover {
+  @apply bg-[var(--color-vert-clair)] animate-[reserver_3s_linear];
+}
+
+.btn-inscription {
+  @apply px-4 md:px-6 py-2.5 bg-[var(--color-bleu-electrique)] text-white rounded-lg font-bold hover:bg-white hover:text-[var(--color-bleu-electrique)] hover:border-[var(--color-bleu-electrique)] hover:border-2 hover:animate-[reserver_3s_linear];
+}
+
+
+
+
+
+
+
+   
 
 
 
