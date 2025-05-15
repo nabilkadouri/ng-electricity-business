@@ -1,0 +1,47 @@
+<div class="max-w-md mx-auto bg-white rounded-md shadow-md p-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+      Merci de votre inscription ! Pour finaliser votre compte, veuillez entrer le
+      code de validation à 6 chiffres que nous venons de vous envoyer à votre
+      adresse email.
+    </h2>
+    <p class="text-sm text-gray-600 mb-4">
+      Ce code est valide pendant 10 minutes.
+    </p>
+  
+    <form [formGroup]="codeForm" (ngSubmit)="onSubmit()">
+      <div class="mb-4 flex justify-center space-x-2">
+        <input
+          type="text"
+          formControlName="codeCheck"
+          maxlength="6"
+          class="w-16 h-10 text-center border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+      <div
+        *ngIf="codeForm.controls['codeCheck'].invalid && codeForm.controls['codeCheck'].touched"
+        class="text-red-500 text-xs italic mb-2"
+      >
+        <span *ngIf="codeForm.controls['codeCheck'].errors?.['required']"
+          >Le code de validation est requis.</span
+        >
+        <span *ngIf="codeForm.controls['codeCheck'].errors?.['minlength'] || codeForm.controls['codeCheck'].errors?.['maxlength']"
+          >Le code doit contenir 6 chiffres.</span
+        >
+      </div>
+  
+      <p class="text-sm text-gray-600 mb-4 text-center">
+        Vous n'avez pas reçu le code ?
+        <button type="button" class="text-blue-500">Renvoyer le code</button>
+      </p>
+      <button
+        type="submit"
+        [disabled]="codeForm.invalid"
+        class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Confirmer
+      </button>
+  
+      <div class="mt-4 text-red-500" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
