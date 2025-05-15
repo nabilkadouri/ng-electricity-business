@@ -1,19 +1,15 @@
 <header >
-  <nav >
-    <div class="max-w-screen-xl flex items-center justify-between m-auto  xl:p-0">
+  <nav>
+    <div class="max-w-screen-xl flex items-center justify-between m-auto xl:p-0">
       <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="/images/logo-electricity-business.webp" class="w-18 h-18 md:w-24 md:h-24 xl:w-32 xl:h-32" alt="Logo electricity business" />
       </a>
       <!-- inscription et mon compte -->
       <div class="flex md:order-2 gap-5 ">
-        <app-button
-        text="S'inscire"
-        classe="btn-inscription max-sm:hidden"
-        />
-        <app-button
-        text="Mon compte"
-        classe="max-sm:hidden"
-        [point]="false"/>
+        <div class="flex gap-3 justify-center items-center">
+          <a href="/register" class="btn-inscription">S'inscrire</a>
+          <a href="/login" class="text-bleu-electrique font-medium">Mon compte</a>
+        </div>
         <!-- button burger -->
         <button data-collapse-toggle="navbar-cta" type="button"
           class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
