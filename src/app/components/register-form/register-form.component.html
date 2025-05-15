@@ -1,0 +1,137 @@
+<div class="max-w-md mx-auto bg-white rounded-md shadow-md p-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+        Rejoignez la communauté<br />
+        <span class="text-blue-500">Electricity</span>
+        <span class="text-green-500">Business</span>
+    </h2>
+    <p class="text-gray-600 mb-4">
+        Vous avez déjà un compte ? <a href="login" class="text-blue-500">Click here</a>
+    </p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4 grid grid-cols-2 gap-4">
+            <div>
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nom</label>
+                <input type="text" id="name" formControlName="name"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div *ngIf="registerForm.controls['name'].invalid && registerForm.controls['name'].touched">
+                    <span *ngIf="registerForm.controls['name'].errors?.['required']"
+                        class="text-red-500 text-xs italic">Le nom est requis.</span>
+                    <span *ngIf="registerForm.controls['name'].errors?.['name']" class="text-red-500 text-xs italic">Le
+                        nom n'est pas valide.</span>
+                </div>
+            </div>
+            <div>
+                <label for="firstName" class="block text-gray-700 text-sm font-bold mb-2">Prénom</label>
+                <input type="text" id="firstName" formControlName="firstName"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div *ngIf="registerForm.controls['firstName'].invalid && registerForm.controls['firstName'].touched">
+                    <span *ngIf="registerForm.controls['firstName'].errors?.['required']"
+                        class="text-red-500 text-xs italic">Le prénom est requis.</span>
+                    <span *ngIf="registerForm.controls['firstName'].errors?.['firstName']"
+                        class="text-red-500 text-xs italic">Le prénom n'est pas valide.</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mb-4 grid grid-cols-2 gap-4">
+            <div>
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <input type="email" id="email" formControlName="email"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    autocomplete="off" />
+                <div *ngIf="registerForm.controls['email'].invalid && registerForm.controls['email'].touched">
+                    <span *ngIf="registerForm.controls['email'].errors?.['required']"
+                        class="text-red-500 text-xs italic">L'email est requis.</span>
+                    <span *ngIf="registerForm.controls['email'].errors?.['email']"
+                        class="text-red-500 text-xs italic">L'email n'est pas valide.</span>
+                </div>
+            </div>
+            <div>
+                <label for="phoneNumber" class="block text-gray-700 text-sm font-bold mb-2">Téléphone</label>
+                <input type="tel" id="phoneNumber" formControlName="phoneNumber"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div
+                    *ngIf="registerForm.controls['phoneNumber'].invalid && registerForm.controls['phoneNumber'].touched">
+                    <span *ngIf="registerForm.controls['phoneNumber'].errors?.['required']"
+                        class="text-red-500 text-xs italic">Le téléphone est requis.</span>
+                    <span *ngIf="registerForm.controls['phoneNumber'].errors?.['phoneNumber']"
+                        class="text-red-500 text-xs italic">Le téléphone n'est pas valide.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4 grid grid-cols-2 gap-4">
+            <div>
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
+                <input type="password" id="password" formControlName="password"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    autocomplete="off" />
+                <div *ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].touched">
+                    <span *ngIf="registerForm.controls['password'].errors?.['required']"
+                        class="text-red-500 text-xs italic">Le mot de passe est requis.</span>
+                </div>
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Confirmer mot de
+                    passe</label>
+                <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div *ngIf="
+              registerForm.controls['confirmPassword'].invalid &&
+              registerForm.controls['confirmPassword'].touched
+            ">
+                    <span *ngIf="registerForm.controls['confirmPassword'].errors?.['required']"
+                        class="text-red-500 text-xs italic">La confirmation du mot de passe est requise.</span>
+                    <span *ngIf="
+                registerForm.controls['confirmPassword'].errors?.['mustMatch']
+              " class="text-red-500 text-xs italic">Les mots de passe doivent correspondre.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Adresse </label>
+            <input type="text" id="address" formControlName="address"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+            <div *ngIf="registerForm.controls['address'].invalid && registerForm.controls['address'].touched">
+                <span *ngIf="registerForm.controls['address'].errors?.['required']"
+                    class="text-red-500 text-xs italic">L'adresse est requise.</span>
+                <span *ngIf="registerForm.controls['address'].errors?.['address']"
+                    class="text-red-500 text-xs italic">L'adresse n'est pas valide.</span>
+            </div>
+        </div>
+
+        <div class="mb-4 grid grid-cols-2 gap-4">
+            <div class="mb-4">
+                <label for="postaleCode" class="block text-gray-700 text-sm font-bold mb-2">Code postale </label>
+                <input type="text" id="postaleCode" formControlName="postaleCode"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div
+                    *ngIf="registerForm.controls['postaleCode'].invalid && registerForm.controls['postaleCode'].touched">
+                    <span *ngIf="registerForm.controls['postaleCode'].errors?.['required']"
+                        class="text-red-500 text-xs italic">Le code postale est requise.</span>
+                    <span *ngIf="registerForm.controls['postaleCode'].errors?.['postaleCode']"
+                        class="text-red-500 text-xs italic">Le code postale n'est pas valide.</span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="city" class="block text-gray-700 text-sm font-bold mb-2">Ville </label>
+                <input type="text" id="city" formControlName="city"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                <div *ngIf="registerForm.controls['city'].invalid && registerForm.controls['city'].touched">
+                    <span *ngIf="registerForm.controls['city'].errors?.['required']"
+                        class="text-red-500 text-xs italic">La ville est requise.</span>
+                    <span *ngIf="registerForm.controls['city'].errors?.['city']" class="text-red-500 text-xs italic">La
+                        ville n'est pas valide.</span>
+                </div>
+            </div>
+        </div>
+        <button type="submit" [disabled]="registerForm.invalid"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            S'inscrire
+        </button>
+    </form>
+</div>
