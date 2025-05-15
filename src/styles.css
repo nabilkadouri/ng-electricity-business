@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import 'animate.css';
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
 
 @theme{
   --font-title: "Montserrat", sans-serif;
