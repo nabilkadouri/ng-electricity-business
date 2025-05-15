@@ -1,0 +1,76 @@
+<div class="max-w-md mx-auto bg-white rounded-md shadow-md p-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+      Welcome to<br />
+      <span class="text-blue-500">Electricity</span>
+      <span class="text-green-500">Business</span>
+    </h2>
+    <p class="text-gray-600 mb-4">
+      Vous n'avez pas de compte ? <a href="#" class="text-blue-500">Click here</a>
+    </p>
+  
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700 text-sm font-bold mb-2"
+          >Entrer Email</label
+        >
+        <input
+          type="email"
+          id="email"
+          formControlName="username"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <div
+          *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched"
+        >
+          <span *ngIf="loginForm.controls['username'].errors?.['required']"
+            class="text-red-500 text-xs italic"
+            >L'email est requis.</span
+          >
+          <span *ngIf="loginForm.controls['username'].errors?.['email']"
+            class="text-red-500 text-xs italic"
+            >L'email n'est pas valide.</span
+          >
+        </div>
+      </div>
+  
+      <div class="mb-6">
+        <label for="password" class="block text-gray-700 text-sm font-bold mb-2"
+          >Entrer mots de passe</label
+        >
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+        <div
+          *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched"
+        >
+          <span *ngIf="loginForm.controls['password'].errors?.['required']"
+            class="text-red-500 text-xs italic"
+            >Le mot de passe est requis.</span
+          >
+        </div>
+      </div>
+  
+      <p class="text-gray-600 mb-4">
+        Mot de passe oublié ? <a href="#" class="text-blue-500">Click here</a>
+      </p>
+  
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Se connecter
+      </button>
+  
+      <div class="mt-4 text-green-500" *ngIf="loginSuccess()">
+        Connexion réussie !
+      </div>
+  
+      <div class="mt-4 text-red-500" *ngIf="loginError()">
+        Erreur de connexion: {{ errorMessage() }}
+      </div>
+    </form>
+  </div>
