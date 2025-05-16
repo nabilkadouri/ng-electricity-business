@@ -1,7 +1,8 @@
 @import "tailwindcss";
-@import 'animate.css';
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+/* @import 'animate.css'; */
 
 @theme{
   --font-title: "Montserrat", sans-serif;
@@ -14,26 +15,25 @@
   --color-accent: #FD3BA2;
 }
 
+h1{
+  @apply text-5xl text-bleu-foncee font-semibold m-0
+}
 
-  h1{
-    @apply text-5xl text-bleu-foncee font-semibold m-0
-  }
+body {
+  @apply m-0 font-[var(--font-text)];
+}
 
-  body {
-    @apply m-0 font-[var(--font-text)];
-  }
+* {
+  @apply box-border;
+}
 
-  * {
-    @apply box-border;
-  }
+ul {
+  @apply list-none pl-0 m-0;
+}
 
-  ul {
-    @apply list-none pl-0 m-0;
-  }
-
-  img {
-    @apply max-w-full;
-  }
+img {
+  @apply max-w-full;
+}
 
 .btn-proposer {
   @apply px-7 py-5 bg-[var(--color-bleu-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
@@ -54,14 +54,3 @@
 .btn-inscription {
   @apply px-4 md:px-6 py-2.5 bg-[var(--color-bleu-electrique)] text-white rounded-lg font-bold hover:bg-white hover:text-[var(--color-bleu-electrique)] hover:border-[var(--color-bleu-electrique)] hover:border-2 hover:animate-[reserver_3s_linear];
 }
-
-
-
-
-
-
-
-   
-
-
-
