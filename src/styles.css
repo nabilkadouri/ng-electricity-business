@@ -36,7 +36,7 @@ img {
 }
 
 .btn-proposer {
-  @apply px-7 py-5 bg-[var(--color-bleu-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
+  @apply px-5 py-3 md:px-7 md:py-5 text-center bg-[var(--color-bleu-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
 }
 
 .btn-proposer:hover {
@@ -44,7 +44,7 @@ img {
 }
 
 .btn-reserver {
-  @apply px-7 py-5 bg-[var(--color-vert-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
+  @apply px-5 py-3 md:px-7 md:py-5 text-center bg-[var(--color-vert-foncee)] text-white rounded-2xl font-bold inline-block text-xl w-auto;
 }
 
 .btn-reserver:hover {
