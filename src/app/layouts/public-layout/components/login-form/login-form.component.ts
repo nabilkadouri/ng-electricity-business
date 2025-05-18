@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthServiceService } from '../../../../shared/services/auth-service.service';
 
 @Component({
   selector: 'app-login-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,RouterLink],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })

@@ -32,9 +32,10 @@ export class AuthServiceService {
     localStorage.setItem(this.tokenKey, token);
   }
   
-  getToken(): string {
-      return localStorage.getItem(this.tokenKey) || '';
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
   }
+  
   
   logout(): void {
     localStorage.removeItem(this.tokenKey);

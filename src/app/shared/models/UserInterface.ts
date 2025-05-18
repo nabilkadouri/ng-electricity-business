@@ -12,6 +12,7 @@ export interface UserInterface extends ApiResponse {
     city: string,
     phoneNumber: string,
     ownsStation: boolean,
+    picture: string,
     bookings: BookingInterface[],
     chargingStations: ChargingStationInterface[]
 }

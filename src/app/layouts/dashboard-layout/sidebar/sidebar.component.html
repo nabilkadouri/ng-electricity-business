@@ -1,5 +1,5 @@
 <header>
-  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white">
+  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white ">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
 
@@ -37,31 +37,26 @@
           </div>
         </div>
 
-        <div class="flex items-center">
+        <div class="flex items-center ">
           <div class="ms-3 flex items-center">
             <!-- image user -->
-            <div>
-              <button
-                type="button"
-                class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                aria-expanded="false"
-                data-dropdown-toggle="dropdown-user"
-              >
-                <span class="sr-only">Open user menu</span>
+            <div *ngIf="user" class="flex justify-center items-center gap-5">
+              <h2 class="text-bleu-electrique font-medium"> {{user.name}} {{user.firstName}}</h2>
+              <a href="#"  >
                 <img
-                  class="h-8 w-8 rounded-full"
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                  alt="user photo"
+                  class="h-8 w-8 md:h-12 md:w-12 xl:h-18 xl:w-18 rounded-full"
+                  [src]="`images/` + user.picture"
+                  alt=""
                 />
-              </button>
+              </a>
             </div>
 
             <!-- menu sidebar -->
             <div
-              class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-sm bg-white text-base shadow-sm dark:divide-gray-600 dark:bg-gray-700"
+              class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-sm bg-white text-base shadow-sm dark:divide-gray-600 dark:bg-gray-700 "
               id="dropdown-user"
             >
-              <div class="px-4 py-3" role="none">
+              <div class="px-4 py-3 " role="none">
                 <p class="text-sm text-gray-900 dark:text-white" role="none">
                   Neil Sims
                 </p>

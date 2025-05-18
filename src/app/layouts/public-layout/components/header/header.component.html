@@ -1,16 +1,17 @@
 <header >
-  <nav class="md:bg-transparent bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200 ">
+  <nav class="md:bg-transparent fixed bg-white w-full z-20 top-0 start-0 border-b border-gray-200 ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto px-4 md:px-0">
-      <a href="/" class="w-18 h-18 md:w-24 md:h-24 xl:w-32 xl:h-32" >
+      <a routerLink="/" class="w-18 h-18 md:w-24 md:h-24 xl:w-32 xl:h-32" >
         <img src="/images/logo-electricity-business.webp"  alt="Logo electricity business" />
       </a>
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
         <div class="flex gap-3 justify-center items-center">
-          <a href="/register" class="btn-inscription hidden md:block">S'inscrire</a>
-          <a href="/login" class="text-bleu-electrique font-medium hidden md:block">Mon compte</a>
+          <a routerLink="/register" routerLinkActive="active" class="btn-inscription hidden md:block" *ngIf="!authService.isLogged()">S'inscrire</a>
+          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-medium hidden md:block" *ngIf="!authService.isLogged()">Mon compte</a>
+          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-medium hidden md:block" *ngIf="authService.isLogged()" (click)="authService.logout()">Se déconnecter</a>
         </div>
         <!-- Bouton menu burger -->
-        <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-sticky" aria-expanded="false">
+        <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-sticky" aria-expanded="false" (click)="toggleMenu()">
           <span class="sr-only">Open main menu</span>
           <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
@@ -18,24 +19,35 @@
       </button>
     </div>
     <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-      <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent space-y-6 md:space-y-0">
+      <ul class="flex flex-col justify-center md:items-center p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent space-y-6 md:space-y-0">
         <li>
-          <a href="/" class="block py-2 px-3 text-white bg-bleu-electrique rounded-sm md:bg-transparent md:text-bleu-electrique md:p-0 " aria-current="page">Accueil</a>
+          <a routerLink="/" routerLinkActive="active" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
+          active:bg-bleu-electrique active:text-white" aria-current="page">Accueil</a>
         </li>
         <li>
-          <a href="#" class="block py-2 px-3 text-text-gris rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0 ">Réserver</a>
+          <a href="#reserver" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
+          active:bg-bleu-electrique active:text-white">Réserver</a>
         </li>
         <li>
-          <a href="#" class="block py-2 px-3 text-text-gris rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0 ">Proposer</a>
+          <a href="#proposer" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
+          active:bg-bleu-electrique active:text-white">Proposer</a>
         </li>
         <li>
-          <a href="#" class="block py-2 px-3 text-text-gris rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0 ">Carte</a>
+          <a href="#simulateur" class="block py-2 px-3 text-text-gris rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0">
+            Simulateur
+          </a>
         </li>
         <li>
-          <a href="#" class="text-bleu-electrique font-medium md:hidden py-2 px-3">Mon compte</a>
+          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-medium md:hidden inline-block py-2 px-3" *ngIf="!authService.isLogged()">Mon compte</a>
         </li>
         <li>
-          <a href="#" class="btn-inscription md:hidden py-2 px-3">S'incrire</a>
+          <a routerLink="/register" routerLinkActive="active" class="btn-inscription md:hidden inline-block ms-3" *ngIf="!authService.isLogged()">S'inscrire</a>
+        </li>
+        <li>
+          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-medium md:hidden inline-block py-2 px-3" *ngIf="authService.isLogged()" (click)="authService.logout()">Se déconnecter</a>
         </li>
       </ul>
     </div>
