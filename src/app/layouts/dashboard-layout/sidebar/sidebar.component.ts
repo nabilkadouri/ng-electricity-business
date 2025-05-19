@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit {
   userService = inject(UserService);
   authService = inject(AuthServiceService)
   user!: UserInterface ;
+  isSidebarOpen: boolean = false;
 
 
   ngOnInit(): void {
@@ -27,12 +28,14 @@ export class SidebarComponent implements OnInit {
   }
 
   userData(){
-    this.userService.getUser().subscribe((data) => {
-      this.user = data;
-      console.log(this.user);
-      
-    });
+    this.userService.getUser().subscribe((data) => 
+      this.user = data);
     }
+
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    }
+
   }
 
 

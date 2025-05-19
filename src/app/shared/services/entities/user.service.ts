@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiListResponse } from '../../models/ApiResponse';
-import { UserInterface } from '../../models/UserInterface';
+import { UserInterface} from '../../models/UserInterface';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -21,4 +21,7 @@ export class UserService {
   getUser(): Observable<UserInterface> {
     return this.http.get<UserInterface>(`${this.apiURL}/api/me`);
   }
+
+  
+
 }

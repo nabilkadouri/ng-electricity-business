@@ -33,7 +33,7 @@ ngAfterViewInit() {
   });
 }
 
-// Methode qui permet de fermer/ouvvrir menu burger
+// Methode qui permet de fermer/ouvrir menu burger
 toggleMenu() {
   const menu = document.getElementById('navbar-sticky');
   menu?.classList.toggle('hidden');

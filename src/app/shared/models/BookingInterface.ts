@@ -11,7 +11,6 @@ export interface BookingInterface extends ApiResponse {
     endDate: Date,
     totalAmount: number,
     status: string,
-    user: UserInterface,
-    chargingStation: ChargingStationInterface [],
-    locationStation : LocationStationInterface []
+    chargingStation?: ChargingStationInterface,
+    locationStation? : LocationStationInterface
 }
