@@ -14,5 +14,5 @@ export interface ChargingStationInterface extends ApiResponse {
     locationStation: LocationStationInterface;
     timeslots: TimeslotsInterface[];
     user: UserInterface;
-    booking: BookingInterface[]
+    bookings: BookingInterface[]
 }

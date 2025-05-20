@@ -1,54 +1,51 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, LOCALE_ID, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/entities/user.service';
 import { AuthServiceService } from '../../../shared/services/auth-service.service';
 import { UserInterface } from '../../../shared/models/UserInterface';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
 import { BookingInterface } from '../../../shared/models/BookingInterface';
 import { ChargingStationInterface } from '../../../shared/models/ChargingStationInterface';
 import { ChargingStationService } from '../../../shared/services/entities/charging-station.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [ CommonModule],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
   userService = inject(UserService);
   authService = inject(AuthServiceService);
   chargingStationService = inject(ChargingStationService);
-  user!: UserInterface ;
-  currentBookings: BookingInterface [] = [];
-  ownedStations: ChargingStationInterface [] = [];
-
-
-
+  user!: UserInterface;
+  currentBookings: BookingInterface[] = [];
+  ownedStations: ChargingStationInterface[] = [];
 
   ngOnInit(): void {
     this.userData();
     this.chargingStationDataByUser();
   }
-  
-  userData(): void{
+
+  userData(): void {
     this.userService.getUser().subscribe((data) => {
       this.user = data;
       this.currentBookings = data.bookings;
       // this.ownedStations = data.chargingStations;
-    }); 
+    });
   }
 
   chargingStationDataByUser(): void {
     this.chargingStationService.getChargingStationByUser().subscribe(
-      (data)=> {
-        this.ownedStations = data; 
+      (data) => {
+        this.ownedStations = data;
         console.log('Bornes possédées:', this.ownedStations);
       },
-      error => {
-        console.error('Erreur lors de la récupération des bornes de l\'utilisateur', error);
-      }
+      (error) => {
+        console.error(
+          "Erreur lors de la récupération des bornes de l'utilisateur",
+          error,
+        );
+      },
     );
   }
-
-
-
 }

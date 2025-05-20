@@ -1,58 +1,67 @@
-<div class="mt-28 flex flex-col gap-5 px-4 sm:ml-80 md:p-10">
-  <div class="text-center md:text-start" *ngIf="user">
-    <h1 class="pb-2 text-sm md:text-2xl">Bienvenue, {{ user.firstName }} !</h1>
-    <p class="text-xl text-gray-300">Vous êtes dans votre espace personnel</p>
-  </div>
+<section>
+  <div class="mt-28 flex flex-col gap-5 px-4 sm:ml-80 md:p-10">
+    <div class="text-center md:text-start" *ngIf="user">
+      <h1 class="pb-2 text-sm md:text-2xl">Bienvenue, {{ user.firstName }} !</h1>
+      <p class="text-xl text-gray-300">Vous êtes dans votre espace personnel</p>
+    </div>
 
-  <div class="flex w-full items-center justify-center">
-    <img src="/images/map-dashboard.png" alt="" class="w-full md:h-[400px]" />
-  </div>
+    <div class="flex w-full items-center justify-center">
+      <img src="/images/map-dashboard.png" alt="" class="w-full h-[150px] md:h-[400px]" />
+    </div>
 
-  <div class="mb-4 flex flex-col items-center justify-center gap-5 md:flex-row">
-    <div
-      class="flex h-auto w-full flex-col items-center justify-center gap-5 md:w-1/2"
-    >
-      <h2 class="text-vert-foncee text-center text-2xl font-medium md:text-3xl">
-        Mes recharges en cours
-      </h2>
-      <div>
-        <div
-          *ngFor="let booking of currentBookings"
-          class="md:h-[350px]rounded-2xl flex flex-col items-center bg-gray-50 p-5 shadow-xl md:w-[350px]"
-        >
-          <h3 class="text-vert-clair text-xl font-medium md:text-2xl">
-            {{ booking.chargingStation?.nameStation }}
-          </h3>
-          <div class="flex space-x-2">
-            <p>{{ booking.chargingStation?.locationStation?.address }}</p>
-            <p>{{ booking.chargingStation?.locationStation?.postaleCode }}</p>
-            <p>{{ booking.chargingStation?.locationStation?.city }}</p>
+    <div class="mb-4 flex flex-col  justify-center gap-10 md:flex-row">
+      <!-- Card mes recharges en cours -->
+      <div class="flex h-auto w-full flex-col items-center justify-center gap-5 md:w-1/2">
+        <h2 class="text-vert-foncee text-center text-2xl font-medium md:text-3xl">
+          Mes recharges en cours
+        </h2>
+        <!-- Card -->
+        <div class="md:h-[350px]rounded-2xl flex flex-col gap-5 bg-gray-50 p-5 shadow-xl w-full md:w-[350px] px-4 md:px-0">
+          <div *ngFor="let booking of currentBookings">
+            <h3 class="text-vert-clair text-xl font-medium md:text-2xl text-center">
+              {{ booking.chargingStation?.nameStation }}
+            </h3>
+            <div class="flex flex-col space-y-2 p-5">
+              <div class="flex space-x-2">
+                <p>{{ booking.chargingStation?.locationStation?.address }}</p>
+                <p>{{ booking.chargingStation?.locationStation?.postaleCode }}</p>
+                <p>{{ booking.chargingStation?.locationStation?.city }}</p>
+              </div>
+              <p>{{ booking.startDate | date: "fullDate" }}</p>
+              <div class="flex space-x-2">
+                <p>{{booking.startDate | date: 'shortTime'}}</p>
+                <span>-></span>
+                <p>{{booking.endDate | date: 'shortTime'}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Card mes bornes en location -->
+      <div class="flex  w-full flex-col items-center justify-center gap-5 md:w-1/2 h-full">
+        <h2 class="text-bleu-foncee text-center text-2xl font-medium md:text-3xl">
+          Mes bornes en location
+        </h2>
+        <!-- Card -->
+        <div class="md:h-[350px]rounded-2xl flex flex-col gap-5 bg-gray-50 p-5 shadow-xl w-full md:w-[350px] px-4 md:px-0">
+          <div *ngFor="let station of ownedStations">
+            <h3 class="text-bleu-electrique text-xl font-medium md:text-2xl text-center">
+              {{ station.nameStation }}
+            </h3>
+            <div *ngFor="let customer of station.bookings " class="flex flex-col space-y-2 p-5">
+              <div class="flex gap-2">
+                <p>Louer à : <span class="font-semibold">{{customer.user.name}}</span></p>
+              </div>
+              <p>{{customer.startDate| date: "fullDate" }}</p>
+              <div class="flex space-x-2">
+                <p>{{customer.startDate | date: 'shortTime'}}</p>
+                <span>-></span>
+                <p>{{customer.endDate | date: 'shortTime'}}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="h-auto md:w-1/2">
-
-      <h2 class="text-bleu-foncee text-center text-2xl font-medium md:text-3xl">
-        Mes locations en cours
-      </h2>
-
-      <div *ngFor="let station of ownedStations">
-        <h3 class="text-bleu-electrique text-xl font-medium md:text-2xl">
-          {{ station.nameStation}}
-        </h3>
-        <div class="flex space-x-2">
-         <p>{{station.locationStation.address}}</p>
-         <p>{{station.locationStation.postaleCode}}</p>
-         <p>{{station.locationStation.city}}</p>
-        </div>
-        <div *ngFor="let bookingDay of station.booking">
-  <p>{{ bookingDay.totalAmount }}</p>
-
-        </div>
-      </div>
-
-    </div>
   </div>
-</div>
+</section>

@@ -1,11 +1,13 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
-
+import {  provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
-import { AuthServiceService } from './shared/services/auth-service.service';
 import { authInterceptor } from './shared/interceptors/auth.interceptor';
-import { DatePipe } from '@angular/common';
+import { DatePipe,registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr, 'fr');
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,5 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
     DatePipe,
+    { provide: LOCALE_ID, useValue: 'fr' }
     ]   
 };
