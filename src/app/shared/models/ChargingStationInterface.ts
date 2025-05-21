@@ -11,6 +11,8 @@ export interface ChargingStationInterface extends ApiResponse {
     power: number,
     pricePerHour: number;
     picture: string;
+    plugType: string;
+    isAvailable: boolean;
     locationStation: LocationStationInterface;
     timeslots: TimeslotsInterface[];
     user: UserInterface;

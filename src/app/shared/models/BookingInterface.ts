@@ -6,7 +6,7 @@ import { UserInterface } from "./UserInterface";
 
 export interface BookingInterface extends ApiResponse {
     id: number,
-    createAt: string,
+    createAt: Date,
     startDate: Date,
     endDate: Date,
     totalAmount: number,

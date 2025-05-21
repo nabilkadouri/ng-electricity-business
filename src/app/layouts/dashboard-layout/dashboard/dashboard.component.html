@@ -29,9 +29,9 @@
               </div>
               <p>{{ booking.startDate | date: "fullDate" }}</p>
               <div class="flex space-x-2">
-                <p>{{booking.startDate | date: 'shortTime'}}</p>
-                <span>-></span>
-                <p>{{booking.endDate | date: 'shortTime'}}</p>
+                <span>{{booking.startDate | date: 'shortTime'}}
+                &rarr; 
+                {{booking.endDate | date: 'shortTime'}}</span>
               </div>
             </div>
           </div>

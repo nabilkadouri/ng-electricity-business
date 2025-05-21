@@ -32,9 +32,15 @@ export class SidebarComponent implements OnInit {
       this.user = data);
     }
 
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-    }
+ // fermer et ouvrir le menu sidebar
+ toggleSidebar(): void {
+  this.isSidebarOpen = !this.isSidebarOpen;
+}
+
+// Methode qui permet de fermer le menu sidebar au click sur un lien en mode mobile
+closeSidebar(): void {
+  this.isSidebarOpen = false;
+}
 
   }
 

@@ -1,0 +1,84 @@
+<section>
+    <div class="my-28 flex flex-col gap-5 px-4 sm:ml-80 md:p-10 text-center md:text-start">
+        <h1 class="text-3xl font-bold text-vert-foncee mb-2">Mes réservations</h1>
+        <h2 class="text-xl font-semibold text-vert-clair mb-6">Historique de mes recharges externes</h2>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+            <div
+                class="hidden md:grid grid-cols-7 gap-4 px-6 py-4 bg-gray-50 font-semibold text-vert-foncee text-sm uppercase tracking-wider border-b border-gray-200 text-center">
+                <div>Date réservation</div>
+                <div>Statut</div>
+                <div>Informations borne</div>
+                <div>Date de début</div>
+                <div>Heure début / fin</div>
+                <div>Prix total</div>
+                <div> Supprimer</div>
+            </div>
+
+            <div
+                class="flex flex-col md:grid md:grid-cols-7 gap-4 md:gap-4 px-4 md:px-6 py-4 border-t border-gray-200 items-center hover:bg-gray-50 text-center">
+                <div *ngFor="let booking of currentBookings" class="
+                    w-full py-4 px-2
+                    border-b md:border-b-0 md:border-t-0 border-gray-200
+                    md:col-span-7
+                    flex flex-col gap-2 md:grid md:grid-cols-7 md:gap-4 md:px-0 md:py-0
+                    text-left md:text-center">
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Date réservation: </span>
+                        <span class="text-sm text-text-gris">{{booking.createAt | date: "shortDate"}}</span>
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Statut: </span>
+                        <span
+                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full text-orange-600 bg-orange-100">
+                            {{booking.status}}
+                        </span>
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Informations borne: </span>
+                        <div class="font-medium text-vert-foncee">{{booking.chargingStation?.nameStation}}</div>
+                        <div class="text-sm text-text-gris">{{booking.chargingStation?.power}} kw -
+                            {{booking.chargingStation?.pricePerHour}}€/h</div>
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Date de début: </span>
+                        <span class="text-sm text-text-gris">du {{booking.startDate | date: "shortDate"}}<br
+                                class="md:hidden"> au {{booking.endDate | date: "shortDate"}}</span>
+                    </div>
+                    
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Heure: </span>
+                        <span class="text-sm text-text-gris">{{booking.startDate | date: 'shortTime'}} &rarr;
+                            {{booking.endDate | date: 'shortTime'}}</span>
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <span class="md:hidden font-semibold text-vert-foncee">Prix total: </span>
+                        <span class="text-lg font-bold text-text-gris">{{booking.totalAmount}}€</span>
+                    </div>
+
+                    <div class="md:col-span-1 text-right md:text-center pt-2 md:pt-0">
+                        <button class="text-red-500 hover:text-red-700 transition duration-150 ease-in-out">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-8">
+            <button
+                class="bg-vert-foncee hover:bg-vert-clair active:bg-vert-clair text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out">
+                Ajouter une recharge
+            </button>
+        </div>
+    </div>
+</section>

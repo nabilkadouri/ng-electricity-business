@@ -7,6 +7,7 @@ import { HomeComponent } from './layouts/public-layout/components/home/home.comp
 import { LoginFormComponent } from './layouts/public-layout/components/login-form/login-form.component';
 import { CheckCodeComponent } from './layouts/public-layout/components/check-code/check-code.component';
 import { RegisterFormComponent } from './layouts/public-layout/components/register-form/register-form.component';
+import { UserBookingsComponent } from './layouts/dashboard-layout/user-bookings/user-bookings.component';
 
 export const routes: Routes = [
   {
@@ -25,7 +26,8 @@ export const routes: Routes = [
     component: DashboardLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path:'', component: DashboardComponent}
+      { path:'', component: DashboardComponent},
+      { path:'bookings', component: UserBookingsComponent},
     ]
   },
 
