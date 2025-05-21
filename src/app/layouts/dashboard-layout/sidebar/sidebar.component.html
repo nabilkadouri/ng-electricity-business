@@ -1,5 +1,5 @@
 <header>
-  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white">
+  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-2">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <!-- Bouton burger et logo -->
@@ -16,7 +16,7 @@
             </svg>
           </button>
           <div class="h-14 w-14 md:h-18 md:w-18 xl:h-24 xl:w-24">
-            <a href="/">
+            <a href="">
               <img src="/images/logo-electricity-business.webp" alt="Logo electricity business" />
             </a>
           </div>
@@ -26,11 +26,11 @@
           <div class="ms-3 flex items-center">
             <!-- image user -->
             <div *ngIf="user" class="flex items-center justify-center gap-5">
-              <h2 class="text-bleu-electrique font-medium">
+              <h2 class="text-bleu-electrique font-medium md:text-xl">
                 {{ user.name }} {{ user.firstName }}
               </h2>
-              <a href="#">
-                <img class="h-8 w-8 rounded-full md:h-12 md:w-12 xl:h-18 xl:w-18" [src]="`images/` + user.picture"
+              <a routerLink="userProfile">
+                <img class="h-8 w-8 rounded-full md:h-12 md:w-12 xl:h-18 xl:w-18" src="/images/visage2.png"
                   [alt]="'Photo profil ' + user.firstName" />
               </a>
             </div>
@@ -82,19 +82,19 @@
     <div class="h-full overflow-y-auto bg-white px-3 pt-20 pb-4">
       <ul class="space-y-6 font-medium">
         <li>
-          <a routerLink="dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
             <img src="/icons/tableau-de-bord.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
             <span class="ms-3 md:text-xl ">Tableau de bord</span>
           </a>
         </li>
         <li>
-          <a routerLink="dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
             <img src="/icons/recharger.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
             <span class="ms-3 md:text-xl ">Recharger mon véhicule</span>
           </a>
         </li>
         <li>
-          <a routerLink="dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
             <img src="/icons/proposer.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
             <span class="ms-3 md:text-xl ">Proposer ma borne</span>
           </a>
@@ -106,13 +106,13 @@
           </a>
         </li>
         <li>
-          <a routerLink="dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+          <a routerLink="userStations" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
             <img src="/icons/borne-dashboard.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
             <span class="ms-3 md:text-xl ">Mes bornes</span>
           </a>
         </li>
         <li>
-          <a routerLink="dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
+          <a routerLink="userProfile" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
             <img src="/icons/profil.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
             <span class="ms-3 md:text-xl ">Mon profil</span>
           </a>
@@ -127,4 +127,5 @@
       </ul>
     </div>
   </aside>
+  
 </header>

@@ -8,6 +8,8 @@ import { LoginFormComponent } from './layouts/public-layout/components/login-for
 import { CheckCodeComponent } from './layouts/public-layout/components/check-code/check-code.component';
 import { RegisterFormComponent } from './layouts/public-layout/components/register-form/register-form.component';
 import { UserBookingsComponent } from './layouts/dashboard-layout/user-bookings/user-bookings.component';
+import { UserChargingStationsComponent } from './layouts/dashboard-layout/user-charging-stations/user-charging-stations.component';
+import { UserProfileSettingsComponent } from './layouts/dashboard-layout/user-profile-settings/user-profile-settings.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +30,8 @@ export const routes: Routes = [
     children: [
       { path:'', component: DashboardComponent},
       { path:'bookings', component: UserBookingsComponent},
+      { path:'userStations', component: UserChargingStationsComponent},
+      { path:'userProfile', component: UserProfileSettingsComponent},
     ]
   },
 

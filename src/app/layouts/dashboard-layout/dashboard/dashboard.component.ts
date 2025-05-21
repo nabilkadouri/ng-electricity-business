@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
     this.userService.getUser().subscribe((data) => {
       this.user = data;
       this.currentBookings = data.bookings;
-      // this.ownedStations = data.chargingStations;
     });
   }
 

@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ChargingStationService } from '../../../shared/services/entities/charging-station.service';
 import { UserService } from '../../../shared/services/entities/user.service';
 import { BookingInterface } from '../../../shared/models/BookingInterface';
 import { CommonModule } from '@angular/common';

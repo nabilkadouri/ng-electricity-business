@@ -15,3 +15,7 @@ export interface BookingInterface extends ApiResponse {
     chargingStation?: ChargingStationInterface,
     locationStation? : LocationStationInterface
 }
+
+export interface FlattenedBooking extends BookingInterface {
+    stationName: string; 
+  }
