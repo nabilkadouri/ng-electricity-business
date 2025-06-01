@@ -6,26 +6,20 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-bookings',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './user-bookings.component.html',
-  styleUrl: './user-bookings.component.css'
+  styleUrl: './user-bookings.component.css',
 })
 export class UserBookingsComponent implements OnInit {
   private userService = inject(UserService);
- currentBookings: BookingInterface[] = [];
-  
+  currentBookings: BookingInterface[] = [];
 
   ngOnInit(): void {
-    this.userData()
-      
-  }
-
-  userData(): void {
-    this.userService.getUser().subscribe((data) => {
-      this.currentBookings = data.bookings;
-      console.log('Historique réservation: ', this.currentBookings);
-      
-    });
+    this.userService.user$.subscribe((user) => {
+      if (user) {
+        this.currentBookings = user.bookings;
+      }
+    })
   }
 
 }

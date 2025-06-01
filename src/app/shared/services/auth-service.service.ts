@@ -1,10 +1,11 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CodeCheckRequest, IToken, LoginRequest, LoginSuccessResponse, RegisterRequest } from '../models/AuthInterface';
 import { UserInterface } from '../models/UserInterface';
 import { Observable } from 'rxjs';
+import { UserService } from './entities/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ import { Observable } from 'rxjs';
 export class AuthServiceService {
   private apiURL = environment.apiUrl;
   private tokenKey = 'authToken';
+  private userService = inject(UserService);
+
   isLoggedIn = signal<boolean>(!!this.getToken());
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -40,6 +43,7 @@ export class AuthServiceService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.isLoggedIn.set(false);
+    this.userService.clearUser;
     this.router.navigate(['/'])
   }
 

@@ -22,17 +22,15 @@ export class DashboardComponent implements OnInit {
   ownedStations: ChargingStationInterface[] = [];
 
   ngOnInit(): void {
-    this.userData();
+    this.userService.user$.subscribe((user) => {
+      if (user) {
+        this.user = user;
+        this.currentBookings = user.bookings;
+      }
+    })
     this.chargingStationDataByUser();
   }
-
-  userData(): void {
-    this.userService.getUser().subscribe((data) => {
-      this.user = data;
-      this.currentBookings = data.bookings;
-    });
-  }
-
+  
   chargingStationDataByUser(): void {
     this.chargingStationService.getChargingStationByUser().subscribe(
       (data) => {
@@ -47,4 +45,4 @@ export class DashboardComponent implements OnInit {
       },
     );
   }
-}
+} 

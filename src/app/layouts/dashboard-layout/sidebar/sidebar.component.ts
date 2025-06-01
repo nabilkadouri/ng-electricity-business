@@ -7,41 +7,34 @@ import { AuthServiceService } from '../../../shared/services/auth-service.servic
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent implements OnInit {
   userService = inject(UserService);
-  authService = inject(AuthServiceService)
-  user!: UserInterface ;
+  authService = inject(AuthServiceService);
+  user!: UserInterface;
   isSidebarOpen: boolean = false;
 
-
   ngOnInit(): void {
-  const token = this.authService.getToken();
+    const token = this.authService.getToken();
     if (token) {
-      this.userData();
-    } else {
-      console.log('Pas de token trouvé, les données utilisateur ne seront pas chargées.');
+      this.userService.getUser().subscribe({
+        next: (user) => (this.user = user),
+        error: () => console.warn("Echec du chargement de l'utilisateur"),
+      });
     }
   }
 
-  userData(){
-    this.userService.getUser().subscribe((data) => 
-      this.user = data);
-    }
-
- // fermer et ouvrir le menu sidebar
- toggleSidebar(): void {
-  this.isSidebarOpen = !this.isSidebarOpen;
-}
-
-// Methode qui permet de fermer le menu sidebar au click sur un lien en mode mobile
-closeSidebar(): void {
-  this.isSidebarOpen = false;
-}
-
+  
+  // fermer et ouvrir le menu sidebar
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 
-
+  // Methode qui permet de fermer le menu sidebar au click sur un lien en mode mobile
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+  }
+}
