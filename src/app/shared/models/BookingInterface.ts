@@ -3,6 +3,11 @@ import { ChargingStationInterface } from "./ChargingStationInterface";
 import { LocationStationInterface } from "./LocationStationInterface";
 import { UserInterface } from "./UserInterface";
 
+export enum BookingStatus {
+  PENDING = 'En attente',
+  CONFIRMED = 'Confirmée', // <-- REGARDE BIEN CES VALEURS
+  CANCELLED = 'Annulée',
+}
 
 export interface BookingInterface extends ApiResponse {
     id: number,
@@ -10,7 +15,7 @@ export interface BookingInterface extends ApiResponse {
     startDate: Date,
     endDate: Date,
     totalAmount: number,
-    status: string,
+    status: BookingStatus,
     user: UserInterface,
     chargingStation?: ChargingStationInterface,
     locationStation? : LocationStationInterface

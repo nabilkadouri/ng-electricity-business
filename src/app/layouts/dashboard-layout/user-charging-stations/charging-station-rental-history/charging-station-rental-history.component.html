@@ -1,123 +1,110 @@
 <section>
-    <div
-      class="flex flex-col gap-5 px-4 text-center sm:ml-80  md:text-start mb-15"
-    >
-      <h2 class="text-bleu-electrique mb-2 text-xl font-semibold">
-        Historique des locations de vos bornes
-      </h2>
-  
-      <div class="rounded-lg border border-gray-200 bg-white shadow-xl">
-        <div
-          class="text-bleu-foncee hidden grid-cols-8 gap-4 border-b border-gray-200 bg-gray-50 px-6 py-4 text-center text-sm font-semibold tracking-wider uppercase md:grid"
-        >
-          <div>Date réservation</div>
-          <div>Nom borne</div>
-          <div>Statut</div>
-          <div>Locataire</div>
-          <div>Période de location</div>
-          <div>Dates début / fin</div>
-          <div>Prix total</div>
-          <div>Supprimer</div>
-        </div>
-  
-        <div *ngIf="allBookings.length > 0; else noBookings">
-          <div
-            *ngFor="let booking of allBookings"
-            class="flex flex-col gap-4 border-t border-gray-200 px-4 py-4 hover:bg-gray-50 md:grid md:grid-cols-8 md:gap-4 md:px-6"
-          >
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="text-bleu-foncee font-semibold md:hidden"
-                >Date de réservation:
-              </span>
-              <span class="text-text-gris text-lg">{{
-                booking.createAt | date: "shortDate"
-              }}</span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="text-bleu-foncee font-semibold md:hidden"
-                >Nom de borne:
-              </span>
-              <span class="inline-flex rounded-full px-2 text-lg leading-5 font-semibold">
-                {{ booking.stationName }}
-              </span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="text-bleu-foncee font-semibold md:hidden"
-                >Statut:
-              </span>
-              <span
-                class="inline-flex rounded-full px-2 text-lg leading-5 font-semibold"
-                [ngClass]="{
-                  'bg-orange-100 text-orange-600': booking.status === 'En attente',
-                  'bg-green-100 text-green-600': booking.status === 'Confirmé' || booking.status === 'Terminé',
-                  'bg-red-100 text-red-600': booking.status === 'Annulé'
-                }"
-              >
-                {{ booking.status }}
-              </span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="text-bleu-foncee font-semibold md:hidden"
-                >Locataire:
-              </span>
-              <span class="text-bleu-electrique font-medium text-xl"
-                >{{booking.user.firstName}} {{booking.user.name}}
-              </span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="md:hidden font-semibold text-bleu-foncee">Période: </span>
-              <span class="text-lg text-text-gris ">
-                  du {{booking.startDate | date: "shortDate"}}<br class="hidden md:block">
-                  au {{booking.endDate | date: "shortDate"}}
-              </span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="md:hidden font-semibold text-bleu-foncee">Heures: </span>
-              <span class="text-lg text-text-gris">
-                  {{booking.startDate | date: "shortTime"}} &rarr; {{booking.endDate | date: "shortTime"}}
-              </span>
-            </div>
-  
-            <div class="md:col-span-1 text-left md:text-center">
-              <span class="text-bleu-foncee font-semibold md:hidden"
-                >Prix total:
-              </span>
-              <span class="text-text-gris text-lg font-bold">{{booking.totalAmount}}€</span>
-            </div>
-  
-            <div class="pt-2 text-right md:col-span-1 md:pt-0 md:text-center">
-              <button
-                class="text-red-500 transition duration-150 ease-in-out hover:text-red-700"
-                aria-label="Supprimer la réservation"
-              >
-                <svg
-                  class="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-        <ng-template #noBookings>
-          <div class="px-6 py-4 text-center text-gray-500">
-            Aucune réservation trouvée pour vos bornes.
-          </div>
-        </ng-template>
+  <div class="mb-15 flex flex-col gap-5 px-4 text-center sm:ml-80 md:text-start">
+    <h2 class="text-bleu-electrique mb-2 text-xl font-semibold">
+      Historique des locations de vos bornes
+    </h2>
+
+    <div class="rounded-lg border border-gray-200 bg-white shadow-xl">
+      <div
+        class="text-bleu-foncee hidden grid-cols-8 gap-4 border-b border-gray-200 bg-gray-50 px-6 py-4 text-center text-sm font-semibold tracking-wider uppercase md:grid">
+        <div>Date réservation</div>
+        <div>Nom borne</div>
+        <div>Statut</div>
+        <div>Locataire</div>
+        <div>Période de location</div>
+        <div>Dates début / fin</div>
+        <div>Prix total</div>
+        <div>Supprimer</div>
       </div>
+
+      <div *ngIf="allBookings.length > 0; else noBookings">
+        <div *ngFor="let booking of allBookings"
+          class="flex flex-col gap-4 border-t border-gray-200 px-4 py-4 hover:bg-gray-50 md:grid md:grid-cols-8 md:gap-4 md:px-6">
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Date de réservation:
+            </span>
+            <span class="text-text-gris text-lg">{{
+              booking.createAt | date: "shortDate"
+              }}</span>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Nom de borne:
+            </span>
+            <span class="inline-flex rounded-full px-2 text-lg leading-5 font-semibold">
+              {{ booking.stationName }}
+            </span>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Statut:
+            </span>
+            <select [(ngModel)]="booking.status" (change)="onStatusChange(booking, $event)"
+              class="focus:border-bleu-electrique focus:ring-bleu-electrique focus:ring-opacity-50 block w-full rounded-md border-gray-300 px-2 py-1 pr-8 text-base shadow-sm focus:ring"
+              [ngClass]="{
+                'bg-orange-100 text-orange-600':
+                  booking.status === BookingStatus.PENDING,
+                'bg-green-100 text-green-600':
+                  booking.status === BookingStatus.CONFIRMED,
+                'bg-red-100 text-red-600':
+                  booking.status === BookingStatus.CANCELLED,
+              }">
+              <option *ngFor="let status of availableBookingStatuses" [value]="status" class="md:text-center">
+                {{ status }}
+              </option>’
+            </select>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Locataire:
+            </span>
+            <span class="text-bleu-electrique text-xl font-medium">{{ booking.user.firstName }} {{ booking.user.name }}
+            </span>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Période:
+            </span>
+            <span class="text-text-gris text-lg">
+              du {{ booking.startDate | date: "shortDate"
+              }}<br class="hidden md:block" />
+              au {{ booking.endDate | date: "shortDate" }}
+            </span>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Heures:
+            </span>
+            <span class="text-text-gris text-lg">
+              {{ booking.startDate | date: "shortTime" }} &rarr;
+              {{ booking.endDate | date: "shortTime" }}
+            </span>
+          </div>
+
+          <div class="text-left md:col-span-1 md:text-center">
+            <span class="text-bleu-foncee font-semibold md:hidden">Prix total:
+            </span>
+            <span class="text-text-gris text-lg font-bold">{{ booking.totalAmount }}€</span>
+          </div>
+
+          <div class="pt-2 text-right md:col-span-1 md:pt-0 md:text-center">
+            <button class="text-red-500 transition duration-150 ease-in-out hover:text-red-700"
+              aria-label="Supprimer la réservation">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <ng-template #noBookings>
+        <div class="px-6 py-4 text-center text-gray-500">
+          Aucune réservation trouvée pour vos bornes.
+        </div>
+      </ng-template>
     </div>
-  </section>
+  </div>
+</section>

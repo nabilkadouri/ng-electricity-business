@@ -2,23 +2,39 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ChargingStationService } from '../../../../shared/services/entities/charging-station.service';
 import { ChargingStationInterface } from '../../../../shared/models/ChargingStationInterface';
 import { CommonModule } from '@angular/common';
-import { FlattenedBooking } from '../../../../shared/models/BookingInterface';
+import { BookingStatus, FlattenedBooking } from '../../../../shared/models/BookingInterface';
+import { BookingService } from '../../../../shared/services/entities/booking.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-charging-station-rental-history',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './charging-station-rental-history.component.html',
   styleUrl: './charging-station-rental-history.component.css'
 })
 export class ChargingStationRentalHistoryComponent implements OnInit{
+  //Injection de services
   chargingStationService = inject(ChargingStationService);
+  bookingService = inject(BookingService);
+  BookingStatus = BookingStatus;
+
   ownedStations: ChargingStationInterface[] = [];
-  allBookings: FlattenedBooking[] = []; 
+  allBookings: FlattenedBooking[] = [];
+
+  // Crée un tableau qui contient toutes les valeurs des différents statuts de réservation 
+  availableBookingStatuses: BookingStatus[] = [
+    BookingStatus.PENDING,
+    BookingStatus.CONFIRMED,
+    BookingStatus.CANCELLED
+  ];
+  
 
   ngOnInit(): void {
     this.chargingStationDataByUser();
+    console.log(this.availableBookingStatuses);
   }
 
+  
   chargingStationDataByUser(): void {
     this.chargingStationService.getChargingStationByUser().subscribe(
       (data) => {
@@ -36,23 +52,53 @@ export class ChargingStationRentalHistoryComponent implements OnInit{
     );
   }
 
-  // Nouvelle méthode pour aplatir le tableau des réservations
+  /**
+   * Nouvelle méthode pour aplatir le tableau des réservations
+   */
   private flattenBookings(): void {
     this.allBookings = []; // Réinitialiser le tableau pour éviter les doublons si la méthode est appelée plusieurs fois
 
     this.ownedStations.forEach(station => {
       station.bookings.forEach(booking => {
         this.allBookings.push({
-          ...booking, // Copie toutes les propriétés de la réservation
+          ...booking,
+           // Copie toutes les propriétés de la réservation
           stationName: station.nameStation // Ajoute le nom de la borne
         });
       });
     });
 
-    // Optionnel: Trier les réservations, par exemple par date de création de la réservation
+    // Trier les réservations par date de création de la réservation
     this.allBookings.sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
 
     console.log('Toutes les réservations aplaties:', this.allBookings);
+  }
+
+  /**
+   * Méthode qui permet de modifier le status de la réservation
+   * @param booking La réservation dont le status est modifié
+   * @param event l'événment de changement du sélécteur HTML
+   */
+  onStatusChange(booking: FlattenedBooking, event: Event ){
+
+    const newStatus = (event.target as HTMLSelectElement).value as BookingStatus;
+    console.log('Nouveau statut séléctionné :', newStatus);
+
+    if(booking.id) {
+      this.bookingService.updateBookingStatus(booking.id, newStatus).subscribe({
+        next: (updateBooking) => {
+          console.log("Status modifié avec succés !", updateBooking);
+          booking.status = updateBooking.status;
+        },
+        error: (error) => {
+          console.error("Erruer lors de la mise à jour du statut",error);
+          
+        } 
+      });
+    } else {
+      console.error("Erreur : ID de réservation manquant pour la mise à jour.");
+      
+    }
   }
 
 }
