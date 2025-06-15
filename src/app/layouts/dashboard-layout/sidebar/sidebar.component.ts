@@ -4,6 +4,7 @@ import { UserInterface } from '../../../shared/models/UserInterface';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServiceService } from '../../../shared/services/auth-service.service';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,7 +27,6 @@ export class SidebarComponent implements OnInit {
       });
     }
   }
-
   
   // fermer et ouvrir le menu sidebar
   toggleSidebar(): void {

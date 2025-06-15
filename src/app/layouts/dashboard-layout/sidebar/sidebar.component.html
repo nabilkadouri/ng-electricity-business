@@ -4,20 +4,33 @@
       <div class="flex items-center justify-between">
         <!-- Bouton burger et logo -->
         <div class="flex items-center justify-end rtl:justify-end">
-          <button (click)="toggleSidebar()" aria-controls="logo-sidebar"
+          <button
+            (click)="toggleSidebar()"
+            aria-controls="logo-sidebar"
             type="button"
-            class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none sm:hidden">
+            class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none sm:hidden"
+          >
             <span class="sr-only">Open sidebar</span>
-            <svg class="h-6 w-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <path clip-rule="evenodd" fill-rule="evenodd"
-                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
-              </path>
+            <svg
+              class="h-6 w-6"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+              ></path>
             </svg>
           </button>
           <div class="h-14 w-14 md:h-18 md:w-18 xl:h-24 xl:w-24">
             <a href="">
-              <img src="/images/logo-electricity-business.webp" alt="Logo electricity business" />
+              <img
+                src="/images/logo-electricity-business.webp"
+                alt="Logo electricity business"
+              />
             </a>
           </div>
         </div>
@@ -30,42 +43,63 @@
                 {{ user.name }} {{ user.firstName }}
               </h2>
               <a routerLink="userProfile">
-                <img class="h-8 w-8 rounded-full md:h-12 md:w-12 xl:h-18 xl:w-18" src="/images/visage2.png"
-                  [alt]="'Photo profil ' + user.firstName" />
+                <img
+                  class="h-8 w-8 rounded-full md:h-12 md:w-12 xl:h-18 xl:w-18"
+                  [src]="
+                    user?.picture
+                      ? user.picture
+                      : 'https://placehold.co/100x100/FFF/000?text=No+Photo'
+                  "
+                  alt="Profil de {{ user?.firstName }} {{ user?.name }}"
+                />
               </a>
             </div>
 
             <div
               class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-sm bg-white text-base shadow-sm dark:divide-gray-600 dark:bg-gray-700"
-              id="dropdown-user">
-              <div class="px-4 py-3" role="none">
-                <p class="text-sm text-gray-900 dark:text-white" role="none">
-                  Neil Sims
-                </p>
-                <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">
+              id="dropdown-user"
+            >
+              <div class="px-4 py-3">
+                <p class="text-sm text-gray-900 dark:text-white">Neil Sims</p>
+                <p
+                  class="truncate text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
                   neil.simsflowbite.com
                 </p>
               </div>
-              <ul class="py-1" role="none">
+
+              <ul class="py-1">
                 <li>
-                  <a href="#"
+                  <a
+                    href="#"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">Dashboard</a>
+                    role="menuitem"
+                    >Dashboard</a
+                  >
                 </li>
                 <li>
-                  <a href="#"
+                  <a
+                    href="#"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">Settings</a>
+                    role="menuitem"
+                    >Settings</a
+                  >
                 </li>
                 <li>
-                  <a href="#"
+                  <a
+                    href="#"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">Earnings</a>
+                    role="menuitem"
+                    >Earnings</a
+                  >
                 </li>
                 <li>
-                  <a href="#"
+                  <a
+                    href="#"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">Sign out</a>
+                    role="menuitem"
+                    >Sign out</a
+                  >
                 </li>
               </ul>
             </div>
@@ -75,57 +109,116 @@
     </div>
   </nav>
 
-  <aside 
-    class="fixed flex justify-center items-center top-0 left-0 z-40 h-full md:w-80 -translate-x-full border-r border-gray-200 bg-white pt-20 transition-transform sm:translate-x-0 "
-    aria-label="Sidebar" [ngClass]="{'translate-x-0': isSidebarOpen, '-translate-x-full': !isSidebarOpen}">
-
+  <aside
+    class="fixed top-0 left-0 z-40 flex h-full -translate-x-full items-center justify-center border-r border-gray-200 bg-white pt-20 transition-transform sm:translate-x-0 md:w-80"
+    aria-label="Sidebar"
+    [ngClass]="{
+      'translate-x-0': isSidebarOpen,
+      '-translate-x-full': !isSidebarOpen,
+    }"
+  >
     <div class="h-full overflow-y-auto bg-white px-3 pt-20 pb-4">
       <ul class="space-y-6 font-medium">
         <li>
-          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/tableau-de-bord.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Tableau de bord</span>
+          <a
+            routerLink="/dashboard"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/tableau-de-bord.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Tableau de bord</span>
           </a>
         </li>
         <li>
-          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/recharger.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Recharger mon véhicule</span>
+          <a
+            routerLink="/dashboard"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/recharger.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Recharger mon véhicule</span>
           </a>
         </li>
         <li>
-          <a routerLink="/dashboard" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/proposer.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Proposer ma borne</span>
+          <a
+            routerLink="/dashboard"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/proposer.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Proposer ma borne</span>
           </a>
         </li>
         <li>
-          <a routerLink="bookings" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/reserver-dashboard.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Mes réservations</span>
+          <a
+            routerLink="bookings"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/reserver-dashboard.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Mes réservations</span>
           </a>
         </li>
         <li>
-          <a routerLink="userStations" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/borne-dashboard.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Mes bornes</span>
+          <a
+            routerLink="userStations"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/borne-dashboard.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Mes bornes</span>
           </a>
         </li>
         <li>
-          <a routerLink="userProfile" (click)="closeSidebar()" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100">
-            <img src="/icons/profil.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8">
-            <span class="ms-3 md:text-xl ">Mon profil</span>
+          <a
+            routerLink="userProfile"
+            (click)="closeSidebar()"
+            class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+          >
+            <img
+              src="/icons/profil.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Mon profil</span>
           </a>
         </li>
         <li>
-          <a routerLink="dashboard" class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 mt-20"
-            *ngIf="authService.isLogged()" (click)="authService.logout()">
-            <img src="/icons/deconnecter.svg" alt="icon tableau de bord" class="h-6 w-6 md:h-8 md:w-8 ">
-            <span class="ms-3 md:text-xl ">Se déconnecter</span>
+          <a
+            routerLink="dashboard"
+            class="group mt-20 flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+            *ngIf="authService.isLogged()"
+            (click)="authService.logout()"
+          >
+            <img
+              src="/icons/deconnecter.svg"
+              alt="icon tableau de bord"
+              class="h-6 w-6 md:h-8 md:w-8"
+            />
+            <span class="ms-3 md:text-xl">Se déconnecter</span>
           </a>
         </li>
       </ul>
     </div>
   </aside>
-  
 </header>
