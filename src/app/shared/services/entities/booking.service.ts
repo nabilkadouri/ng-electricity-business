@@ -15,12 +15,6 @@ export class BookingService {
   updateBookingStatus(bookingId: number, newStatus: BookingStatus): Observable<BookingInterface> {
     const url = `${this.apiURL}/api/bookings/${bookingId}`;
     const body = { status: newStatus };
-
-    // Ajout de logs pour vérification (temporaire)
-    console.log('Service: Sending PATCH request to:', url);
-    console.log('Service: Request Body:', body);
-    console.log('Service: New Status value being sent:', newStatus);
-
     const headers = new HttpHeaders({
       'Content-Type': 'application/merge-patch+json', 
       'Accept': 'application/ld+json' 
