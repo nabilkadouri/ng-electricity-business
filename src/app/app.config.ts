@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { authInterceptor } from './shared/interceptors/auth.interceptor';
 import { DatePipe,registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { errorInterceptor } from './shared/interceptors/error.interceptor';
 
 registerLocaleData(localeFr, 'fr');
 
@@ -13,7 +14,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor, 
+        errorInterceptor]
+      )),
     DatePipe,
     { provide: LOCALE_ID, useValue: 'fr' }
     ]   
