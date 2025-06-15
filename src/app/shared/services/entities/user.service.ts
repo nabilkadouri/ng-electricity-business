@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, tap } from 'rxjs';
 import { UserInterface } from '../../models/UserInterface';
 import { environment } from '../../../../environments/environment';
@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class UserService {
   readonly apiURL = environment.apiUrl;
+ 
   private userSubject = new BehaviorSubject<UserInterface| null>(null);
   public user$ = this.userSubject.asObservable();
   
@@ -30,9 +31,27 @@ export class UserService {
     return this.userSubject.getValue();
   }
 
+  uploadProfilePicture(file: File): Observable<{ message: string; pictureUrl: string }> {
+    const formData = new FormData();
+    formData.append('pictureFile', file, file.name);
+
+    return this.http.post<{ message: string; pictureUrl: string }>(`${this.apiURL}/api/me/upload-picture`, formData);
+  }
+
+  deleteProfilePicture(): Observable <{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiURL}/api/me/delete-picture`);
+  }
+
   //Méthode qui permet d'effacer l'utilisateur contenu dans le BehaviorSubject
   clearUser() {
     this.userSubject.next(null);
   }
+
+  //Méthode pour mettre à jour manuellement l'utilisateur dans le BehaviorSubject.
+  updateUserInService(updatedUser: UserInterface): void {
+    this.userSubject.next(updatedUser);
+  }
+
+  
   
 }
