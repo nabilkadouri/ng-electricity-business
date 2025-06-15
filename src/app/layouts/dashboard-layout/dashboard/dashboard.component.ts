@@ -15,7 +15,7 @@ import { ChargingStationService } from '../../../shared/services/entities/chargi
 })
 export class DashboardComponent implements OnInit {
   userService = inject(UserService);
-  authService = inject(AuthServiceService);
+  //authService = inject(AuthServiceService);
   chargingStationService = inject(ChargingStationService);
   user!: UserInterface;
   currentBookings: BookingInterface[] = [];
