@@ -1,65 +1,148 @@
 <section>
   <div class="my-28 flex flex-col gap-5 px-4 sm:ml-80 md:p-10">
-    <!-- Titre bienvenue -->
     <div class="text-center sm:text-start" *ngIf="user">
-      <h1 class="pb-2 text-sm sm:text-lg md:text-2xl">Bienvenue, {{ user.firstName }} !</h1>
-      <p class="text-base sm:text-lg md:text-xl text-gray-300">Vous êtes dans votre espace personnel</p>
+      <h1 class="pb-2 text-sm sm:text-lg md:text-2xl">
+        Bienvenue, {{ user.firstName }} !
+      </h1>
+      <p class="text-base text-gray-300 sm:text-lg md:text-xl">
+        Vous êtes dans votre espace personnel
+      </p>
     </div>
 
-    <!-- Carte map -->
-    <div class="flex w-full items-center justify-center">
-      <img src="/images/map-dashboard.png" alt="" class="w-full h-[150px] sm:h-[250px] md:h-[400px]" />
-    </div>
+    <div
+      id="map"
+      class="h-[150px] w-full rounded-2xl shadow-lg sm:h-[250px] md:h-[400px]"
+    ></div>
 
-    <!-- Les 2 cartes principaux -->
-    <div class="mb-4 flex flex-col justify-center gap-10 sm:flex-col md:flex-row">
-      <!-- Card mes recharges en cours -->
-      <div class="flex w-full flex-col items-center justify-center gap-5">
-        <h2 class="text-vert-foncee text-center text-xl sm:text-2xl md:text-3xl font-medium">
-          Mes recharges en cours
-        </h2>
-        <div class="rounded-2xl flex flex-col gap-5 bg-gray-50 p-5 shadow-xl w-full sm:w-[80%] md:w-[400px]">
-          <div *ngFor="let booking of currentBookings.slice(0, 2)">
-            <h3 class="text-vert-clair text-lg sm:text-xl md:text-2xl font-medium text-center">
-              {{ booking.chargingStation?.nameStation }}
-            </h3>
-            <div class="flex flex-col space-y-2 p-5">
-              <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-                <p>{{ booking.chargingStation?.locationStation?.address }}</p>
-                <p>{{ booking.chargingStation?.locationStation?.postaleCode }}</p>
-                <p>{{ booking.chargingStation?.locationStation?.city }}</p>
-              </div>
+    <div
+      class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
+    >
+    <div class="flex flex-col items-center justify-center gap-5">
+      <h2
+        class="text-vert-foncee text-center text-xl font-medium sm:text-2xl md:text-3xl"
+      >
+        Mes recharges en cours
+      </h2>
+      <div
+        class="flex w-full flex-col gap-5 rounded-2xl bg-gray-50 p-5 shadow-xl md:w-auto"
+      >
+        <div *ngFor="let booking of bookingsWhithStationDetails.slice(0, 2)" class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+          <h3
+            class="text-vert-clair text-center text-lg font-semibold sm:text-xl md:text-2xl mb-2"
+          >
+            {{ booking.stationDetails?.nameStation || 'Station inconnue' }}
+          </h3>
+          <div class="flex items-center gap-2">
+            <img [src]="booking.stationDetails?.picture?.src" alt="">
+          </div>
+
+          <div class="flex flex-col space-y-2 p-3">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-600 font-medium">Adresse :</span>
+              <p>{{ booking.stationDetails?.locationStation?.address || 'Non disponible' }}</p>
+              <p>{{ booking.stationDetails?.locationStation?.postaleCode }}</p>
+              <p>{{ booking.stationDetails?.locationStation?.city }}</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <span class="text-gray-600 font-medium">Date :</span>
               <p>{{ booking.startDate | date: "fullDate" }}</p>
-              <div class="flex space-x-2 justify-center sm:justify-start">
-                <span>{{ booking.startDate | date: 'shortTime' }} → {{ booking.endDate | date: 'shortTime' }}</span>
-              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-gray-600 font-medium">Horaires :</span>
+              <p>
+                <span
+                  >{{ booking.startDate | date: "shortTime" }} →
+                  {{ booking.endDate | date: "shortTime" }}</span
+                >
+              </p>
             </div>
           </div>
         </div>
+        <p *ngIf="!bookingsWhithStationDetails || bookingsWhithStationDetails.length === 0" class="text-center text-gray-500">
+          Aucune recharge en cours.
+          <br>
+          <button class="mt-4 rounded-lg bg-vert-foncee px-4 py-2 text-white hover:bg-green-700 text-sm">
+            Réserver une recharge
+          </button>
+        </p>
       </div>
+    </div>
 
-      <!-- Card mes bornes en location -->
-      <div class="flex w-full flex-col items-center justify-center gap-5">
-        <h2 class="text-bleu-foncee text-center text-xl sm:text-2xl md:text-3xl font-medium">
+      <div class="flex flex-col items-center justify-center gap-5">
+        <h2
+          class="text-bleu-foncee text-center text-xl font-medium sm:text-2xl md:text-3xl"
+        >
           Mes bornes en location
         </h2>
-        <div class="rounded-2xl flex flex-col gap-5 bg-gray-50 p-5 shadow-xl w-full sm:w-[80%] md:w-[400px]">
-          <div *ngFor="let station of ownedStations">
-            <h3 class="text-bleu-electrique text-lg sm:text-xl md:text-2xl font-medium text-center">
+        <div
+          class="flex w-full flex-col gap-5 rounded-2xl bg-gray-50 p-5 shadow-xl md:w-auto"
+        >
+          <div *ngFor="let station of ownedStations" class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
+            <h3
+              class="text-bleu-electrique text-center text-lg font-semibold sm:text-xl md:text-2xl mb-2"
+            >
               {{ station.nameStation }}
             </h3>
-            <div *ngFor="let customer of station.bookings" class="flex flex-col space-y-2 p-5">
-              <div class="flex flex-wrap gap-2">
-                <p>Louer à : <span class="font-semibold">{{ customer.user.name }}</span></p>
+            <div class="flex flex-col space-y-2 p-3">
+              <div class="flex items-center gap-2">
+                <img [src]="station.picture.src" [alt]= " station.picture.alt ">
               </div>
-              <p>{{ customer.startDate | date: "fullDate" }}</p>
-              <div class="flex space-x-2 justify-center sm:justify-start">
-                <p>{{ customer.startDate | date: 'shortTime' }}</p>
-                <span>→</span>
-                <p>{{ customer.endDate | date: 'shortTime' }}</p>
+              
+              <div class="flex items-center gap-2">
+                <span class="text-gray-600 font-medium">Type de prise :</span>
+                <p>{{ station.plugType || 'Non spécifié' }}</p>
               </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-gray-600 font-medium">Puissance :</span>
+                <p>{{ station.power || '0' }} kW</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-gray-600 font-medium">Prix/heure :</span>
+                <p>{{ station.pricePerHour || '0.00' | currency:'EUR':'symbol':'1.2-2':'fr' }}</p>
+              </div>
+
+              <div *ngFor="let disponibility of station.timeslots"    class="flex items-center gap-2">
+                <span class="text-gray-600 font-medium">Disponible:</span>
+                <p>{{ getDisplayDay(disponibility.dayOfWeek  || "Aucun jours")}}</p>
+                <p> Entre {{ disponibility.startTime | date: "shortTime" }} et {{ disponibility.endTime | date: "shortTime" }} </p>
+              </div>
+              
             </div>
           </div>
+          <p *ngIf="!ownedStations || ownedStations.length === 0" class="text-center text-gray-500">
+            Vous ne possédez aucune borne pour le moment.
+            <br>
+            <button class="mt-4 rounded-lg bg-bleu-electrique px-4 py-2 text-white hover:bg-blue-600 text-sm">
+              Ajouter ma première borne
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col items-center justify-center gap-5 lg:col-span-1"
+      >
+        <h2
+          class="text-gray-700 text-center text-xl font-medium sm:text-2xl md:text-3xl"
+        >
+          À découvrir
+        </h2>
+        <div
+          class="flex w-full flex-col items-center justify-center gap-5 rounded-2xl bg-gray-50 p-5 shadow-xl md:w-auto"
+        >
+          <p class="text-center text-gray-600">
+            Explorez les fonctionnalités supplémentaires et les bornes près de chez vous !
+          </p>
+          <button class="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+            Trouver une borne
+          </button>
+          <button class="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600">
+            Ajouter ma borne
+          </button>
         </div>
       </div>
     </div>
