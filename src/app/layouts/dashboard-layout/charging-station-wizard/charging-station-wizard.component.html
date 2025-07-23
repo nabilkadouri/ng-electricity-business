@@ -1,0 +1,35 @@
+<section>
+    <div class="mt-28 flex flex-col gap-5 px-4 sm:ml-80 md:p-10">
+        <div class="w-full bg-white rounded-lg shadow-md p-6 md:p-8">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-2">Proposer ma borne</h1>
+            <p class="text-gray-600 mb-6">Renseignez les informations de la borne que vous souhaitez proposer !</p>
+
+            <div class="mb-6 flex justify-around text-center">
+                <div [class.font-bold]="currentStep === 1" [class.text-blue-600]="currentStep === 1">1. Lieu</div>
+                <div [class.font-bold]="currentStep === 2" [class.text-blue-600]="currentStep === 2">2. Détails Borne</div>
+                <div [class.font-bold]="currentStep === 3" [class.text-blue-600]="currentStep === 3">3. Disponibilités</div>
+            </div>
+
+            <ng-container *ngIf="currentStep === 1">
+                <app-location-station-form
+                (locationSubmitted)="onLocationSubmitted($event)">
+                </app-location-station-form>
+            </ng-container>
+
+            <ng-container *ngIf="currentStep === 2 && locationStationId">
+                <app-charging-station-details-form
+                    [locationStationId]="locationStationId"
+                    (chargingStationSubmitted)="onChargingStationSubmitted($event)">
+                </app-charging-station-details-form>
+            </ng-container>
+
+            <ng-container *ngIf="currentStep === 3 && chargingStationId">
+                <app-timeslot-selection-form
+                    [chargingStationId]="chargingStationId"
+                    (timeslotsSubmitted)="onTimeslotsSubmitted()">
+                </app-timeslot-selection-form>
+            </ng-container>
+
+        </div>
+    </div>
+</section>
