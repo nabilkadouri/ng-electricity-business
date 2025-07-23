@@ -10,6 +10,7 @@ import { RegisterFormComponent } from './layouts/public-layout/components/regist
 import { UserBookingsComponent } from './layouts/dashboard-layout/user-bookings/user-bookings.component';
 import { UserChargingStationsComponent } from './layouts/dashboard-layout/user-charging-stations/user-charging-stations.component';
 import { UserProfileSettingsComponent } from './layouts/dashboard-layout/user-profile-settings/user-profile-settings.component';
+import { ChargingStationWizardComponent } from './layouts/dashboard-layout/charging-station-wizard/charging-station-wizard.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
       { path:'bookings', component: UserBookingsComponent},
       { path:'userStations', component: UserChargingStationsComponent},
       { path:'userProfile', component: UserProfileSettingsComponent},
+      { path: 'proposerBorne', component: ChargingStationWizardComponent },
     ]
   },
 

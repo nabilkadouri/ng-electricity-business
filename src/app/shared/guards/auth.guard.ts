@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthServiceService } from '../services/auth-service.service';
 import { UserService } from '../services/entities/user.service';
 import { catchError, map, of, take } from 'rxjs';
 
@@ -16,14 +15,14 @@ export const authGuard: CanActivateFn = () => {
   }
 
   //Sinon tentative de chargement depuis l'API
-  return userService.getUser().pipe(
+  return userService.getConnectedUserFromApi().pipe(
     take(1),
     map((user) => {
-      return !!user; // si on a récupéré un user, on peut continuer
+      return !!user; 
     }),
     catchError(() => {
       router.navigate(['/login']);
-      return of(false); // sinon, redirection
+      return of(false); 
     })
   );
 };
