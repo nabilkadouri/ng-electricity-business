@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {initFlowbite} from 'flowbite'
-import { HeaderComponent } from './layouts/public-layout/components/header/header.component';
-import { FooterComponent } from './layouts/public-layout/components/footer/footer.component';
+
 
 @Component({
   selector: 'app-root',

@@ -1,29 +1,35 @@
-    export interface RegisterRequest{
-    email?: string,
-    password?: string,
-    name?: string,
-    firstName?: string,
-    address?: string,
-    postaleCode?: string,
-    city?: string,
-    phoneNumber?: string 
-    }
-
-    export interface LoginRequest {
-        username?: string;
-        password?: string;
+   
+    export interface LoginRequestInterface {
+        email: string;
+        password: string;
     }
 
     export interface IToken{
         token: string;
     }
 
-    export interface LoginSuccessResponse {
-        login: string;
-        two_factor_complete: boolean;
+    export interface LoginInitialResponse {
+        message: string;
+    }
+
+    export interface LoginResponseInterface {
+        accessToken: string;
+        refreshToken: string;
     }
     
-    export interface CodeCheckRequest {
-    codeCheck?: string ;
+    export interface CodeCheckRequestInterface {
+    email: string;
+    codeCheck: string ;
+    }
+
+    export interface RegisterRequestInterface {
+        email: string;
+        password: string;
+        name: string;
+        firstName: string;
+        address: string;
+        postaleCode: string;
+        city: string;
+        phoneNumber?: string;
     }
 

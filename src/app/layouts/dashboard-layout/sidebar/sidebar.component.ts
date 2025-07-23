@@ -1,10 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/entities/user.service';
-import { UserInterface } from '../../../shared/models/UserInterface';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServiceService } from '../../../shared/services/auth-service.service';
-import { environment } from '../../../../environments/environment.development';
+import { UserResponseInterface } from '../../../shared/models/UserInterface';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,14 +14,17 @@ import { environment } from '../../../../environments/environment.development';
 export class SidebarComponent implements OnInit {
   userService = inject(UserService);
   authService = inject(AuthServiceService);
-  user!: UserInterface;
+  user!: UserResponseInterface;
   isSidebarOpen: boolean = false;
+  pictureSrc!:string ;
 
   ngOnInit(): void {
-    const token = this.authService.getToken();
+    const token = this.authService.getAccessToken();
     if (token) {
-      this.userService.getUser().subscribe({
-        next: (user) => (this.user = user),
+      this.userService.getConnectedUserFromApi().subscribe({
+        next: (user) => {
+          this.user = user
+        },
         error: () => console.warn("Echec du chargement de l'utilisateur"),
       });
     }

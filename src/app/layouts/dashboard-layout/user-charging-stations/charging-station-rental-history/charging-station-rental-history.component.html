@@ -24,7 +24,7 @@
             <span class="text-bleu-foncee font-semibold md:hidden">Date de réservation:
             </span>
             <span class="text-text-gris text-lg">{{
-              booking.createAt | date: "shortDate"
+              booking.createdAt | date: "shortDate"
               }}</span>
           </div>
 
@@ -55,12 +55,12 @@
             </select>
           </div>
 
-          <div class="text-left md:col-span-1 md:text-center">
+           <div class="text-left md:col-span-1 md:text-center">
             <span class="text-bleu-foncee font-semibold md:hidden">Locataire:
             </span>
-            <span class="text-bleu-electrique text-xl font-medium">{{ booking.user.firstName }} {{ booking.user.name }}
+            <span class="text-bleu-electrique text-xl font-medium">{{ booking.userId }} 
             </span>
-          </div>
+          </div> 
 
           <div class="text-left md:col-span-1 md:text-center">
             <span class="text-bleu-foncee font-semibold md:hidden">Période:
@@ -107,4 +107,4 @@
       </ng-template>
     </div>
   </div>
-</section>
+</section> 

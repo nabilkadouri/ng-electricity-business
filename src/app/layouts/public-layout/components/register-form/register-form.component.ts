@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthServiceService } from '../../../../shared/services/auth-service.service';
+import { LoginRequestInterface, RegisterRequestInterface } from '../../../../shared/models/AuthInterface';
 
 @Component({
   selector: 'app-register-form',
@@ -50,44 +51,63 @@ export class RegisterFormComponent {
     city: new FormControl<string>('', {
       nonNullable: true, validators: Validators.required
     }),
-  }, { validators: this.mustMatch('password', 'confirmPassword') }); // Ajout du validateur au FormGroup
+  }, { validators: this.mustMatch('password', 'confirmPassword') }); 
 
-  get f() { return this.registerForm.controls; } // Getter pour accéder facilement aux contrôles du formulaire
+  get f() { return this.registerForm.controls; } 
 
   mustMatch(controlName: string, matchingControlName: string) {
-    return (control: AbstractControl) => { // Change AbstractControl ici
-      const formGroup = control as FormGroup; // Castez AbstractControl en FormGroup
+    return (control: AbstractControl) => {
+      const formGroup = control as FormGroup;
       const passwordControl = formGroup.controls[controlName];
       const confirmPasswordControl = formGroup.controls[matchingControlName];
 
-      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['mustMatch']) {
-        return null; // Retournez null si une autre erreur existe déjà
+      if (!passwordControl || !confirmPasswordControl) { // Ajoutez des vérifications de nullité
+        return null;
+      }
+
+      // Supprimez l'erreur mustMatch pour éviter les conflits
+      if (confirmPasswordControl.errors && confirmPasswordControl.errors['mustMatch']) {
+        confirmPasswordControl.setErrors(null);
       }
 
       if (passwordControl.value !== confirmPasswordControl.value) {
         confirmPasswordControl.setErrors({ mustMatch: true });
-      } else {
-        confirmPasswordControl.setErrors(null);
       }
-      return null; // Les validateurs de groupe doivent retourner null si la validation réussit
+      // Ne faites rien si les valeurs correspondent et qu'il n'y a pas d'erreur mustMatch
+      return null;
     };
   }
 
   onSubmit() {
+    // Marquer tous les champs comme touchés pour déclencher les validations
+    this.registerForm.markAllAsTouched();
+
     if (this.registerForm.valid) {
-      this.authService.register(this.registerForm.value).subscribe({
+      // Cast la valeur du formulaire au type RegisterRequestInterface
+      const registerData: RegisterRequestInterface = this.registerForm.value as RegisterRequestInterface;
+
+      this.authService.register(registerData).subscribe({
         next: (response) => {
-          this.authService.login({username: this.registerForm.value.email, password: this.registerForm.value.password}).subscribe({
-            next: (response) =>{
-              this.router.navigate(['/check'])
+          // Cast pour LoginRequestInterface également
+          const loginData: LoginRequestInterface = {
+            email: registerData.email, 
+            password: registerData.password 
+          };
+
+          this.authService.login(loginData).subscribe({
+            next: (response) => {
+              this.router.navigate(['/check']);
             }
-          })
+          });
           console.log('Inscription réussie');
         },
         error: (err) => {
           console.error("Erreur lors de l'inscription", err);
         }
       });
+    } else {
+        console.log('Formulaire invalide', this.registerForm.errors);
+        // Vous pouvez ajouter une logique ici pour afficher des messages d'erreur à l'utilisateur
     }
   }
 }

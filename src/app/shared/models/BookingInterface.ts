@@ -1,26 +1,35 @@
-import { ApiResponse } from "./ApiResponse";
-import { ChargingStationInterface } from "./ChargingStationInterface";
-import { LocationStationInterface } from "./LocationStationInterface";
-import { UserInterface } from "./UserInterface";
+
 
 export enum BookingStatus {
   PENDING = 'En attente',
-  CONFIRMED = 'Confirmée', // <-- REGARDE BIEN CES VALEURS
+  CONFIRMED = 'Confirmée', 
   CANCELLED = 'Annulée',
 }
 
-export interface BookingInterface extends ApiResponse {
-    id: number,
-    createAt: Date,
-    startDate: Date,
-    endDate: Date,
-    totalAmount: number,
-    status: BookingStatus,
-    user: UserInterface,
-    chargingStation?: ChargingStationInterface,
-    locationStation? : LocationStationInterface
+export enum PaymentMethod {
+  CB = "CB",
+  PAYPAL = "PayPal",
 }
 
-export interface FlattenedBooking extends BookingInterface {
+export interface BookingResponseInterface {
+    id: number,
+    createdAt: string,
+    startDate: string,
+    endDate: string,
+    totalAmount: number,
+    status: BookingStatus,
+    userId: number,
+    chargingStationId: number,
+}
+
+export interface BookingRequestInterface {
+  startDate: string,
+  endDate: string,
+  paymentType?: PaymentMethod;
+  userId: number,
+  chargingStationId: number,
+}
+
+export interface FlattenedBooking extends BookingResponseInterface {
     stationName: string; 
   }

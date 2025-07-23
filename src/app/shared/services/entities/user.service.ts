@@ -1,45 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, tap } from 'rxjs';
-import { UserInterface } from '../../models/UserInterface';
+import { PictureDetailsInterface, UserEmailUpdateInterface, UserResponseInterface } from '../../models/UserInterface';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  readonly apiURL = environment.apiUrl;
+  readonly apiUrl = environment.apiUrl;
  
-  private userSubject = new BehaviorSubject<UserInterface| null>(null);
-  public user$ = this.userSubject.asObservable();
+  private userSubject = new BehaviorSubject<UserResponseInterface| null>(null);
+  public user$: Observable<UserResponseInterface | null> = this.userSubject.asObservable();
   
 
   constructor(private http: HttpClient) {}
 
-  getUser(): Observable<UserInterface> {
-    //récupération du user connecté
-    return this.http.get<UserInterface>(`${this.apiURL}/api/me`).pipe(
-      //Transformation de la réponse et stockage des donnée dans le BehaviorSubject
-      tap((user) =>this.userSubject.next(user)),
-      //Si deux composant s'abonne au même moment une seul requête est exécutée
+  getConnectedUserFromApi(): Observable<UserResponseInterface> {
+    return this.http.get<UserResponseInterface>(`${this.apiUrl}/api/users/me`).pipe(
+      // Met à jour le BehaviorSubject avec les données reçues de l'API.
+      tap((userResponse) => this.userSubject.next(userResponse)),
       shareReplay(1)
     );
   }
 
-  //Méthode synchrone qui renvoie le contenu actuel du BehaviorSubject
-  getUserFromCache(): UserInterface | null {
+  //Méthode qui renvoie le contenu actuel du BehaviorSubject
+  //Permet de récuperer le user sans refaire de requête HTTP
+  getUserFromCache(): UserResponseInterface | null {
     return this.userSubject.getValue();
-  }
-
-  uploadProfilePicture(file: File): Observable<{ message: string; pictureUrl: string }> {
-    const formData = new FormData();
-    formData.append('pictureFile', file, file.name);
-
-    return this.http.post<{ message: string; pictureUrl: string }>(`${this.apiURL}/api/me/upload-picture`, formData);
-  }
-
-  deleteProfilePicture(): Observable <{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiURL}/api/me/delete-picture`);
   }
 
   //Méthode qui permet d'effacer l'utilisateur contenu dans le BehaviorSubject
@@ -48,10 +36,36 @@ export class UserService {
   }
 
   //Méthode pour mettre à jour manuellement l'utilisateur dans le BehaviorSubject.
-  updateUserInService(updatedUser: UserInterface): void {
+  updateUserInService(updatedUser: UserResponseInterface): void {
     this.userSubject.next(updatedUser);
   }
 
-  
-  
+
+  uploadProfilePicture(userId: number, file: File, altText: string,
+    isMain: boolean = true): Observable<PictureDetailsInterface> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    if((altText.trim().length === 0)) {
+      formData.append("alt", altText)
+    }
+    formData.append("isMain", String(isMain))
+
+    return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/users/${userId}/uploadProfilePicture`, formData);
+  }
+
+  updateUserEmail(id: number, emailUpdate: UserEmailUpdateInterface): Observable<UserResponseInterface> {
+    return this.http.patch<UserResponseInterface>(`${this.apiUrl}/api/users/${id}/email`, emailUpdate).pipe(
+      tap((updatedUser)=> {
+        if(this.userSubject.getValue()?.id === updatedUser.id) {
+          this.userSubject.next(updatedUser)
+        }
+      })
+    );
+  }
+
+  deleteUser(id: number):Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/api/users/${id}`);
+  }
+
 }

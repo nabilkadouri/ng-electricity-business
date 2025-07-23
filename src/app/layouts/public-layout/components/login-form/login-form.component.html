@@ -16,17 +16,17 @@
         <input
           type="email"
           id="email"
-          formControlName="username"
+          formControlName="email"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
         <div
-          *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched"
+          *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched"
         >
-          <span *ngIf="loginForm.controls['username'].errors?.['required']"
+          <span *ngIf="loginForm.controls['email'].errors?.['required']"
             class="text-red-500 text-xs italic"
             >L'email est requis.</span
           >
-          <span *ngIf="loginForm.controls['username'].errors?.['email']"
+          <span *ngIf="loginForm.controls['email'].errors?.['email']"
             class="text-red-500 text-xs italic"
             >L'email n'est pas valide.</span
           >

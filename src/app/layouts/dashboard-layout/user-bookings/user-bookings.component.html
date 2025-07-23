@@ -25,7 +25,7 @@
                     text-left md:text-center">
                     <div class="md:col-span-1">
                         <span class="md:hidden font-semibold text-vert-foncee">Date réservation: </span>
-                        <span class="text-sm text-text-gris">{{booking.createAt | date: "shortDate"}}</span>
+                        <span class="text-sm text-text-gris">{{booking.createdAt | date: "shortDate"}}</span>
                     </div>
 
                     <div class="md:col-span-1">
@@ -36,12 +36,12 @@
                         </span>
                     </div>
 
-                    <div class="md:col-span-1">
+                    <!-- <div class="md:col-span-1">
                         <span class="md:hidden font-semibold text-vert-foncee">Informations borne: </span>
-                        <div class="font-medium text-vert-foncee">{{booking.chargingStation?.nameStation}}</div>
+                        <div class="font-medium text-vert-foncee">{{booking.chargingStationId}}</div>
                         <div class="text-sm text-text-gris">{{booking.chargingStation?.power}} kw -
                             {{booking.chargingStation?.pricePerHour}}€/h</div>
-                    </div>
+                    </div> -->
 
                     <div class="md:col-span-1">
                         <span class="md:hidden font-semibold text-vert-foncee">Date de début: </span>

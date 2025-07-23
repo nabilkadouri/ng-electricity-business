@@ -6,23 +6,27 @@
         Gérer vos bornes 
       </p>
     </div>
-    <div class="flex flex-col gap-5 md:flex-row">
-      <div class="rounded-2xl bg-white px-4 py-6 shadow-xl">
-        <div class="mb-2 flex justify-end">
-          <button
-            class="text-red-500 hover:text-red-700"
-            aria-label="Supprimer la borne 1"
-          >
-            <img src="/icons/delete.svg" alt="icone bouton de suppression" />
-          </button>
-        </div>
-        <img
-          src="/images/borne1.png"
-          alt="photo de ma borne"
+    
+      <div class="flex flex-col md:flex-row gap-5 md:gap-10">
+        
+        <div *ngFor="let station of ownedStations" class="space-y-4 rounded-2xl bg-white px-4 py-6 shadow-2xl ">
+          <div class="mb-2 flex justify-end">
+            <button
+            (click)="deleteStation(station.id!)"
+              class="text-red-500 hover:text-red-700"
+              aria-label="Supprimer la borne 1"
+            >
+            
+              <img src="/icons/delete.svg" alt="icone bouton de suppression" />
+            </button>
+          </div>
+       <img
+          [src]="station.picture.src"
+          alt="Borne"
           class="h-auto w-full rounded-2xl"
-        />
-        <div *ngFor="let station of ownedStations" class="space-y-2">
-          <h2 class="text-bleu-foncee text-3xl font-semibold">
+        /> 
+        
+          <h2 class="text-bleu-foncee text-3xl font-semibold pb-5">
             {{ station.nameStation }}
           </h2>
           <p class="text-gray-700">
@@ -30,26 +34,32 @@
             <span class="text-bleu-electrique font-semibold">Type 2</span>
           </p>
           <p class="text-gray-700">
-            <span class="font-medium">Puissance max et tarif horaire : </span>
+            <span class="font-medium">Puissance max : </span>
             <span class="text-bleu-electrique font-semibold"
-              >{{ station.power }} kW - {{ station.pricePerHour }}€/h</span
+              >{{ station.power }} kW </span
             >
           </p>
+          <p class="text-gray-700">
+            <span class="font-medium">Tarif horaire : </span>
+            <span class="text-bleu-electrique font-semibold"
+              >{{ station.pricePerHour }}€ / h</span
+            >
+          </p>
+         
           <div *ngIf="station.timeslots && station.timeslots.length > 0">
             <p class="font-medium text-gray-700 mb-2">Disponibilité :</p>
             <div *ngFor="let availability of station.timeslots">
                 <p class="text-bleu-electrique font-medium">
-                    {{ availability.dayOfWeek }} :
+                    {{ availability.dayOfWeek }} 
                     {{ availability.startTime | date:'HH:mm' }} &rarr; {{ availability.endTime | date:'HH:mm' }}
                 </p>
             </div>
         </div>
 
-          <div class="mt-4 flex justify-center">
+          <div class="mt-10 flex justify-center ">
             <button class="btn-proposer">Modifier ma borne</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </section>

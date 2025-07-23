@@ -1,21 +1,52 @@
-import { ApiResponse } from "./ApiResponse";
-import { BookingInterface } from "./BookingInterface";
-import { LocationStationInterface } from "./LocationStationInterface";
-import { TimeslotsInterface } from "./TimeslotsInterface";
-import { UserInterface } from "./UserInterface";
 
-export interface ChargingStationInterface extends ApiResponse {
+
+import { BookingResponseInterface } from "./BookingInterface";
+import { LocationStationResponseInterface } from "./LocationStationInterface";
+import { TimeslotsResponseInterface } from "./TimeslotsInterface";
+
+import { PictureDetailsInterface} from "./UserInterface";
+
+export enum ChargingStationStatus {
+    PENDING = 'En attente',
+    CONFIRMED = 'Confirmée', 
+    CANCELLED = 'Annulée',
+  }
+
+
+export interface ChargingStationResponseInterface {
     id: number;
-    createAt: Date;
+    createdAt: string;
+    nameStation: string;
+    description: string,
+    power: number,
+    pricePerHour: number;
+    picture: PictureDetailsInterface;
+    status: ChargingStationStatus,
+    isAvailable: boolean;
+    plugType: string;
+    userId: number;
+    locationStation: LocationStationResponseInterface;
+    timeslots: TimeslotsResponseInterface[];
+    bookings: BookingResponseInterface[]
+}
+
+export interface ChargingStationRequestInterface  {
+    nameStation: string;
+    description?: string,
+    power: number,
+    pricePerHour: number;
+    status?: ChargingStationStatus,
+    isAvailable?: boolean;
+    locationStationId: number;
+    userId: number;
+}
+
+export interface CharginStationInterfaceMap {
+    id:number;
     nameStation: string;
     power: number,
     pricePerHour: number;
-    picture: string;
-    plugType: string;
-    status: string,
-    isAvailable: boolean;
-    locationStation: LocationStationInterface;
-    timeslots: TimeslotsInterface[];
-    user: UserInterface;
-    bookings: BookingInterface[]
+    locationStation: LocationStationResponseInterface;
+    timeslots: TimeslotsResponseInterface[];
 }
+

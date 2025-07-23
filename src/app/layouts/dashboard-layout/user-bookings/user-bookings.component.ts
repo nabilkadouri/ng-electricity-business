@@ -1,8 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/entities/user.service';
-import { BookingInterface } from '../../../shared/models/BookingInterface';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { BookingResponseInterface } from '../../../shared/models/BookingInterface';
 
 @Component({
   selector: 'app-user-bookings',
@@ -12,7 +11,7 @@ import { RouterLink } from '@angular/router';
 })
 export class UserBookingsComponent implements OnInit {
   private userService = inject(UserService);
-  currentBookings: BookingInterface[] = [];
+  currentBookings: BookingResponseInterface[] = [];
 
   ngOnInit(): void {
     this.userService.user$.subscribe((user) => {

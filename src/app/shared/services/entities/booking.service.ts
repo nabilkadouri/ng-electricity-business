@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BookingInterface, BookingStatus } from '../../models/BookingInterface';
+import { BookingResponseInterface, BookingStatus } from '../../models/BookingInterface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class BookingService {
 
   constructor(private http: HttpClient) { }
 
-  updateBookingStatus(bookingId: number, newStatus: BookingStatus): Observable<BookingInterface> {
+  updateBookingStatus(bookingId: number, newStatus: BookingStatus): Observable<BookingResponseInterface> {
     const url = `${this.apiURL}/api/bookings/${bookingId}`;
     const body = { status: newStatus };
     const headers = new HttpHeaders({
@@ -20,7 +20,7 @@ export class BookingService {
       'Accept': 'application/ld+json' 
     });
 
-    return this.http.patch<BookingInterface>(url, body, { headers: headers });
+    return this.http.patch<BookingResponseInterface>(url, body, { headers: headers });
   }
 
 }

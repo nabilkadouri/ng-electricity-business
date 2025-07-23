@@ -45,12 +45,8 @@
               <a routerLink="userProfile">
                 <img
                   class="h-8 w-8 rounded-full md:h-12 md:w-12 xl:h-18 xl:w-18"
-                  [src]="
-                    user?.picture
-                      ? user.picture
-                      : 'https://placehold.co/100x100/FFF/000?text=No+Photo'
-                  "
-                  alt="Profil de {{ user?.firstName }} {{ user?.name }}"
+                  [src]="user.profilePicture.src"
+                  alt="Profil de {{ user.firstName }} {{ user.name }}"
                 />
               </a>
             </div>
@@ -149,7 +145,7 @@
         </li>
         <li>
           <a
-            routerLink="/dashboard"
+            routerLink="proposerBorne"
             (click)="closeSidebar()"
             class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
           >

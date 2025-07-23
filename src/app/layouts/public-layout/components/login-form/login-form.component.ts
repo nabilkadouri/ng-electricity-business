@@ -15,18 +15,26 @@ export class LoginFormComponent {
   loginError = signal<boolean>(false);   
   errorMessage = signal<string>('');
 
+  loginForm = new FormGroup({
+    email: new FormControl<string>('', {
+      nonNullable: true, 
+      validators: [Validators.required, Validators.email]
+    }),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: Validators.required
+    })
+  });
+
   constructor(private authService: AuthServiceService, private router: Router ){}
 
-  loginForm = new FormGroup({
-    username: new FormControl<string>('', { 
-    nonNullable: true, validators: [Validators.required, Validators.email] }),
-    password: new FormControl<string>('', { 
-    nonNullable: true, validators: Validators.required })
-    });
-
     onSubmit(){
+    this.loginSuccess.set(false);
+    this.loginError.set(false);
+    this.errorMessage.set('');
+    const credentials = this.loginForm.value as { email: string; password: string };
       if(this.loginForm.valid){
-        this.authService.login(this.loginForm.value).subscribe({
+        this.authService.login(credentials).subscribe({
           next: (response)=> {
           this.loginSuccess.set(true);
           this.loginError.set(false);
@@ -37,14 +45,9 @@ export class LoginFormComponent {
             this.loginSuccess.set(false);
             this.loginError.set(true);
             console.error('Erreur de connection', err);
-            if (err && err.error && err.error.error) {
-              this.errorMessage.set(err.error.error);
-            } else {
-              this.errorMessage.set('Une erreur de connexion est survenue.');
-            }
+            this.errorMessage.set('Une erreur de connexion est survenue.');
           }
         });
       }
     }
-
 }
