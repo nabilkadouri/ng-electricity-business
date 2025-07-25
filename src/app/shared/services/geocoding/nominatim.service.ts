@@ -29,13 +29,7 @@ export class NominatimService {
       addressdetails: '0'
     };
 
-    // Il est important de fournir un User-Agent pour Nominatim.
-    // Indiquez le nom de votre application et une adresse email de contact.
-    const headers = {
-      'User-Agent': 'YourAppNameAngular/1.0 (your_email@example.com)' // Adaptez avec votre info
-    };
-
-    return this.http.get<NominatimResult[]>(this.NOMINATIM_API_URL, { params, headers }).pipe(
+    return this.http.get<NominatimResult[]>(this.NOMINATIM_API_URL, { params}).pipe(
       map(response => {
         if (response && response.length > 0) {
           const result = response[0];
@@ -50,9 +44,7 @@ export class NominatimService {
       }),
       catchError(error => {
         console.error('NominatimService: Erreur lors de l\'appel API Nominatim:', error);
-        // Vous pouvez ajouter une logique de gestion d'erreur plus sophistiquée ici,
-        // comme afficher un message à l'utilisateur ou retenter l'opération.
-        return of(null); // Retourne null en cas d'erreur
+        return of(null); 
       })
     );
   }

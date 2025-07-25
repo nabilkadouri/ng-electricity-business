@@ -31,7 +31,6 @@ export class ChargingStationDetailsFormComponent {
       description: ['', Validators.required],
       power: ['', Validators.required],
       pricePerHour: ['', [Validators.required, Validators.min(0)]],
-      picture: ['images/default_picture_station.png'], 
       status: ['En attente'], 
       isAvailable: [true] 
     });
@@ -47,20 +46,10 @@ export class ChargingStationDetailsFormComponent {
   onSubmit(): void {
     if (this.chargingStationForm.valid && this.locationStationId && this.currentUserId) {
       const formData: ChargingStationRequestInterface = { ...this.chargingStationForm.value,
-        locationStation: `/api/location_stations/${this.locationStationId}`,
+        locationStationId: this.locationStationId,
+        userId: this.currentUserId
         
        };
-
-       if (formData.pricePerHour !== null && formData.pricePerHour !== undefined) {
-        formData.pricePerHour = formData.pricePerHour;
-      }
-
-      if (formData.power !== null && formData.power !== undefined) {
-        formData.power = formData.power;
-      }
-
-      formData.userId = this.currentUserId; 
-
       console.log('Soumission ChargingStation:', formData);
       this.chargingStationService.postChargingStationByUser(formData).subscribe({
         next: (response:any) => {

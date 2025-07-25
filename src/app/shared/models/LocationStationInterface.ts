@@ -17,6 +17,7 @@ export interface LocationStationRequestInterface {
     city: string,
     latitude?: number,
     longitude?: number,
+    phoneNumber?: string
 }
 
 export interface NominatimResult {

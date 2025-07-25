@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthServiceService } from '../../../../shared/services/auth-service.service';
 import { LoginRequestInterface, RegisterRequestInterface } from '../../../../shared/models/AuthInterface';
+import { NominatimService } from '../../../../shared/services/geocoding/nominatim.service';
 
 @Component({
   selector: 'app-register-form',
@@ -13,59 +14,63 @@ import { LoginRequestInterface, RegisterRequestInterface } from '../../../../sha
 })
 export class RegisterFormComponent {
 
-  constructor(private authService: AuthServiceService, private router: Router) {}
+  registerForm: FormGroup;
+  isLoadingGeocoding: boolean = false;
 
-  registerForm = new FormGroup({
-    name: new FormControl<string>('', {
-      nonNullable: true, validators: Validators.required
-    }),
-    firstName: new FormControl<string>('', {
-      nonNullable: true, validators: Validators.required
-    }),
-    phoneNumber: new FormControl('', {
-      nonNullable: true, validators: [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(10),
-      ]
-    }),
-    email: new FormControl<string>('', {
-      nonNullable: true, validators: [Validators.required, Validators.email]
-    }),
-    password: new FormControl<string>('', {
-      nonNullable: true, validators: Validators.required
-    }),
-    confirmPassword: new FormControl<string>('', { // Ajout du contrôle confirmPassword
-      nonNullable: true, validators: Validators.required
-    }),
-    address: new FormControl<string>('', {
-      nonNullable: true, validators: Validators.required
-    }),
-    postaleCode: new FormControl('', {
-      nonNullable: true, validators: [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(5),
-      ]
-    }),
-    city: new FormControl<string>('', {
-      nonNullable: true, validators: Validators.required
-    }),
-  }, { validators: this.mustMatch('password', 'confirmPassword') }); 
+  constructor(private fb: FormBuilder, private authService: AuthServiceService, private router: Router, private nominatimService: NominatimService) {
+    this.registerForm = this.fb.group({
+      name: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
+      firstName: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
+      
+      email: new FormControl<string>('', {
+        nonNullable: true, validators: [Validators.required, Validators.email]
+      }),
+      password: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
+      confirmPassword: new FormControl<string>('', { 
+        nonNullable: true, validators: Validators.required
+      }),
+      address: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
+      postaleCode: new FormControl('', {
+        nonNullable: true, validators: [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(5),
+        ]
+      }),
+      city: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
+      latitude: [null],
+      longitude: [null],
+      phoneNumber: new FormControl('', {
+        nonNullable: true, validators: [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+        ]
+      })
+    }, { validators: this.mustMatch('password', 'confirmPassword') }); 
+  }
 
-  get f() { return this.registerForm.controls; } 
-
+  
   mustMatch(controlName: string, matchingControlName: string) {
     return (control: AbstractControl) => {
       const formGroup = control as FormGroup;
       const passwordControl = formGroup.controls[controlName];
       const confirmPasswordControl = formGroup.controls[matchingControlName];
 
-      if (!passwordControl || !confirmPasswordControl) { // Ajoutez des vérifications de nullité
+      if (!passwordControl || !confirmPasswordControl) { 
         return null;
       }
 
-      // Supprimez l'erreur mustMatch pour éviter les conflits
       if (confirmPasswordControl.errors && confirmPasswordControl.errors['mustMatch']) {
         confirmPasswordControl.setErrors(null);
       }
@@ -73,41 +78,63 @@ export class RegisterFormComponent {
       if (passwordControl.value !== confirmPasswordControl.value) {
         confirmPasswordControl.setErrors({ mustMatch: true });
       }
-      // Ne faites rien si les valeurs correspondent et qu'il n'y a pas d'erreur mustMatch
       return null;
     };
   }
 
   onSubmit() {
-    // Marquer tous les champs comme touchés pour déclencher les validations
     this.registerForm.markAllAsTouched();
-
+    
     if (this.registerForm.valid) {
-      // Cast la valeur du formulaire au type RegisterRequestInterface
-      const registerData: RegisterRequestInterface = this.registerForm.value as RegisterRequestInterface;
+      this.isLoadingGeocoding = true;
+      const { address, postaleCode, city} = this.registerForm.value;
+      const fullAddress = `${address}, ${postaleCode}, ${city}`;
 
-      this.authService.register(registerData).subscribe({
-        next: (response) => {
-          // Cast pour LoginRequestInterface également
-          const loginData: LoginRequestInterface = {
-            email: registerData.email, 
-            password: registerData.password 
-          };
+      this.nominatimService.getCoordinates(fullAddress).subscribe({
+        next:(coordinates) => {
+          this.isLoadingGeocoding = false;
 
-          this.authService.login(loginData).subscribe({
-            next: (response) => {
-              this.router.navigate(['/check']);
-            }
-          });
-          console.log('Inscription réussie');
+          if(coordinates){
+            this.registerForm.patchValue({
+              latitude: coordinates.latitude,
+              longitude: coordinates.longitude
+            });
+            this.sendRegisterToBackend();
+          } else {
+            console.error('Impossible de récupérer les coordonnées pour l\'adresse fournie.')
+          }
         },
-        error: (err) => {
-          console.error("Erreur lors de l'inscription", err);
+        error: (error) => {
+          this.isLoadingGeocoding = false; 
+          console.error('Erreur lors du géocodage:', error);
         }
       });
     } else {
         console.log('Formulaire invalide', this.registerForm.errors);
-        // Vous pouvez ajouter une logique ici pour afficher des messages d'erreur à l'utilisateur
     }
+  }
+
+  private sendRegisterToBackend(): void {
+    const registerData: RegisterRequestInterface = this.registerForm.value as RegisterRequestInterface;
+    this.authService.register(registerData).subscribe({
+      next: (response) => {
+        const loginData: LoginRequestInterface = {
+          email: registerData.email, 
+          password: registerData.password 
+        };
+
+        this.authService.login(loginData).subscribe({
+          next: (response) => {
+            this.router.navigate(['/check']);
+            this.registerForm.reset();
+            console.log("Navigation réussite", response)
+          }
+        });
+        console.log('Inscription réussie',response);
+      },
+      error: (err) => {
+        console.error("Erreur lors de l'inscription", err);
+      }
+    });
   }
 }

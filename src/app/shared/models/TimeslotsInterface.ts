@@ -15,23 +15,20 @@ export interface TimeslotsResponseInterface{
     dayOfWeek: string,
     startTime: string,
     endTime: string,
-    isAvailable: boolean
     chargingStationId?: number
 }
 
 export interface TimeslotRequestInterface {
     dayOfWeek: DayOfWeek;
-    startTime: string; 
-    endTime: string;
-    isAvailable?: boolean;   
+    startTime: String ; 
+    endTime: String; 
     chargingStationId: number 
 }
+
 
 export interface TimeslotsMapInterface{
     id: number,
     dayOfWeek: string,
     startTime: string,
     endTime: string,
-    isAvailable: boolean
-   
 }

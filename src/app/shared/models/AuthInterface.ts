@@ -31,5 +31,12 @@
         postaleCode: string;
         city: string;
         phoneNumber?: string;
+        latitude?: number,
+        longitude?: number,
     }
+
+    export interface Coordinates {
+        latitude: number;
+        longitude: number;
+      }
 

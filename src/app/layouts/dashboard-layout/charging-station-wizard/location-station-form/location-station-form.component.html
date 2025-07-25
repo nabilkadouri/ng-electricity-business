@@ -3,8 +3,11 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="nameLocation">Nom du lieu (optionnel)</label>
-            <input type="text" formControlName="name" id="nameLocation" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="locationName">Nom de l'emplacement</label>
+            <input type="text" formControlName="locationName" id="locationName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 form-control" placeholder="Ex: Borne principale">
+            <div *ngIf="locationForm.get('locationName')?.invalid && locationForm.get('locationName')?.touched" class="text-red-500 text-sm mt-1">
+                Le nom de l'emplacement est requis.
+              </div>
         </div>
         <div>
             <label class="block text-gray-700 text-sm font-bold mb-2" for="addressStation">Adresse de la borne <span class="text-red-500">*</span></label>

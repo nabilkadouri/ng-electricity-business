@@ -1,9 +1,10 @@
 import {
-  AfterViewInit,
   Component,
+  ElementRef,
   inject,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { UserService } from '../../../shared/services/entities/user.service';
 import { CommonModule } from '@angular/common';
@@ -26,14 +27,16 @@ import { DayOfWeek } from '../../../shared/models/TimeslotsInterface';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
+
+  @ViewChild('mapElement', { static: false }) mapElement!: ElementRef;
+
   userService = inject(UserService);
   chargingStationService = inject(ChargingStationService);
   user!: UserResponseInterface;
-  currentBookings: BookingResponseInterface[] = [];
   ownedStations: ChargingStationResponseInterface[] = [];
   bookingsWhithStationDetails: (BookingResponseInterface & {
-    stationDetails?: ChargingStationResponseInterface;
+  stationDetails?: ChargingStationResponseInterface;
   })[] = [];
 
   map!: maplibregl.Map;
@@ -60,14 +63,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           dayOfWeek: 'Lundi',
           startTime: '2025-01-01T08:00:00',
           endTime: '2025-01-01T09:00:00',
-          isAvailable: true,
         },
         {
           id: 1002,
           dayOfWeek: 'Lundi',
           startTime: '2025-01-01T09:00:00',
           endTime: '2025-01-01T10:00:00',
-          isAvailable: false,
         },
       ],
     },
@@ -91,14 +92,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           dayOfWeek: 'Mardi',
           startTime: '2025-01-01T10:00:00',
           endTime: '2025-01-01T11:00:00',
-          isAvailable: true,
         },
         {
           id: 2002,
           dayOfWeek: 'Mardi',
           startTime: '2025-01-01T11:00:00',
           endTime: '2025-01-01T12:00:00',
-          isAvailable: true,
         },
       ],
     },
@@ -122,7 +121,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           dayOfWeek: 'Mercredi',
           startTime: '2025-01-01T14:00:00',
           endTime: '2025-01-01T15:00:00',
-          isAvailable: true,
         },
       ],
     },
@@ -150,6 +148,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         this.user = user;
         this.ownedStations = user.chargingStations;
         this.loadBookingsStationsDetails();
+        setTimeout(() => {
+          this.initializeMap();
+        }, 0);
       } else {
         console.error(
           "Erreur lors de la récupération des données utilisateur : L'objet utilisateur est null."
@@ -158,10 +159,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit(): void {
-    // Initialise directement la carte avec des coordonnées par défaut
-    this.initializeMap();
-  }
 
   ngOnDestroy(): void {
     if (this.map) {
@@ -169,23 +166,40 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  // metode qui permet d'afficher la recharge a venir
+  get nextBooking(): (BookingResponseInterface & { stationDetails?: ChargingStationResponseInterface }) | undefined {
+    const now = new Date();
+    return this.bookingsWhithStationDetails
+      .filter(b => new Date(b.startDate) > now)
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0];
+  }
+
+  // Methode qui ^permet d'afficher la borne en location principale
+  get mainStation(): ChargingStationResponseInterface | undefined {
+    return this.ownedStations.length > 0 ? this.ownedStations[0] : undefined;
+  }
+
   /**
    * Initialise la carte MapLibre GL JS avec une position et un zoom par défaut.
    * Cette version ne gère pas la géolocalisation ni l'affichage de marqueurs pour les bornes de recharge.
    */
   initializeMap(): void {
+    if (!this.mapElement || !this.mapElement.nativeElement) {
+      console.error("L'élément DOM de la carte n'est pas trouvé.");
+      return;
+    }
+
     try {
-      // Coordonnées par défaut (par exemple, le centre de Paris)
-      const defaultLat = 45.6833; // Latitude de Paris
-      const defaultLng = 4.9333; // Longitude de Paris
+      const defaultLat = this.user.latitude!;
+      const defaultLng = this.user.longitude!;
 
       this.map = new maplibregl.Map({
-        container: 'map',
+        container: this.mapElement.nativeElement,
         style:
-          'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', // Le style de la carte (une carte de base claire)
-        center: [defaultLng, defaultLat], // Le centre initial de la carte [longitude, latitude]
-        zoom: 11.5, // Le niveau de zoom initial
-        attributionControl: false, // Désactive le contrôle d'attribution par défaut
+          'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', 
+        center: [defaultLng, defaultLat], 
+        zoom: 13, 
+        attributionControl: false, 
       });
 
       // Ajoute les contrôles de navigation (zoom +/- et boussole) à la carte
@@ -200,6 +214,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map.on('load', () => {
         this.loadChargingStationsOnMap(defaultLat, defaultLng);
       });
+      setTimeout(() => {
+        if (this.map) {
+          this.map.resize();
+        }
+      }, 200);
     } catch (error) {
       console.error("Erreur lors de l'initialisation de la carte :", error);
     }
@@ -207,7 +226,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadChargingStationsOnMap(latitude: number, longitude: number) {
     const radiusKm = 10;
-
     const Stations = this.mockNearbyStations.filter((station) => {
       if (
         station.locationStation &&

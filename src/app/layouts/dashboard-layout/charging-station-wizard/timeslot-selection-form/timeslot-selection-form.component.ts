@@ -18,7 +18,7 @@ export class TimeslotSelectionFormComponent {
   timeslotForm: FormGroup;
   selectedDays: string[] = []; 
 
-  daysOfWeek = [
+  readonly daysOfWeek = [
     { label: 'L', value: 'Lundi' },
     { label: 'Ma', value: 'Mardi' },
     { label: 'Me', value: 'Mercredi' },
@@ -35,24 +35,14 @@ export class TimeslotSelectionFormComponent {
     });
   }
 
-  ngOnInit(): void {
-   
-  }
 
   toggleDay(dayValue: string): void {
-    if (this.selectedDays.includes(dayValue)) {
-      this.selectedDays = this.selectedDays.filter(day => day !== dayValue);
-    } else {
-      this.selectedDays = [...this.selectedDays, dayValue]; 
-    }
-
-    this.selectedDays.sort((a, b) => {
-        const daysOrder = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-        return daysOrder.indexOf(a) - daysOrder.indexOf(b);
-    });
-    console.log('Jours sélectionnés:', this.selectedDays);
-  this.cdr.detectChanges();
-
+    const index = this.selectedDays.indexOf(dayValue);
+    index === -1
+      ? this.selectedDays.push(dayValue)
+      : this.selectedDays.splice(index, 1);
+  
+    this.cdr.detectChanges();
   }
 
   isDaySelected(dayValue: string): boolean {
@@ -60,29 +50,25 @@ export class TimeslotSelectionFormComponent {
   }
 
   onSubmit(): void {
-    if (this.timeslotForm.valid && this.selectedDays.length > 0 && this.chargingStationId) {
-      const { startTime, endTime } = this.timeslotForm.value;
-    
-      // Mapper les jours sélectionnés en objets Timeslot pour l'API batch
-      const timeslotsToCreate = this.selectedDays.map(day => ({
-        dayOfWeek: day as DayOfWeek,
-        startTime: startTime + ':00', 
-        endTime: endTime + ':00',
-        chargingStationId: this.chargingStationId
-      }));
-
-      console.log('Soumission Timeslots:', timeslotsToCreate);
-      this.timeslotService.createMultipleTimeslots(timeslotsToCreate).subscribe({
-        next: (response) => {
-          console.log('Timeslots créés avec succès:', response);
-          this.timeslotsSubmitted.emit(); // Informe le parent que l'opération est complète
-        },
-        error: (error) => {
-          console.error('Erreur lors de la création des timeslots:', error);
-        }
-      });
-    } else {
-      console.warn('Formulaire Timeslot invalide, aucun jour sélectionné, ou ChargingStationId manquant.');
+    if (this.timeslotForm.invalid || !this.selectedDays.length || !this.chargingStationId) {
+      console.warn('Formulaire invalide ou jours non sélectionnés');
+      return;
     }
+
+    const { startTime, endTime } = this.timeslotForm.value;
+
+    const timeslotsToCreate = this.selectedDays.map(day => ({
+      dayOfWeek: day as DayOfWeek,
+      startTime,
+      endTime,
+      chargingStationId: this.chargingStationId,
+    }));
+
+    console.log('Données envoyées:', timeslotsToCreate);
+    this.timeslotService.createMultipleTimeslots(timeslotsToCreate).subscribe({
+      next: () => this.timeslotsSubmitted.emit(),
+      error: err => console.error('Erreur lors de la création des créneaux :', err),
+    });
   }
+
 }

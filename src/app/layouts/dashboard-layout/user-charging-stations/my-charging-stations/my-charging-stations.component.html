@@ -1,34 +1,35 @@
 <section>
-  <div class="px-4 pt-36 mb-15 sm:ml-80">
+  <div class="mb-15 px-4 pt-36 sm:ml-80">
     <div class="mb-5 text-center md:text-start">
       <h1 class="text-3xl">Mes bornes</h1>
-      <p class="mt-1 text-bleu-electrique font-medium">
-        Gérer vos bornes 
-      </p>
+      <p class="text-bleu-electrique mt-1 font-medium">Gérer vos bornes</p>
     </div>
-    
-      <div class="flex flex-col md:flex-row gap-5 md:gap-10">
-        
-        <div *ngFor="let station of ownedStations" class="space-y-4 rounded-2xl bg-white px-4 py-6 shadow-2xl ">
-          <div class="mb-2 flex justify-end">
-            <button
+
+    <div class="flex flex-col gap-5 md:flex-row md:gap-5">
+      <div
+        *ngFor="let station of ownedStations"
+        class="space-y-4 rounded-2xl bg-white p-6 shadow-2xl"
+      >
+        <div class="mb-2 flex justify-end">
+          <button
             (click)="deleteStation(station.id!)"
-              class="text-red-500 hover:text-red-700"
-              aria-label="Supprimer la borne 1"
-            >
-            
-              <img src="/icons/delete.svg" alt="icone bouton de suppression" />
-            </button>
-          </div>
-       <img
+            class="text-red-500 hover:text-red-700"
+            aria-label="Supprimer la borne 1"
+          >
+            <img src="/icons/delete.svg" alt="icone bouton de suppression" />
+          </button>
+        </div>
+
+        <h2 class="text-bleu-foncee text-center  text-3xl font-semibold">
+          {{ station.nameStation }}
+        </h2>
+        <img
           [src]="station.picture.src"
           alt="Borne"
           class="h-auto w-full rounded-2xl"
-        /> 
-        
-          <h2 class="text-bleu-foncee text-3xl font-semibold pb-5">
-            {{ station.nameStation }}
-          </h2>
+        />
+
+        <div class="flex flex-col md:flex-row gap-5">
           <p class="text-gray-700">
             <span class="font-medium">Connecteur : </span>
             <span class="text-bleu-electrique font-semibold">Type 2</span>
@@ -36,30 +37,34 @@
           <p class="text-gray-700">
             <span class="font-medium">Puissance max : </span>
             <span class="text-bleu-electrique font-semibold"
-              >{{ station.power }} kW </span
-            >
+              >{{ station.power }} kW
+            </span>
           </p>
-          <p class="text-gray-700">
-            <span class="font-medium">Tarif horaire : </span>
-            <span class="text-bleu-electrique font-semibold"
-              >{{ station.pricePerHour }}€ / h</span
-            >
-          </p>
-         
-          <div *ngIf="station.timeslots && station.timeslots.length > 0">
-            <p class="font-medium text-gray-700 mb-2">Disponibilité :</p>
-            <div *ngFor="let availability of station.timeslots">
-                <p class="text-bleu-electrique font-medium">
-                    {{ availability.dayOfWeek }} 
-                    {{ availability.startTime | date:'HH:mm' }} &rarr; {{ availability.endTime | date:'HH:mm' }}
-                </p>
-            </div>
+
+        </div>
+        
+        <p class="text-gray-700">
+          <span class="font-medium">Tarif horaire : </span>
+          <span class="text-bleu-electrique font-semibold"
+            >{{ station.pricePerHour }}€ / h</span
+          >
+        </p>
+
+        <div *ngIf="station.timeslots && station.timeslots.length > 0">
+          <p class="mb-2 font-medium text-gray-700">Disponibilité :</p>
+          <div *ngFor="let availability of station.timeslots">
+            <p class="text-bleu-electrique font-medium">
+              {{ availability.dayOfWeek }} :
+              {{ availability.startTime.slice(0,5) }} &rarr;
+              {{ availability.endTime.slice(0,5)  }}
+            </p>
+          </div>
         </div>
 
-          <div class="mt-10 flex justify-center ">
-            <button class="btn-proposer">Modifier ma borne</button>
-          </div>
+        <div class="mt-5 flex justify-center">
+          <button class="btn-proposer">Modifier ma borne</button>
         </div>
       </div>
     </div>
+  </div>
 </section>

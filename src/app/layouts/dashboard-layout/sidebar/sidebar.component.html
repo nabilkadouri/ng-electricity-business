@@ -1,5 +1,5 @@
 <header>
-  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-2">
+  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white px-4">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <!-- Bouton burger et logo -->
@@ -106,15 +106,15 @@
   </nav>
 
   <aside
-    class="fixed top-0 left-0 z-40 flex h-full -translate-x-full items-center justify-center border-r border-gray-200 bg-white pt-20 transition-transform sm:translate-x-0 md:w-80"
+    class="fixed top-0 left-0 z-40 flex h-full -translate-x-full pt-30 justify-center border-r border-gray-200 bg-white transition-transform sm:translate-x-0 md:w-80"
     aria-label="Sidebar"
     [ngClass]="{
       'translate-x-0': isSidebarOpen,
       '-translate-x-full': !isSidebarOpen,
     }"
   >
-    <div class="h-full overflow-y-auto bg-white px-3 pt-20 pb-4">
-      <ul class="space-y-6 font-medium">
+    <div class="h-full overflow-y-auto bg-white px-4 md:py-10 ">
+      <ul class="space-y-6  md:space-y-10 font-medium">
         <li>
           <a
             routerLink="/dashboard"
@@ -202,7 +202,7 @@
         <li>
           <a
             routerLink="dashboard"
-            class="group mt-20 flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
+            class="group mt-24 md:mt-32 flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100"
             *ngIf="authService.isLogged()"
             (click)="authService.logout()"
           >
