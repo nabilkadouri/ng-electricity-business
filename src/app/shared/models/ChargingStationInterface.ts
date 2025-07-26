@@ -14,7 +14,7 @@ export enum ChargingStationStatus {
 
 
 export interface ChargingStationResponseInterface {
-    id: number;
+    id: number ;
     createdAt: string;
     nameStation: string;
     description: string,
@@ -42,7 +42,8 @@ export interface ChargingStationRequestInterface  {
 }
 
 export interface CharginStationInterfaceMap {
-    id:number;
+    picture: any;
+    id:number ;
     nameStation: string;
     power: number,
     pricePerHour: number;

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   inject,
@@ -20,6 +21,7 @@ import distance from '@turf/distance';
 import { UserResponseInterface } from '../../../shared/models/UserInterface';
 import { BookingResponseInterface } from '../../../shared/models/BookingInterface';
 import { DayOfWeek } from '../../../shared/models/TimeslotsInterface';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,7 +29,7 @@ import { DayOfWeek } from '../../../shared/models/TimeslotsInterface';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('mapElement', { static: false }) mapElement!: ElementRef;
 
@@ -42,105 +44,105 @@ export class DashboardComponent implements OnInit, OnDestroy {
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
-  mockNearbyStations: CharginStationInterfaceMap[] = [
-    {
-      id: 1,
-      nameStation: 'Borne Centre Saint-Priest',
-      power: 50,
-      pricePerHour: 0.3,
-      locationStation: {
-        id: 101,
-        locationName: 'Centre Saint-Priest',
-        address: "1 Rue de l'Hôtel de Ville",
-        postaleCode: '69800',
-        city: 'Saint-Priest',
-        latitude: 45.6987,
-        longitude: 4.94,
-      },
-      timeslots: [
-        {
-          id: 1001,
-          dayOfWeek: 'Lundi',
-          startTime: '2025-01-01T08:00:00',
-          endTime: '2025-01-01T09:00:00',
-        },
-        {
-          id: 1002,
-          dayOfWeek: 'Lundi',
-          startTime: '2025-01-01T09:00:00',
-          endTime: '2025-01-01T10:00:00',
-        },
-      ],
-    },
-    {
-      id: 2,
-      nameStation: 'Superchargeur Technopole',
-      power: 150,
-      pricePerHour: 0.45,
-      locationStation: {
-        id: 102,
-        locationName: 'Technopole Est',
-        address: '20 Avenue Jean Mermoz',
-        postaleCode: '69800',
-        city: 'Saint-Priest',
-        latitude: 45.705,
-        longitude: 4.935,
-      },
-      timeslots: [
-        {
-          id: 2001,
-          dayOfWeek: 'Mardi',
-          startTime: '2025-01-01T10:00:00',
-          endTime: '2025-01-01T11:00:00',
-        },
-        {
-          id: 2002,
-          dayOfWeek: 'Mardi',
-          startTime: '2025-01-01T11:00:00',
-          endTime: '2025-01-01T12:00:00',
-        },
-      ],
-    },
-    {
-      id: 3,
-      nameStation: 'Parking Relais Saint-Priest',
-      power: 22,
-      pricePerHour: 0.25,
-      locationStation: {
-        id: 103,
-        locationName: 'Parking Relais',
-        address: '5 Rue du Dauphiné',
-        postaleCode: '69800',
-        city: 'Saint-Priest',
-        latitude: 45.69,
-        longitude: 4.95,
-      },
-      timeslots: [
-        {
-          id: 3001,
-          dayOfWeek: 'Mercredi',
-          startTime: '2025-01-01T14:00:00',
-          endTime: '2025-01-01T15:00:00',
-        },
-      ],
-    },
-    {
-      id: 4,
-      nameStation: 'Recharge Express Gare Saint-Priest',
-      power: 7,
-      pricePerHour: 0.2,
-      locationStation: {
-        id: 104,
-        locationName: 'Gare SNCF',
-        address: 'Place de la Gare',
-        postaleCode: '69800',
-        city: 'Saint-Priest',
-        latitude: 45.695,
-        longitude: 4.945,
-      },
-      timeslots: [],
-    },
-  ];
+  // mockNearbyStations: CharginStationInterfaceMap[] = [
+  //   {
+  //     id: 1,
+  //     nameStation: 'Borne Centre Saint-Priest',
+  //     power: 50,
+  //     pricePerHour: 0.3,
+  //     locationStation: {
+  //       id: 101,
+  //       locationName: 'Centre Saint-Priest',
+  //       address: "1 Rue de l'Hôtel de Ville",
+  //       postaleCode: '69800',
+  //       city: 'Saint-Priest',
+  //       latitude: 45.6987,
+  //       longitude: 4.94,
+  //     },
+  //     timeslots: [
+  //       {
+  //         id: 1001,
+  //         dayOfWeek: 'Lundi',
+  //         startTime: '2025-01-01T08:00:00',
+  //         endTime: '2025-01-01T09:00:00',
+  //       },
+  //       {
+  //         id: 1002,
+  //         dayOfWeek: 'Lundi',
+  //         startTime: '2025-01-01T09:00:00',
+  //         endTime: '2025-01-01T10:00:00',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     nameStation: 'Superchargeur Technopole',
+  //     power: 150,
+  //     pricePerHour: 0.45,
+  //     locationStation: {
+  //       id: 102,
+  //       locationName: 'Technopole Est',
+  //       address: '20 Avenue Jean Mermoz',
+  //       postaleCode: '69800',
+  //       city: 'Saint-Priest',
+  //       latitude: 45.705,
+  //       longitude: 4.935,
+  //     },
+  //     timeslots: [
+  //       {
+  //         id: 2001,
+  //         dayOfWeek: 'Mardi',
+  //         startTime: '2025-01-01T10:00:00',
+  //         endTime: '2025-01-01T11:00:00',
+  //       },
+  //       {
+  //         id: 2002,
+  //         dayOfWeek: 'Mardi',
+  //         startTime: '2025-01-01T11:00:00',
+  //         endTime: '2025-01-01T12:00:00',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     nameStation: 'Parking Relais Saint-Priest',
+  //     power: 22,
+  //     pricePerHour: 0.25,
+  //     locationStation: {
+  //       id: 103,
+  //       locationName: 'Parking Relais',
+  //       address: '5 Rue du Dauphiné',
+  //       postaleCode: '69800',
+  //       city: 'Saint-Priest',
+  //       latitude: 45.69,
+  //       longitude: 4.95,
+  //     },
+  //     timeslots: [
+  //       {
+  //         id: 3001,
+  //         dayOfWeek: 'Mercredi',
+  //         startTime: '2025-01-01T14:00:00',
+  //         endTime: '2025-01-01T15:00:00',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 4,
+  //     nameStation: 'Recharge Express Gare Saint-Priest',
+  //     power: 7,
+  //     pricePerHour: 0.2,
+  //     locationStation: {
+  //       id: 104,
+  //       locationName: 'Gare SNCF',
+  //       address: 'Place de la Gare',
+  //       postaleCode: '69800',
+  //       city: 'Saint-Priest',
+  //       latitude: 45.695,
+  //       longitude: 4.945,
+  //     },
+  //     timeslots: [],
+  //   },
+  // ];
 
   ngOnInit(): void {
     this.userService.user$.subscribe((user) => {
@@ -148,13 +150,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.user = user;
         this.ownedStations = user.chargingStations;
         this.loadBookingsStationsDetails();
-        setTimeout(() => {
-          this.initializeMap();
-        }, 0);
       } else {
         console.error(
           "Erreur lors de la récupération des données utilisateur : L'objet utilisateur est null."
         );
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.mapElement || !this.mapElement.nativeElement) {
+      console.error("L'élément DOM de la carte n'est pas trouvé lors de ngAfterViewInit.");
+      return;
+    }
+
+    this.userService.user$.pipe(take(1)).subscribe(user => {
+      if (user && user.latitude && user.longitude) {
+        this.user = user; 
+        this.initializeMap();
+      } else {
+        console.warn("Données utilisateur (latitude/longitude) non disponibles pour initialiser la carte.");
       }
     });
   }
@@ -225,24 +240,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadChargingStationsOnMap(latitude: number, longitude: number) {
-    const radiusKm = 10;
-    const Stations = this.mockNearbyStations.filter((station) => {
-      if (
-        station.locationStation &&
-        station.locationStation.latitude &&
-        station.locationStation.longitude
-      ) {
-        const distanceCalculated = this.getDistance(
-          latitude,
-          longitude,
-          station.locationStation.latitude,
-          station.locationStation.longitude,
-        );
-        return distanceCalculated <= radiusKm;
+    const radiusKm = 20; 
+  
+    this.chargingStationService.getChargingStations().subscribe({
+      next: (response: ChargingStationResponseInterface[]) => {
+        this.markers.forEach(marker => marker.remove());
+        this.markers = [];
+  
+        const stations = response.filter((station) => { // 
+          if (
+            station.locationStation &&
+            station.locationStation.latitude &&
+            station.locationStation.longitude
+          ) {
+            const distanceCalculated = this.getDistance(
+              latitude,
+              longitude,
+              station.locationStation.latitude,
+              station.locationStation.longitude
+            );
+            
+            return distanceCalculated <= radiusKm;
+          }
+          return false;
+        });
+        this.addMarkersToMap(stations); 
+      },
+      error: (err) => {
+        console.error("Erreur lors du chargement des bornes de recharge :", err);
       }
-      return false;
     });
-    this.addMarkersToMap(Stations);
   }
 
   getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {

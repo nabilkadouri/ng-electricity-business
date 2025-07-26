@@ -11,6 +11,8 @@ import { UserBookingsComponent } from './layouts/dashboard-layout/user-bookings/
 import { UserChargingStationsComponent } from './layouts/dashboard-layout/user-charging-stations/user-charging-stations.component';
 import { UserProfileSettingsComponent } from './layouts/dashboard-layout/user-profile-settings/user-profile-settings.component';
 import { ChargingStationWizardComponent } from './layouts/dashboard-layout/charging-station-wizard/charging-station-wizard.component';
+import { RechargeVehicleComponent } from './layouts/dashboard-layout/recharge-vehicle/recharge-vehicle.component';
+import { BorneDetailsComponent } from './layouts/dashboard-layout/recharge-vehicle/borne-details/borne-details.component';
 
 export const routes: Routes = [
   {
@@ -33,7 +35,10 @@ export const routes: Routes = [
       { path:'bookings', component: UserBookingsComponent},
       { path:'userStations', component: UserChargingStationsComponent},
       { path:'userProfile', component: UserProfileSettingsComponent},
-      { path: 'proposerBorne', component: ChargingStationWizardComponent },
+      { path:'proposerBorne', component: ChargingStationWizardComponent},
+      { path:'rechargeVehicle', component: RechargeVehicleComponent},
+      { path: 'borne-details/:id', component: BorneDetailsComponent }
+
     ]
   },
 

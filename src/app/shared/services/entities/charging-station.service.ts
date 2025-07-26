@@ -14,6 +14,10 @@ export class ChargingStationService {
 
   constructor(private http:HttpClient) { }
 
+  getChargingStations():Observable<ChargingStationResponseInterface[]> {
+    return this.http.get<ChargingStationResponseInterface[]>(`${this.apiUrl}/api/charging_stations`)
+  }
+
   getChargingStationByUser():Observable<ChargingStationResponseInterface[]> {
 return this.http.get<ChargingStationResponseInterface[]>(`${this.apiUrl}/api/users/me/charging_stations`)
   }
