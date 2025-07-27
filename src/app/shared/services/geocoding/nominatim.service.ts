@@ -48,4 +48,21 @@ export class NominatimService {
       })
     );
   }
+
+  /**
+   * Effectue une recherche d'adresse en utilisant l'API Nominatim d'OpenStreetMap.
+   *
+   * @param query - Le texte saisi par l'utilisateur (ex: début d'une adresse)
+   * @returns Observable<any> - Retourne un tableau d'objets avec les résultats (coordonnées, nom complet, etc.)
+   */
+  searchAddress(query: string):Observable<any> {
+    return this.http.get<any>(this.NOMINATIM_API_URL,{
+      params: {
+        q: query,
+        format: 'json',
+        addresDetails:'1',
+        limit: '5'
+      }
+    });
+  }
 }

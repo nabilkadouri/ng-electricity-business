@@ -22,10 +22,11 @@ import { UserResponseInterface } from '../../../shared/models/UserInterface';
 import { BookingResponseInterface } from '../../../shared/models/BookingInterface';
 import { DayOfWeek } from '../../../shared/models/TimeslotsInterface';
 import { take } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })

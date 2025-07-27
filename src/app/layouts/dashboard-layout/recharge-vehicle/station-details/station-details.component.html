@@ -1,0 +1,85 @@
+<section class="bg-gray-50 p-6">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-30 border border-dashed border-blue-400">
+        <!-- Header -->
+        <h1 class="text-center text-xl font-bold text-blue-800 mb-4">Demande de réservation</h1>
+        <!-- Borne Info -->
+        <div class="flex items-center gap-4 mb-6">
+            <img src="https://via.placeholder.com/80" alt="borne" class="w-20 h-20 object-cover">
+            <div>
+                <h2 class="font-semibold text-gray-800">Borne Dupont</h2>
+                <p class="text-gray-600 text-sm">5 chemin du chat, 69330 Meyzieu</p>
+                <p class="text-bleu-electrique font-semibold text-sm">7.4 kW - 4.50€/h</p>
+                <span class="inline-block mt-1 bg-green-600 text-white text-xs px-3 py-1 rounded ">
+                    Disponible de 9h00 à 23h00
+                </span>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6">
+            <!-- Horaires -->
+            <div class="border rounded-lg p-4">
+                <ul class="space-y-2">
+                    <li class="flex justify-between">
+                        <span>9h00</span>
+                        <span class="text-green-600 font-medium">Disponible</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>10h00</span>
+                        <span class="text-green-600 font-medium">Disponible</span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span>11h00</span>
+                        <span class="text-gray-500">Indisponible</span>
+                    </li>
+                    <!-- Ajoute les autres horaires ici -->
+                </ul>
+            </div>
+            <!-- Calendrier + Paiement -->
+            <div>
+                <!-- Date Picker -->
+                <div class="border rounded-lg p-4 mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Select date</label>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-semibold">Mon, Aug 17</span>
+                        <button class="text-blue-500 text-sm">✏️</button>
+                    </div>
+                    <div class="mt-2">
+                        <input type="date" class="w-full border rounded px-2 py-1">
+                    </div>
+                </div>
+                <!-- Info & Prix -->
+                <div class="bg-blue-100 text-blue-800 text-sm p-3 rounded mb-4">
+                    Les demandes jusqu'à 2 heures avant sont autorisées
+                </div>
+                <div class="border rounded-lg p-4 mb-4">
+                    <h3 class="font-semibold text-gray-700 mb-2">Prix de la charge</h3>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>4.5 x 2.5 heures</span>
+                        <span>10€</span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Frais de réservation</span>
+                        <span>0.38€</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-gray-800">
+                        <span>Total à régler</span>
+                        <span>11.63€</span>
+                    </div>
+                </div>
+                <!-- Boutons -->
+                <div class="space-y-2">
+                    <button class="w-full bg-yellow-400 text-gray-800 font-bold py-2 rounded hover:bg-yellow-500">
+                        Payer avec PayPal
+                    </button>
+                    <div class="text-center text-gray-500 text-sm">ou</div>
+                    <button class="w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600">
+                        Payer par carte
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6">
+            <a routerLink="/dashboard/rechargeVehicle" class="text-blue-500 text-sm">← Retour</a>
+        </div>
+    </div>
+</section>
+  

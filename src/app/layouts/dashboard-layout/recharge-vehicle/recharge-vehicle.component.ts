@@ -6,38 +6,52 @@ import { NominatimService } from '../../../shared/services/geocoding/nominatim.s
 import { UserService } from '../../../shared/services/entities/user.service';
 import { UserResponseInterface } from '../../../shared/models/UserInterface';
 import maplibregl from 'maplibre-gl';
-import { take } from 'rxjs';
+import {debounceTime, distinctUntilChanged, Subject, switchMap, take } from 'rxjs';
 import { point } from '@turf/helpers';
 import distance from '@turf/distance';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-recharge-vehicle',
-  imports: [CommonModule,],
+  imports: [CommonModule,FormsModule],
   templateUrl: './recharge-vehicle.component.html',
   styleUrl: './recharge-vehicle.component.css'
 })
 export class RechargeVehicleComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapElement', { static: false}) mapElement!: ElementRef;
-  
-chargingStationService = inject(ChargingStationService);
-nominatimService = inject(NominatimService);
+  searchTerm = '';
+  suggestions: any[] = [];
+  private searchSubject = new Subject<string>();
+  nominatimService = inject(NominatimService);
 
-chargingStations: ChargingStationResponseInterface[] = [];
-userService = inject(UserService);
-user!: UserResponseInterface;
+  chargingStationService = inject(ChargingStationService)
+  chargingStations: ChargingStationResponseInterface[] = [];
+  userService = inject(UserService);
+  user!: UserResponseInterface;
 
-map!: maplibregl.Map;
-markers: maplibregl.Marker[] = [];
+  map!: maplibregl.Map;
+  markers: maplibregl.Marker[] = [];
 
-constructor(private router: Router, private ngZone: NgZone) {}
+  constructor(private router: Router, private ngZone: NgZone) {}
 
 
+  // Initialise le flux de recherche avec debounce et distinctUntilChanged pour éviter
+  // les appels inutiles à l'API. À chaque saisie (après 400 ms), on interroge Nominatim.
 ngOnInit(): void {
-  
+  this.searchSubject.pipe(
+    debounceTime(400),
+    distinctUntilChanged(),
+    switchMap(term => this.nominatimService.searchAddress(term))
+  ).subscribe((results) => {
+    this.suggestions = results;
+    console.log(results);
+    
+  });
     
 }
 
+// Initialisation de la map
 ngAfterViewInit(): void {
   if(!this.mapElement || !this.mapElement.nativeElement) {
     console.error("L'élément DOM de la carte introuvable !")
@@ -59,6 +73,35 @@ ngOnDestroy(): void {
   }
 }
 
+// Méthode déclenché à chaque modification dans la barre de recherche.
+onSearchChange() {
+  if (this.searchTerm.length > 2) {
+    this.searchSubject.next(this.searchTerm);
+  } else {
+    this.suggestions = [];
+  }
+}
+
+// Méthode qui sélectionne une adresse dans la liste, remplit le champ, recentre la carte et recharge les bornes de recharge autour de la nouvelle position.
+selectAddress(address: any) {
+  this.searchTerm = address.display_name;
+  this.suggestions = [];
+
+  const lat = parseFloat(address.lat);
+  const lon = parseFloat(address.lon);
+
+  // Recentre la carte sur cette position
+  if (this.map) {
+    this.map.flyTo({ center: [lon, lat], zoom: 14 });
+  }
+
+  // Recharge les bornes autour de la nouvelle adresse
+  this.loadChargingStationsOnMap(lat, lon);
+}
+
+
+
+// Methode d'initialisation de la map
 initializeMap():void {
 
   if(this.map){
@@ -75,7 +118,7 @@ initializeMap():void {
         style:
           'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', 
         center: [defaultLng, defaultLat], 
-        zoom: 13, 
+        zoom: 12, 
         attributionControl: false,
       });
 
@@ -101,6 +144,7 @@ initializeMap():void {
   }
 }
 
+// Methode pourrécuperer les bornes dans un rayon de 20km autour de l'adresse du user
 loadChargingStationsOnMap(latitude: number, longitude: number) {
   const radiusKm = 20; 
 
@@ -134,6 +178,7 @@ loadChargingStationsOnMap(latitude: number, longitude: number) {
   });
 }
 
+// Methode qui permet de caluler la distance 
 getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   // Créez les points géographiques au format attendu par Turf.js
   // point([longitude, latitude])
@@ -147,6 +192,7 @@ getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   return dist;
 }
 
+// Methode pour l'ajout des markers et de la popup avec redirection vers stationsDétails
 addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
   stations.forEach((station) => {
     if (
@@ -155,12 +201,15 @@ addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
       station.locationStation.longitude
     ) {
       const popupContent = `
-        <div class="p-2">
-          <h3 class="text-lg font-semibold text-vert-foncee">${station.nameStation}</h3>
+        <div>
+          <h3 class="text-lg font-semibold text-vert-foncee pb-2 text-center">${station.nameStation}</h3>
           <p>${station.locationStation.address}, ${station.locationStation.postaleCode} ${station.locationStation.city}</p>
-          <p><strong>Puissance:</strong> ${station.power}</p>
-          <p><strong>Prix/heure:</strong> ${station.pricePerHour}</p>
-          <p class="mt-2 text-sm text-blue-600 font-semibold">Cliquez ici pour réserver cette borne</p>
+          <p><strong>Puissance charge:</strong> ${station.power} kW</p>
+          <p><strong>Tarif horaire:</strong> ${station.pricePerHour} €</p>
+          <p class="inline-block mt-1 bg-vert-clair text-white text-xs px-3 py-2 rounded w-full">
+          <span>Disponible de <span> ${station.timeslots[0]?.startTime.slice(0, 5)} à ${station.timeslots[0]?.endTime.slice(0, 5)}
+          </p>
+          <p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>
         </div>
       `;
 
@@ -190,7 +239,7 @@ addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
       marker.getElement().addEventListener('click', () => {
         this.ngZone.run(() => {
           console.log('Click sur station', station.id);
-          this.router.navigate(['/dashboard/borne-details', station.id]);
+          this.router.navigate(['/dashboard/station-details', station.id]);
         });
       });
 
