@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PARTNERS } from '../../../../../../shared/data';
+// import { PARTNERS } from '../../../../../../shared/data';
 
 @Component({
   selector: 'app-section-simulator',
@@ -12,16 +12,16 @@ import { PARTNERS } from '../../../../../../shared/data';
 })
 export class SectionSimulatorComponent {
 
-  partenaires:any[] = PARTNERS;
-  searchTerm = '';
-  resultat:any[] = [];
+//   partenaires:any[] = PARTNERS;
+//   searchTerm = '';
+//   resultat:any[] = [];
 
-  search(){
-      this.resultat = this.partenaires.filter((prestataire)=>{
-        return (prestataire.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) || prestataire.categorie.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        prestataire.services.some((service: string) => service.toLowerCase().includes(this.searchTerm.toLowerCase()))
-      )
-      })
-}
+//   search(){
+//       this.resultat = this.partenaires.filter((prestataire)=>{
+//         return (prestataire.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) || prestataire.categorie.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+//         prestataire.services.some((service: string) => service.toLowerCase().includes(this.searchTerm.toLowerCase()))
+//       )
+//       })
+// }
 
 }

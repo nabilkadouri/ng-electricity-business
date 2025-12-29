@@ -41,8 +41,6 @@ export class CheckCodeComponent implements OnInit{
       
   }
 
-
-
   onSubmit(): void{
     this.errorMessage.set(null);
 

@@ -20,24 +20,17 @@ export class RegisterFormComponent {
   constructor(private fb: FormBuilder, private authService: AuthServiceService, private router: Router, private nominatimService: NominatimService) {
     this.registerForm = this.fb.group({
       name: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required
-      }),
+        nonNullable: true, validators: Validators.required}),
       firstName: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required
-      }),
-      
+        nonNullable: true, validators: Validators.required}),
       email: new FormControl<string>('', {
-        nonNullable: true, validators: [Validators.required, Validators.email]
-      }),
+        nonNullable: true, validators: [Validators.required, Validators.email]}),
       password: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required
-      }),
+        nonNullable: true, validators: Validators.required}),
       confirmPassword: new FormControl<string>('', { 
-        nonNullable: true, validators: Validators.required
-      }),
+        nonNullable: true, validators: Validators.required}),
       address: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required
-      }),
+        nonNullable: true, validators: Validators.required}),
       postaleCode: new FormControl('', {
         nonNullable: true, validators: [
           Validators.required,
@@ -46,8 +39,7 @@ export class RegisterFormComponent {
         ]
       }),
       city: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required
-      }),
+        nonNullable: true, validators: Validators.required}),
       latitude: [null],
       longitude: [null],
       phoneNumber: new FormControl('', {
