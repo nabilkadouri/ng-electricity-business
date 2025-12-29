@@ -30,7 +30,6 @@ export class MyChargingStationsComponent implements OnInit{
         );
       } 
     })
-   
   }
 
   deleteStation(stationId: number): void {
