@@ -35,10 +35,26 @@ export interface ChargingStationRequestInterface  {
     description?: string,
     power: number,
     pricePerHour: number;
+    picture?: PictureDetailsInterface;
     status?: ChargingStationStatus,
     isAvailable?: boolean;
-    locationStationId: number;
+    locationStationId?: number;
     userId: number;
+}
+
+export interface ChargingStationFormModel {
+    id?: number;
+    nameStation: string;
+    description?: string;
+    power: number | null;
+    pricePerHour: number | null;
+    picture?: PictureDetailsInterface;
+    status?:ChargingStationStatus
+    isAvailable?: boolean;
+    plugType?: string;
+    userId?: number;
+    locationStationId?: number;
+    locationStation?: LocationStationResponseInterface;
 }
 
 export interface CharginStationInterfaceMap {

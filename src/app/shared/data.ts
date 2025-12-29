@@ -17,30 +17,30 @@ export const LIST_ETAPES = [
 
 ];
 
-export const PARTNERS = [
-  {
-    nom: "SantéPlus",
-    categorie: "Mutuelle santé",
-    services: ["Consultations médicales", "Soins dentaires", "Optique"],
-  },
-  {
-    nom: "Assur'Auto",
-    categorie: "Assurance auto",
-    services: ["Responsabilité civile", "Tous risques", "Assistance dépannage"],
-  },
-  {
-    nom: "PrevoyanceFamiliale",
-    categorie: "Assurance prévoyance",
-    services: ["Décès", "Invalidité", "Arrêt de travail"],
-  },
-  {
-    nom: "ImmoSecur",
-    categorie: "Assurance habitation",
-    services: ["Incendie", "Dégâts des eaux", "Vol"],
-  },
-  {
-    nom: "RetraiteZen",
-    categorie: "Mutuelle retraite",
-    services: ["Complémentaire retraite", "Épargne retraite", "Conseils financiers"],
-  },
-];
+// export const PARTNERS = [
+//   {
+//     nom: "SantéPlus",
+//     categorie: "Mutuelle santé",
+//     services: ["Consultations médicales", "Soins dentaires", "Optique"],
+//   },
+//   {
+//     nom: "Assur'Auto",
+//     categorie: "Assurance auto",
+//     services: ["Responsabilité civile", "Tous risques", "Assistance dépannage"],
+//   },
+//   {
+//     nom: "PrevoyanceFamiliale",
+//     categorie: "Assurance prévoyance",
+//     services: ["Décès", "Invalidité", "Arrêt de travail"],
+//   },
+//   {
+//     nom: "ImmoSecur",
+//     categorie: "Assurance habitation",
+//     services: ["Incendie", "Dégâts des eaux", "Vol"],
+//   },
+//   {
+//     nom: "RetraiteZen",
+//     categorie: "Mutuelle retraite",
+//     services: ["Complémentaire retraite", "Épargne retraite", "Conseils financiers"],
+//   },
+// ];
