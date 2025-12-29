@@ -11,11 +11,6 @@ export class NominatimService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Récupère les coordonnées (latitude, longitude) pour une adresse donnée via Nominatim.
-   * @param address L'adresse complète à géocoder.
-   * @returns Un Observable qui émet les coordonnées ou null si non trouvées/erreur.
-   */
   getCoordinates(address: string): Observable<Coordinates | null> {
     if (!address) {
       console.warn('NominatimService: Adresse vide fournie pour le géocodage.');

@@ -23,7 +23,7 @@ export class AuthServiceService {
   constructor(private http: HttpClient, private router: Router) { }
 
   register(credentials: RegisterRequestInterface):Observable<UserResponseInterface>{
-    return this.http.post<UserResponseInterface>(`${this.apiURL}/api/auth/register`,credentials);
+    return this.http.post<UserResponseInterface>(`${this.apiURL}/api/account/register`,credentials);
   }
 
   login(credentials: LoginRequestInterface):Observable<LoginInitialResponse> {

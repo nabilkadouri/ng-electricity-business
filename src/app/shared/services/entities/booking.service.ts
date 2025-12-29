@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BookingResponseInterface, BookingStatus } from '../../models/BookingInterface';
+import { BookingRequestInterface, BookingResponseInterface, BookingStatus } from '../../models/BookingInterface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,15 +12,33 @@ export class BookingService {
 
   constructor(private http: HttpClient) { }
 
-  updateBookingStatus(bookingId: number, newStatus: BookingStatus): Observable<BookingResponseInterface> {
-    const url = `${this.apiURL}/api/bookings/${bookingId}`;
-    const body = { status: newStatus };
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/merge-patch+json', 
-      'Accept': 'application/ld+json' 
-    });
-
-    return this.http.patch<BookingResponseInterface>(url, body, { headers: headers });
+  updateBookingStatus(bookingId: number, newStatus: BookingStatus, cancelReason?: string): Observable<BookingResponseInterface> {
+  
+    const url = `${this.apiURL}/api/bookings/${bookingId}/status`;
+  
+    const body: any = { status: newStatus };
+    if (cancelReason) {
+      body.cancelReason = cancelReason;
+    }
+  
+    return this.http.patch<BookingResponseInterface>(url, body);
   }
+  
+
+  createBooking(bookingRequest: BookingRequestInterface): Observable<BookingResponseInterface> {
+    const url = `${this.apiURL}/api/bookings`;
+
+    const authToken = localStorage.getItem('authToken');
+
+    let headers = new HttpHeaders();
+    if (authToken) {
+      headers = headers.set('Authorization', `Bearer ${authToken}`);
+    } else {
+      console.error("Jeton d'authentification non trouvé.");
+    }
+    return this.http.post<BookingResponseInterface>(url, bookingRequest, { headers: headers });
+  }
+
+
 
 }

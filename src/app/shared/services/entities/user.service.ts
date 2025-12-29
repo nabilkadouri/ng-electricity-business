@@ -17,7 +17,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getConnectedUserFromApi(): Observable<UserResponseInterface> {
-    return this.http.get<UserResponseInterface>(`${this.apiUrl}/api/users/me`).pipe(
+    return this.http.get<UserResponseInterface>(`${this.apiUrl}/api/account/me`).pipe(
       // Met à jour le BehaviorSubject avec les données reçues de l'API.
       tap((userResponse) => this.userSubject.next(userResponse)),
       shareReplay(1)
@@ -51,11 +51,11 @@ export class UserService {
     }
     formData.append("isMain", String(isMain))
 
-    return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/users/${userId}/uploadProfilePicture`, formData);
+    return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/account/${userId}/uploadProfilePicture`, formData);
   }
 
   updateUserEmail(id: number, emailUpdate: UserEmailUpdateInterface): Observable<UserResponseInterface> {
-    return this.http.patch<UserResponseInterface>(`${this.apiUrl}/api/users/${id}/email`, emailUpdate).pipe(
+    return this.http.patch<UserResponseInterface>(`${this.apiUrl}/api/account/${id}/email`, emailUpdate).pipe(
       tap((updatedUser)=> {
         if(this.userSubject.getValue()?.id === updatedUser.id) {
           this.userSubject.next(updatedUser)
@@ -65,7 +65,7 @@ export class UserService {
   }
 
   deleteUser(id: number):Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/api/users/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/api/account/${id}`);
   }
 
 }

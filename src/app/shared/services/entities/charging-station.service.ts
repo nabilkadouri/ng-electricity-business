@@ -3,6 +3,7 @@ import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {  ChargingStationRequestInterface, ChargingStationResponseInterface } from '../../models/ChargingStationInterface';
 import { Observable } from 'rxjs';
+import { PictureDetailsInterface } from '../../models/UserInterface';
 
 
 @Injectable({
@@ -30,6 +31,35 @@ return this.http.get<ChargingStationResponseInterface[]>(`${this.apiUrl}/api/use
   getChargingStationById(id: number): Observable<ChargingStationResponseInterface> {
     return this.http.get<ChargingStationResponseInterface>(`${this.apiUrl}/api/charging_stations/${id}`);
     }
+
+  uploadTempPicture(file: File, altText: string): Observable<PictureDetailsInterface> {
+  
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('alt', altText);
+  
+    return this.http.post<PictureDetailsInterface>(
+      `${this.apiUrl}/api/charging_stations/upload-temp-picture`, formData);
+  }
+    
+
+  uploadChargingStationPicture(chargingStationId: number, file: File, altText: string,
+      isMain: boolean = true): Observable<PictureDetailsInterface> {
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+  
+      if (altText && altText.trim().length > 0) {
+        formData.append('alt', altText);
+      }
+      formData.append("isMain", String(isMain))
+  
+      return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/charging_stations/${chargingStationId}/uploadPicture`, formData);
+    }
+
+  updateChargingStation(chargingStationId: number, data: ChargingStationRequestInterface):Observable<ChargingStationResponseInterface>{
+
+    return this.http.put<ChargingStationResponseInterface>(`${this.apiUrl}/api/charging_stations/${chargingStationId}`,data)
+  }
 
   deleteChargingStation(id: number): Observable<any> {
     return this.http.delete<void>(`${this.apiUrl}/api/charging_stations/${id}`);
