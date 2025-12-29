@@ -1,8 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ChargingStationService } from '../../../../shared/services/entities/charging-station.service';
 import { CommonModule } from '@angular/common';
-import { TimeslotService } from '../../../../shared/services/entities/timeslot.service';
-import { forkJoin, of, switchMap } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChargingStationResponseInterface } from '../../../../shared/models/ChargingStationInterface';
 import { UserService } from '../../../../shared/services/entities/user.service';
@@ -23,6 +21,8 @@ export class MyChargingStationsComponent implements OnInit{
   ngOnInit(): void {
     this.userService.user$.subscribe((user)=> {
       if(user){
+      console.log('USER JSON COMPLET 👉', user);
+      console.log('STATIONS 👉', user.chargingStations);
         this.ownedStations = user?.chargingStations;
       } else {
         console.error(
@@ -32,21 +32,6 @@ export class MyChargingStationsComponent implements OnInit{
     })
    
   }
-
-  // chargingStationDataByUser(): void {
-  //   this.chargingStationService.getChargingStationByUser().subscribe(
-  //     (data) => {
-  //       this.ownedStations = data;
-  //       console.log('Bornes possédées:', this.ownedStations);
-  //     },
-  //     (error) => {
-  //       console.error(
-  //         "Erreur lors de la récupération des bornes de l'utilisateur",
-  //         error,
-  //       );
-  //     },
-  //   );
-  // }
 
   deleteStation(stationId: number): void {
     if (

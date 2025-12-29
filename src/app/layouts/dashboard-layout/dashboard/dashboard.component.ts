@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   inject,
+  NgZone,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -22,7 +23,7 @@ import { UserResponseInterface } from '../../../shared/models/UserInterface';
 import { BookingResponseInterface } from '../../../shared/models/BookingInterface';
 import { DayOfWeek } from '../../../shared/models/TimeslotsInterface';
 import { take } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,105 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
-  // mockNearbyStations: CharginStationInterfaceMap[] = [
-  //   {
-  //     id: 1,
-  //     nameStation: 'Borne Centre Saint-Priest',
-  //     power: 50,
-  //     pricePerHour: 0.3,
-  //     locationStation: {
-  //       id: 101,
-  //       locationName: 'Centre Saint-Priest',
-  //       address: "1 Rue de l'Hôtel de Ville",
-  //       postaleCode: '69800',
-  //       city: 'Saint-Priest',
-  //       latitude: 45.6987,
-  //       longitude: 4.94,
-  //     },
-  //     timeslots: [
-  //       {
-  //         id: 1001,
-  //         dayOfWeek: 'Lundi',
-  //         startTime: '2025-01-01T08:00:00',
-  //         endTime: '2025-01-01T09:00:00',
-  //       },
-  //       {
-  //         id: 1002,
-  //         dayOfWeek: 'Lundi',
-  //         startTime: '2025-01-01T09:00:00',
-  //         endTime: '2025-01-01T10:00:00',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     nameStation: 'Superchargeur Technopole',
-  //     power: 150,
-  //     pricePerHour: 0.45,
-  //     locationStation: {
-  //       id: 102,
-  //       locationName: 'Technopole Est',
-  //       address: '20 Avenue Jean Mermoz',
-  //       postaleCode: '69800',
-  //       city: 'Saint-Priest',
-  //       latitude: 45.705,
-  //       longitude: 4.935,
-  //     },
-  //     timeslots: [
-  //       {
-  //         id: 2001,
-  //         dayOfWeek: 'Mardi',
-  //         startTime: '2025-01-01T10:00:00',
-  //         endTime: '2025-01-01T11:00:00',
-  //       },
-  //       {
-  //         id: 2002,
-  //         dayOfWeek: 'Mardi',
-  //         startTime: '2025-01-01T11:00:00',
-  //         endTime: '2025-01-01T12:00:00',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 3,
-  //     nameStation: 'Parking Relais Saint-Priest',
-  //     power: 22,
-  //     pricePerHour: 0.25,
-  //     locationStation: {
-  //       id: 103,
-  //       locationName: 'Parking Relais',
-  //       address: '5 Rue du Dauphiné',
-  //       postaleCode: '69800',
-  //       city: 'Saint-Priest',
-  //       latitude: 45.69,
-  //       longitude: 4.95,
-  //     },
-  //     timeslots: [
-  //       {
-  //         id: 3001,
-  //         dayOfWeek: 'Mercredi',
-  //         startTime: '2025-01-01T14:00:00',
-  //         endTime: '2025-01-01T15:00:00',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 4,
-  //     nameStation: 'Recharge Express Gare Saint-Priest',
-  //     power: 7,
-  //     pricePerHour: 0.2,
-  //     locationStation: {
-  //       id: 104,
-  //       locationName: 'Gare SNCF',
-  //       address: 'Place de la Gare',
-  //       postaleCode: '69800',
-  //       city: 'Saint-Priest',
-  //       latitude: 45.695,
-  //       longitude: 4.945,
-  //     },
-  //     timeslots: [],
-  //   },
-  // ];
+  constructor(private router: Router, private ngZone: NgZone) {}
 
   ngOnInit(): void {
     this.userService.user$.subscribe((user) => {
@@ -182,7 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  // metode qui permet d'afficher la recharge a venir
+  // Méthode qui permet d'afficher la recharge a venir
   get nextBooking(): (BookingResponseInterface & { stationDetails?: ChargingStationResponseInterface }) | undefined {
     const now = new Date();
     return this.bookingsWhithStationDetails
@@ -190,7 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0];
   }
 
-  // Methode qui ^permet d'afficher la borne en location principale
+  // Methode qui permet d'afficher la borne en location principale
   get mainStation(): ChargingStationResponseInterface | undefined {
     return this.ownedStations.length > 0 ? this.ownedStations[0] : undefined;
   }
@@ -214,7 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         style:
           'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', 
         center: [defaultLng, defaultLat], 
-        zoom: 13, 
+        zoom: 11.5, 
         attributionControl: false, 
       });
 
@@ -274,13 +177,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    // Créez les points géographiques au format attendu par Turf.js
-    // point([longitude, latitude])
+ 
     const from = point([lon1, lat1]);
     const to = point([lon2, lat2]);
 
-    // Calculez la distance. Par défaut, elle est en kilomètres.
-    // Vous pouvez spécifier l'unité : { units: 'kilometers' }, 'miles', 'nauticalmiles', etc.
     const dist = distance(from, to, { units: 'kilometers' });
 
     return dist;
@@ -297,23 +197,72 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         station.locationStation.latitude &&
         station.locationStation.longitude
       ) {
-        const popupContent = `
-        <div class="p-2">
-          <h3 class="text-lg font-semibold text-vert-foncee">${station.nameStation}</h3>
-          <p>${station.locationStation.address}, ${station.locationStation.postaleCode} ${station.locationStation.city}</p>
-          <p><strong>Puissance:</strong> ${station.power}</p>
-          <p><strong>Prix/heure:</strong> ${station.pricePerHour}</p>
-        </div>
-      `;
+        let availabilityMessage: string;
+        let availabilityClass: string;
+        let isReservable: boolean = true; 
 
-        const marker = new maplibregl.Marker({ color: '#007bff' }) 
-          .setLngLat([
-            station.locationStation.longitude,
-            station.locationStation.latitude,
-          ])
-          .setPopup(new maplibregl.Popup().setHTML(popupContent))
-          .addTo(this.map);
-        this.markers.push(marker);
+        if (station.timeslots && station.timeslots.length > 0 && station.timeslots[0]?.startTime && station.timeslots[0]?.endTime) {
+          const startTime = station.timeslots[0].startTime.slice(0, 5);
+          const endTime = station.timeslots[0].endTime.slice(0, 5);
+          availabilityMessage = `Disponible de ${startTime} à ${endTime}`;
+          availabilityClass = 'bg-vert-clair'; 
+        } else {
+          availabilityMessage = `Aucun horaire défini`;
+          availabilityClass = 'bg-gray-400'; 
+          isReservable = false; 
+        }
+
+        const popupContent = `
+                <div>
+                    <h3 class="text-lg font-semibold text-vert-foncee pb-2 text-center">${station.nameStation}</h3>
+                    <p>${station.locationStation.address}, ${station.locationStation.postaleCode} ${station.locationStation.city}</p>
+                    <p><strong>Puissance charge:</strong> ${station.power} kW</p>
+                    <p><strong>Tarif horaire:</strong> ${station.pricePerHour} €</p>
+                    <p class="inline-block mt-1 ${availabilityClass} text-white text-xs px-3 py-2 rounded w-full">
+                      <span>${availabilityMessage}</span>
+                    </p>
+                    ${isReservable ? 
+                      `<p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>` :
+                      `<p class="mt-2 text-center text-red-600 font-semibold">Non réservable (horaires non définis)</p>`
+                    }
+                  </div>
+              `;
+        
+              const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: [0, -20] })
+              
+                .setHTML(popupContent);
+
+       const marker = new maplibregl.Marker({ color: '#007bff' })
+               .setLngLat([
+                 station.locationStation.longitude,
+                 station.locationStation.latitude,
+               ])
+               .addTo(this.map);
+
+               // Affiche la popup au survol
+      marker.getElement().addEventListener('mouseenter', () => {
+        popup.addTo(this.map);
+        popup.setLngLat(marker.getLngLat());
+      });
+
+      // Cache la popup quand la souris sort du marker
+      marker.getElement().addEventListener('mouseleave', () => {
+        popup.remove();
+      });
+
+      // Redirige vers la page détails au clic sur le marker
+      marker.getElement().addEventListener('click', () => {
+        this.ngZone.run(() => {
+          if (isReservable) {
+            console.log('Click sur station', station.id);
+            this.router.navigate(['/dashboard/station-details', station.id]);
+          } else {
+            alert("Cette borne n'est pas réservable car ses horaires ne sont pas définis.");
+          }
+        });
+      });;
+
+      this.markers.push(marker);
       }
     });
   }
@@ -323,7 +272,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     for (const booking of this.user.bookings) {
       this.chargingStationService
-        .getChargingStationById(booking.chargingStationId)
+        .getChargingStationById(booking.chargingStation.id)
         .subscribe({
           next: (stationDetails: ChargingStationResponseInterface) => {
             this.bookingsWhithStationDetails.push({

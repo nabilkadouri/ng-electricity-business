@@ -84,22 +84,42 @@ export class ChargingStationRentalHistoryComponent {
    * @param event l'événment de changement du sélécteur HTML
    */
   onStatusChange(booking: FlattenedBooking, event: Event) {
-    const newStatus = (event.target as HTMLSelectElement)
-      .value as BookingStatus;
-    console.log('Nouveau statut séléctionné :', newStatus);
+    const newStatus = (event.target as HTMLSelectElement).value as BookingStatus;
+    console.log("Nouveau statut sélectionné :", newStatus);
+  
+    if (newStatus === BookingStatus.CANCELLED) {
+      const reason = prompt("Indiquez le motif de l'annulation :");
+  
+      if (!reason || reason.trim().length < 3) {
+        alert("Vous devez fournir un motif d'annulation.");
+        return;
+      }
+  
+      this.sendStatusUpdate(booking, newStatus, reason);
+    }
+    else {
+      this.sendStatusUpdate(booking, newStatus);
+    }
+  }
 
-    if (booking.id) {
-      this.bookingService.updateBookingStatus(booking.id, newStatus).subscribe({
-        next: (updateBooking) => {
-          console.log('Status modifié avec succés !', updateBooking);
-          booking.status = updateBooking.status;
+  private sendStatusUpdate(booking: FlattenedBooking, newStatus: BookingStatus,cancelReason?: string) {
+    if (!booking.id) {
+      console.error("Impossible de mettre à jour : ID manquant");
+      return;
+    }
+  
+    this.bookingService.updateBookingStatus(booking.id, newStatus, cancelReason)
+      .subscribe({
+        next: (updated) => {
+          console.log("Statut mis à jour", updated);
+  
+          booking.status = updated.status;
+  
+          this.chargingStationDataByUser(); 
         },
         error: (error) => {
-          console.error('Erruer lors de la mise à jour du statut', error);
-        },
+          console.error("Erreur mise à jour statut", error);
+        }
       });
-    } else {
-      console.error('Erreur : ID de réservation manquant pour la mise à jour.');
-    }
   }
 }

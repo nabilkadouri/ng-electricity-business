@@ -5,7 +5,8 @@ import { ChargingStationService } from '../../../../shared/services/entities/cha
 import { AuthServiceService } from '../../../../shared/services/auth-service.service';
 import { UserService } from '../../../../shared/services/entities/user.service';
 import { Route, Router } from '@angular/router';
-import { ChargingStationRequestInterface } from '../../../../shared/models/ChargingStationInterface';
+import { ChargingStationFormModel, ChargingStationRequestInterface, ChargingStationResponseInterface, ChargingStationStatus } from '../../../../shared/models/ChargingStationInterface';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-charging-station-details-form',
@@ -18,54 +19,116 @@ export class ChargingStationDetailsFormComponent {
   @Input() locationStationId!: number; 
   @Output() chargingStationSubmitted = new EventEmitter<number>(); 
 
-  chargingStationForm: FormGroup;
+  chargingStationForm!: FormGroup;
+
   currentUserId: number | undefined = undefined; 
+
+  chargingStation! : ChargingStationFormModel
+
+  isLoading: boolean = false;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private chargingStationService: ChargingStationService,
     private userService: UserService,
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.chargingStation = {
+      nameStation: '',
+      description: '',
+      power: 0,
+      pricePerHour: 0,
+      picture: undefined,
+      status: ChargingStationStatus.PENDING,
+      isAvailable: true,
+      locationStationId: this.locationStationId,
+      userId: undefined
+    };
+
     this.chargingStationForm = this.fb.group({
       nameStation: ['', Validators.required],
       description: ['', Validators.required],
       power: ['', Validators.required],
-      pricePerHour: ['', [Validators.required, Validators.min(0)]],
-      status: ['En attente'], 
-      isAvailable: [true] 
+      pricePerHour: ['', [Validators.required, Validators.min(0)]]
+    });
+
+    this.userService.user$?.subscribe(user => {
+      if (user) {
+        this.currentUserId = user.id;
+        this.chargingStation.userId = user.id;
+      }
     });
   }
 
-  ngOnInit(): void {
-    this.userService.user$?.subscribe(user => {
-      this.currentUserId = user?.id; 
-    });
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
 
+    const file = input.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      this.errorMessage = 'Le fichier doit être une image';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.chargingStationService
+      .uploadTempPicture(file, 'Photo de la borne')
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (picture) => {
+          /** 🔥 ON MET À JOUR LE MODEL */
+          this.chargingStation = {
+            ...this.chargingStation,
+            picture
+          };
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors de l’upload de l’image';
+        }
+      });
   }
 
   onSubmit(): void {
-    if (this.chargingStationForm.valid && this.locationStationId && this.currentUserId) {
-      const formData: ChargingStationRequestInterface = { ...this.chargingStationForm.value,
-        locationStationId: this.locationStationId,
-        userId: this.currentUserId
-        
-       };
-      console.log('Soumission ChargingStation:', formData);
-      this.chargingStationService.postChargingStationByUser(formData).subscribe({
-        next: (response:any) => {
-          console.log('ChargingStation créée avec succès:', response);
+
+    if (this.chargingStationForm.invalid || !this.locationStationId || !this.currentUserId
+    ) {
+      this.errorMessage = 'Formulaire incomplet';
+      return;
+    }
+
+    this.chargingStation = {...this.chargingStation, ...this.chargingStationForm.value,locationStationId: this.locationStationId, userId: this.currentUserId};
+
+    const payload: ChargingStationRequestInterface = {
+      nameStation: this.chargingStation.nameStation,
+      description: this.chargingStation.description,
+      power: this.chargingStation.power ?? 0,
+      pricePerHour: this.chargingStation.pricePerHour ?? 0,
+      picture: this.chargingStation.picture, 
+      status: this.chargingStation.status,
+      isAvailable: this.chargingStation.isAvailable,
+      locationStationId: this.locationStationId,
+      userId: this.currentUserId
+    };
+
+    this.isLoading = true;
+
+    this.chargingStationService
+      .postChargingStationByUser(payload)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (response) => {
+          this.successMessage = 'Borne créée avec succès';
           this.chargingStationSubmitted.emit(response.id);
         },
-        error: (error:any) => {
-          console.error('Erreur lors de la création de ChargingStation:', error);
+        error: () => {
+          this.errorMessage = 'Erreur lors de la création de la borne';
         }
       });
-
-
-    } else {
-      console.warn('Formulaire ChargingStation invalide, locationStationId ou User ID manquant.');
-    }
-    
   }
-  
 }

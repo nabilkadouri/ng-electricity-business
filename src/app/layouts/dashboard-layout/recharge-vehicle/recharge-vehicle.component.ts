@@ -118,13 +118,14 @@ initializeMap():void {
         style:
           'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', 
         center: [defaultLng, defaultLat], 
-        zoom: 12, 
+        zoom: 11.5, 
         attributionControl: false,
       });
 
-      //Ajoute du controle de navigation
+      // Ajoute du controle de navigation
       this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
       
+      // Ajoute le marker selon l'adresse du user
       new maplibregl.Marker({ color: 'red' })
         .setLngLat([defaultLng, defaultLat])
         .setPopup(new maplibregl.Popup().setHTML(`<h3>Centre de la carte</h3>`))
@@ -144,7 +145,7 @@ initializeMap():void {
   }
 }
 
-// Methode pourrécuperer les bornes dans un rayon de 20km autour de l'adresse du user
+// Methode pour récuperer les bornes dans un rayon de 20km autour de l'adresse du user
 loadChargingStationsOnMap(latitude: number, longitude: number) {
   const radiusKm = 20; 
 
@@ -185,8 +186,7 @@ getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const from = point([lon1, lat1]);
   const to = point([lon2, lat2]);
 
-  // Calculez la distance. Par défaut, elle est en kilomètres.
-  // Vous pouvez spécifier l'unité : { units: 'kilometers' }, 'miles', 'nauticalmiles', etc.
+  // Calculez la distance en kilomètres.
   const dist = distance(from, to, { units: 'kilometers' });
 
   return dist;
@@ -200,17 +200,35 @@ addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
       station.locationStation.latitude &&
       station.locationStation.longitude
     ) {
+
+      let availabilityMessage: string;
+        let availabilityClass: string;
+        let isReservable: boolean = true; 
+
+        if (station.timeslots && station.timeslots.length > 0 && station.timeslots[0]?.startTime && station.timeslots[0]?.endTime) {
+          const startTime = station.timeslots[0].startTime.slice(0, 5);
+          const endTime = station.timeslots[0].endTime.slice(0, 5);
+          availabilityMessage = `Disponible de ${startTime} à ${endTime}`;
+          availabilityClass = 'bg-vert-clair'; 
+        } else {
+          availabilityMessage = `Aucun horaire défini`;
+          availabilityClass = 'bg-gray-400'; 
+          isReservable = false; 
+        }
       const popupContent = `
         <div>
-          <h3 class="text-lg font-semibold text-vert-foncee pb-2 text-center">${station.nameStation}</h3>
-          <p>${station.locationStation.address}, ${station.locationStation.postaleCode} ${station.locationStation.city}</p>
-          <p><strong>Puissance charge:</strong> ${station.power} kW</p>
-          <p><strong>Tarif horaire:</strong> ${station.pricePerHour} €</p>
-          <p class="inline-block mt-1 bg-vert-clair text-white text-xs px-3 py-2 rounded w-full">
-          <span>Disponible de <span> ${station.timeslots[0]?.startTime.slice(0, 5)} à ${station.timeslots[0]?.endTime.slice(0, 5)}
-          </p>
-          <p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>
-        </div>
+            <h3 class="text-lg font-semibold text-vert-foncee pb-2 text-center">${station.nameStation}</h3>
+            <p>${station.locationStation.address}, ${station.locationStation.postaleCode} ${station.locationStation.city}</p>
+            <p><strong>Puissance charge:</strong> ${station.power} kW</p>
+            <p><strong>Tarif horaire:</strong> ${station.pricePerHour} €</p>
+            <p class="inline-block mt-1 ${availabilityClass} text-white text-xs px-3 py-2 rounded w-full">
+              <span>${availabilityMessage}</span>
+            </p>
+            ${isReservable ? 
+              `<p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>` :
+              `<p class="mt-2 text-center text-red-600 font-semibold">Non réservable (horaires non définis)</p>`
+            }
+          </div>
       `;
 
       const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: [0, -20] })
@@ -224,24 +242,28 @@ addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
         ])
         .addTo(this.map);
 
-      // ✅ Affiche la popup au survol
+      // Affiche la popup au survol
       marker.getElement().addEventListener('mouseenter', () => {
         popup.addTo(this.map);
         popup.setLngLat(marker.getLngLat());
       });
 
-      // ✅ Cache la popup quand la souris sort du marker
+      // Cache la popup quand la souris sort du marker
       marker.getElement().addEventListener('mouseleave', () => {
         popup.remove();
       });
 
-      // ✅ Redirige vers la page détails au clic sur le marker
+      // Redirige vers la page détails au clic sur le marker
       marker.getElement().addEventListener('click', () => {
         this.ngZone.run(() => {
-          console.log('Click sur station', station.id);
-          this.router.navigate(['/dashboard/station-details', station.id]);
+          if (isReservable) {
+            console.log('Click sur station', station.id);
+            this.router.navigate(['/dashboard/station-details', station.id]);
+          } else {
+            alert("Cette borne n'est pas réservable car ses horaires ne sont pas définis.");
+          }
         });
-      });
+      });;
 
       this.markers.push(marker);
     }
