@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "file-saver"
+            ],
             "outputPath": "dist/electricity-business",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -28,6 +31,7 @@
             ],
             "styles": [
               "src/styles.css"
+              
             ],
             "scripts": []
           },
