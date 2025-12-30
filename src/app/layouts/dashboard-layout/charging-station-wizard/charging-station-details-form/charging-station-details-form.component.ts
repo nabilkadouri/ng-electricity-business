@@ -82,7 +82,6 @@ export class ChargingStationDetailsFormComponent {
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (picture) => {
-          /** 🔥 ON MET À JOUR LE MODEL */
           this.chargingStation = {
             ...this.chargingStation,
             picture

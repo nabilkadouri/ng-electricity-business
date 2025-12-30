@@ -26,6 +26,7 @@ export class AuthServiceService {
     return this.http.post<UserResponseInterface>(`${this.apiURL}/api/account/register`,credentials);
   }
 
+
   login(credentials: LoginRequestInterface):Observable<LoginInitialResponse> {
     return this.http.post<LoginInitialResponse>(`${this.apiURL}/api/auth/login`,credentials).pipe(
       tap(response => {
@@ -34,6 +35,19 @@ export class AuthServiceService {
       })
     );
   }
+  
+
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post(`${this.apiURL}/api/auth/password/forgot`,{ email },{ responseType: 'text' });
+  }
+  
+
+  resetPassword(token: string, newPassword: string): Observable<string> {
+    return this.http.post(`${this.apiURL}/api/auth/password/reset`,{ token, newPassword },{ responseType: 'text' });
+  }
+  
+  
+
   // Méthode ajouter l'email temporaire
   setTempUserEmail(email: string): void {
    this.tempUserEmail = email;

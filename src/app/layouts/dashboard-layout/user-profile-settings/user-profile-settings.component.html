@@ -9,13 +9,13 @@
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Votre photo de profil</h2>
         <div class="flex flex-col md:flex-row items-center gap-6">
           <div class="w-24 h-24 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
-            <img [src]="user.profilePicture.src"
+            <img [src]="user.profilePicture.src || '/images/default_user.png'"
               alt="Profil de {{ user.firstName }} {{ user.name }}" class="w-full h-full object-cover">
           </div>
           <div class="flex flex-col items-center md:items-start gap-3">
             <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden">
             <button (click)="fileInput.click()" [disabled]="isLoading"
-              class="bg-blue-700 text-white py-2 px-4 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-sm font-medium">
+              class="btn-inscription">
               <span *ngIf="!isLoading">Changer de photo</span>
               <span *ngIf="isLoading">Chargement...</span>
             </button>
@@ -96,21 +96,55 @@
         </div>
       </form>
 
-      <div class="flex flex-col md:flex-row justify-between items-center mt-10 gap-4">
-        <div class="w-full md:w-auto">
-          <button
-            class="bg-blue-700 text-white py-2 px-4 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-base font-medium w-full md:w-auto">
-            Réinitialiser mon mot de passe
-          </button>
-        </div>
-        <div class="w-full md:w-auto">
-          <button
-            class="bg-white border border-red-500 text-red-600 py-2 px-4 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50 text-base font-medium w-full md:w-auto">
-            Supprimer mon compte
-          </button>
-        </div>
+      <div class="mt-10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <button 
+          class="btn-inscription md:w-auto w-full"
+          (click)="togglePasswordForm()">
+          Modifier mon mot de passe
+        </button>
+        <button
+          class="bg-white border border-red-500 text-red-600 py-2 px-4 rounded-md hover:bg-red-50 
+                focus:outline-none focus:ring-2 focus:ring-red-300 font-bold w-full md:w-auto"
+          (click)="deleteAccount()"
+        >
+          Supprimer mon compte
+        </button>
+      </div>
+
+      <div *ngIf="showPasswordForm" class="mt-6 p-6 rounded-lg shadow-lg bg-gray-100 md:w-150">
+        <h3 class="text-xl font-semibold text-gray-900 mb-1">
+          Modifier votre mot de passe
+        </h3>
+        <p class="text-gray-600 text-sm mb-6">
+          Pour garantir la sécurité de votre compte, veuillez confirmer votre ancien mot de passe
+          puis entrer un nouveau mot de passe.
+        </p>
+      
+        <label class="block text-sm font-medium">Ancien mot de passe</label>
+        <input type="password" [(ngModel)]="oldPassword"
+               class="w-full border px-3 py-2 rounded-md mb-4"/>
+    
+        <label class="block text-sm font-medium">Nouveau mot de passe</label>
+        <input type="password" [(ngModel)]="newPassword"
+               class="w-full border px-3 py-2 rounded-md mb-4"/>
+    
+        <label class="block text-sm font-medium">Confirmer le nouveau mot de passe</label>
+        <input type="password" [(ngModel)]="confirmPassword"
+               class="w-full border px-3 py-2 rounded-md mb-4"/>
+    
+        <button 
+          (click)="updatePassword()"
+          class="btn-inscription w-full">
+          Valider le changement
+        </button>
+    
+        <p *ngIf="passwordSuccess" class="text-green-600 mt-2">{{ passwordSuccess }}</p>
+        <p *ngIf="passwordError" class="text-red-600 mt-2">{{ passwordError }}</p>
+    
+      </div>
+      
+      
       </div>
 
     </div>
-  </div>
 </section>

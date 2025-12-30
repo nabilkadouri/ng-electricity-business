@@ -30,10 +30,12 @@ export class UserService {
     return this.userSubject.getValue();
   }
 
+
   //Méthode qui permet d'effacer l'utilisateur contenu dans le BehaviorSubject
   clearUser() {
     this.userSubject.next(null);
   }
+
 
   //Méthode pour mettre à jour manuellement l'utilisateur dans le BehaviorSubject.
   updateUserInService(updatedUser: UserResponseInterface): void {
@@ -54,6 +56,8 @@ export class UserService {
     return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/account/${userId}/uploadProfilePicture`, formData);
   }
 
+
+
   updateUserEmail(id: number, emailUpdate: UserEmailUpdateInterface): Observable<UserResponseInterface> {
     return this.http.patch<UserResponseInterface>(`${this.apiUrl}/api/account/${id}/email`, emailUpdate).pipe(
       tap((updatedUser)=> {
@@ -64,8 +68,19 @@ export class UserService {
     );
   }
 
+
+  updatePassword(userId: number, payload: any) {
+    return this.http.patch(`${this.apiUrl}/api/account/${userId}/password`, payload,);
+  }
+  
+
+
   deleteUser(id: number):Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/api/account/${id}`);
   }
 
+  logout() {
+    localStorage.removeItem('token');
+    this.userSubject.next(null);
+  }  
 }

@@ -13,6 +13,8 @@ import { UserProfileSettingsComponent } from './layouts/dashboard-layout/user-pr
 import { ChargingStationWizardComponent } from './layouts/dashboard-layout/charging-station-wizard/charging-station-wizard.component';
 import { RechargeVehicleComponent } from './layouts/dashboard-layout/recharge-vehicle/recharge-vehicle.component';
 import {StationDetailsComponent } from './layouts/dashboard-layout/recharge-vehicle/station-details/station-details.component';
+import { ForgotPasswordComponent } from './layouts/public-layout/components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './layouts/public-layout/components/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +25,8 @@ export const routes: Routes = [
       { path: 'login', component: LoginFormComponent},
       { path: 'check', component: CheckCodeComponent },
       { path: 'register', component: RegisterFormComponent },
+      {path: 'forgot-password', component: ForgotPasswordComponent},
+      {path: 'reset-password', component: ResetPasswordComponent}
     ]
   },
 

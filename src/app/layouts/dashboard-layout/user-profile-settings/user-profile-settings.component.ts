@@ -2,13 +2,13 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../../shared/services/entities/user.service';
 import { CommonModule } from '@angular/common';
 import { finalize, Subject, takeUntil} from 'rxjs';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserResponseInterface } from '../../../shared/models/UserInterface';
 
 
 @Component({
   selector: 'app-user-profile-settings',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './user-profile-settings.component.html',
   styleUrl: './user-profile-settings.component.css'
 })
@@ -24,6 +24,16 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
   errorMessage: string | null = null;
   successMessage: string | null = null;
   isEditingEmail = false;
+
+  showPasswordForm = false;
+
+  oldPassword = '';
+  newPassword = '';
+  confirmPassword = '';
+
+  passwordSuccess: string | null = null;
+  passwordError: string | null = null;
+
 
   private destroy$ = new Subject<void>();
 
@@ -44,7 +54,6 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
         });
         this.errorMessage = null;
       }else {
-        console.log("Erreur lors de la récupératin des données utilisateur");
         this.errorMessage = "Impossible de charger les données utilisateur.";
       }
     });
@@ -67,6 +76,11 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
       this.emailForm.patchValue({ email: this.user.email });
     }
   }
+
+  togglePasswordForm() {
+    this.showPasswordForm = !this.showPasswordForm;
+  }
+  
 
   onSubmit(): void {
     if (this.emailForm.invalid) return;
@@ -142,5 +156,65 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
     });
   }
 
+  updatePassword() {
 
+    this.passwordError = null;
+    this.passwordSuccess = null;
+  
+    if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
+      this.passwordError = "Tous les champs sont obligatoires.";
+      return;
+    }
+  
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordError = "Les nouveaux mots de passe ne correspondent pas.";
+      return;
+    }
+  
+    const payload = {
+      oldPassword: this.oldPassword,
+      newPassword: this.newPassword
+    };
+  
+    this.userService.updatePassword(this.user.id, payload).subscribe({
+      next: () => {
+        this.passwordSuccess = "Mot de passe mis à jour avec succès.";
+        this.oldPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+      },
+      error: () => {
+        this.passwordError = "Ancien mot de passe incorrect.";
+      }
+    });
+  }
+
+  
+  deleteAccount() {
+    if (!this.user?.id) {
+      alert("Erreur : ID utilisateur introuvable.");
+      return;
+    }
+  
+    const confirmation = confirm(
+      "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est définitive."
+    );
+  
+    if (!confirmation) return;
+  
+    this.userService.deleteUser(this.user.id).subscribe({
+      next: () => {
+        // Déconnexion locale
+        this.userService.logout();
+  
+        // Redirection
+        window.location.href = "/login";
+      },
+      error: (err) => {
+        console.error("Erreur lors de la suppression du compte :", err);
+        alert("Une erreur est survenue lors de la suppression du compte.");
+      }
+    });
+  }
+  
 }
