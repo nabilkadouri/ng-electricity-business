@@ -1,41 +1,67 @@
-<section id="simulateur" class="scroll-mt-32">
-  <!-- titre  -->
-  <div class="m-auto mb-20 flex max-w-screen-xl flex-col items-center px-4 md:flex-row md:justify-center md:gap-10 md:px-0">
+<section id="simulateur" class="scroll-mt-32 py-12">
+  <div class="max-w-screen-xl m-auto mb-20 flex flex-col md:flex-row items-center md:justify-center gap-10 px-4 md:px-0">
+
+    <!-- Texte -->
     <div class="flex flex-col justify-center space-y-6 md:w-1/2">
-      <h2 class="text-center text-3xl leading-14 font-semibold md:text-start md:text-5xl md:leading-20"><span
-          class="text-accent">Monétisez</span> votre borne de recharge</h2>
-      <p class=" text-xl leading-14 font-medium text-center md:text-start md:leading-14 mb-5 md:mb-0">Découvrez les revenus que vous
-        pourriez générer en tant que hôte en mettant à disposition votre borne de recharge électrique à des particuliers
+      <h2 class="text-3xl md:text-5xl font-semibold leading-14 md:leading-20 text-center md:text-start">
+        <span class="text-accent">Monétisez</span> votre borne de recharge
+      </h2>
+
+      <p class="text-xl leading-14 font-medium text-center md:text-start">
+        Découvrez les revenus que vous pourriez générer en mettant votre borne de recharge à disposition.
       </p>
     </div>
-    <!-- simulateur -->
-    <div class="flex flex-col   md:w-1/2 w-full ">
-      <div class="bg-black text-white px-4 py-2 flex flex-col rounded-xl shadow-xl gap-5">
-        <h4 class="text-xl md:text-2xl font-semibold ">Nombre d'heures</h4>
+
+    <!-- SIMULATEUR -->
+    <div class="flex flex-col md:w-1/2 w-full space-y-6">
+
+      <!-- Bloc slider -->
+      <div class="bg-black text-white px-4 py-4 rounded-xl shadow-xl space-y-4">
+        <h4 class="text-xl md:text-2xl font-semibold">Nombre d'heures</h4>
+
         <div class="flex flex-col">
-          <label for="range" class="font-semibold pb-2">0h00</label>
-          <input type="range" id="range" min="0" max="24" class="">
+          <label class="font-semibold pb-1">{{ displayedTime }}</label>
+
+          <input
+            type="range"
+            min="0"
+            max="20"
+            step="1"
+            [(ngModel)]="sliderValue"
+            (input)="updateSimulation()"
+            class="w-full accent-blue-600"
+          />
         </div>
       </div>
-      <div>
-        <div class=" px-4 py-2 flex flex-col rounded-xl shadow-xl gap-5 border-2 border-gray-200">
-          <h4 class="text-xl md:text-2xl font-semibold ">Ce qui représente</h4>
-          <div class="flex justify-between">
-            <div class="flex flex-col ">
-              <p class="font-semibold">Par jour</p>
-              <p>0,00€</p>
-            </div>
-            <div class="flex flex-col">
-              <p class="font-semibold">Par semaine</p>
-              <p>0,00€</p>
-            </div>
-            <div class="flex flex-col">
-              <p class="font-semibold text-bleu-electrique">Par mois</p>
-              <p class="text-bleu-electrique">0,00€</p>
-            </div>
+
+      <!-- Résultats -->
+      <div class="px-4 py-4 rounded-xl shadow-xl border-2 border-gray-200 space-y-5">
+        <h4 class="text-xl md:text-2xl font-semibold">Ce qui représente</h4>
+
+        <div class="flex justify-between">
+          <div>
+            <p class="font-semibold">Par jour</p>
+            <p>{{ dailyRevenue }}€</p>
+          </div>
+
+          <div>
+            <p class="font-semibold">Par semaine</p>
+            <p>{{ weeklyRevenue }}€</p>
+          </div>
+
+          <div>
+            <p class="font-semibold text-bleu-electrique">Par mois</p>
+            <p class="text-bleu-electrique">{{ monthlyRevenue }}€</p>
           </div>
         </div>
       </div>
+
+      <!-- INFO simulation -->
+      <p class="text-xs text-gray-500 italic">
+        * Simulation basée sur le prix horaire moyen du marché pour une borne 7 kW,<br>
+        incluant 2,5% de frais de service appliqués au total.
+      </p>
+
     </div>
   </div>
 </section>

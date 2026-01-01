@@ -43,14 +43,14 @@ export class UserService {
   }
 
 
-  uploadProfilePicture(userId: number, file: File, altText: string,
-    isMain: boolean = true): Observable<PictureDetailsInterface> {
+  uploadProfilePicture(userId: number, file: File, altText: string, isMain: boolean = true): Observable<PictureDetailsInterface> {
     const formData = new FormData();
     formData.append('file', file, file.name);
 
     if((altText.trim().length === 0)) {
       formData.append("alt", altText)
     }
+    
     formData.append("isMain", String(isMain))
 
     return this.http.post<PictureDetailsInterface>(`${this.apiUrl}/api/account/${userId}/uploadProfilePicture`, formData);
@@ -83,4 +83,9 @@ export class UserService {
     localStorage.removeItem('token');
     this.userSubject.next(null);
   }  
+
+  
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }

@@ -70,6 +70,13 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
       this.destroy$.complete();
   }
 
+
+
+  togglePasswordForm() {
+    this.showPasswordForm = !this.showPasswordForm;
+  }
+  
+  
   toggleEditEmail(): void {
     this.isEditingEmail = !this.isEditingEmail;
     if (this.isEditingEmail) {
@@ -77,10 +84,6 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
     }
   }
 
-  togglePasswordForm() {
-    this.showPasswordForm = !this.showPasswordForm;
-  }
-  
 
   onSubmit(): void {
     if (this.emailForm.invalid) return;
@@ -109,6 +112,7 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
     });
   }
 
+
   onFileSelected(event: Event): void{
     this.errorMessage = null;
     const input = event.target as HTMLInputElement;
@@ -119,6 +123,7 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
       this.errorMessage = "Impossible d'uploader le photo: ID utilisateur manquant.";
     }
   }
+
 
   private uploadPicture(userId: number, file: File): void {
     this.isLoading = true; 
