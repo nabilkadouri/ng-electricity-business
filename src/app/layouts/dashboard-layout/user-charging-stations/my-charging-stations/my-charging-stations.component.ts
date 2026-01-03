@@ -21,8 +21,6 @@ export class MyChargingStationsComponent implements OnInit{
   ngOnInit(): void {
     this.userService.user$.subscribe((user)=> {
       if(user){
-      console.log('USER JSON COMPLET 👉', user);
-      console.log('STATIONS 👉', user.chargingStations);
         this.ownedStations = user?.chargingStations;
       } else {
         console.error(
@@ -39,7 +37,6 @@ export class MyChargingStationsComponent implements OnInit{
       this.chargingStationService.deleteChargingStation(stationId)
       .subscribe({
         next: () => {
-          console.log(`Borne (ID: ${stationId}) et ses timeslots supprimés avec succès.`);
           this.ownedStations = this.ownedStations.filter(station => station.id != stationId);
         },
         error: (error) => {

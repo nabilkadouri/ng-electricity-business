@@ -53,7 +53,6 @@ export class CheckCodeComponent implements OnInit{
       this.authService.checkCode(codeCheckRequest).subscribe({
         next: (res: LoginResponseInterface) => {
           this.router.navigate(['/dashboard']);
-          console.log('Vérification du code réussie, connexion complète et redirection.');
         },
         error: (err) => {
           console.error('Code invalide', err);

@@ -60,10 +60,8 @@ export class LocationStationFormComponent {
   }
 
   private sendLocationToBackend(): void {
-    console.log('Soumission LocationStation avec coordonnées:', this.locationForm.value);
     this.locationService.createLocationStation(this.locationForm.value).subscribe({
       next: (response: any) => {
-        console.log('LocationStation créée avec succès:', response);
         this.locationSubmitted.emit(response.id);
       },
       error: (error: any) => {

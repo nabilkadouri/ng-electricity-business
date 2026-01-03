@@ -149,7 +149,6 @@ export class UserProfileSettingsComponent implements OnInit, OnDestroy{
 
           this.userService.updateUserInService(updatedUser);
           this.successMessage = 'Photo mise à jour avec succès !';
-          console.log('Photo mise à jour avec succès !');
         } else {
           this.errorMessage = 'Problème: Le serveur n\'a pas renvoyé l\'adresse de la photo.';
         }

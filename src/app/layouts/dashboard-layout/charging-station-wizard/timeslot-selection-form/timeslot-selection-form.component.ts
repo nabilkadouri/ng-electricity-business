@@ -64,7 +64,7 @@ export class TimeslotSelectionFormComponent {
       chargingStationId: this.chargingStationId,
     }));
 
-    console.log('Données envoyées:', timeslotsToCreate);
+
     this.timeslotService.createMultipleTimeslots(timeslotsToCreate).subscribe({
       next: () => this.timeslotsSubmitted.emit(),
       error: err => console.error('Erreur lors de la création des créneaux :', err),

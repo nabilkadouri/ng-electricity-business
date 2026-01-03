@@ -39,7 +39,6 @@ export class LoginFormComponent {
           this.loginSuccess.set(true);
           this.loginError.set(false);
           this.router.navigate(['/check'])
-          console.log('Connexion réussie', response);
           },
           error: (err) => {
             this.loginSuccess.set(false);

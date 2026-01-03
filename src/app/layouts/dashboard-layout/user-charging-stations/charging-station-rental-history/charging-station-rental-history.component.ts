@@ -41,7 +41,6 @@ export class ChargingStationRentalHistoryComponent {
     this.userService.getConnectedUserFromApi().subscribe({
       next: (data) => {
         this.ownedStations = data.chargingStations;
-        console.log('Bornes possédées:', this.ownedStations);
         // Une fois les bornes chargées, nous aplatissons les réservations
         this.flattenBookings();
       },
@@ -74,8 +73,6 @@ export class ChargingStationRentalHistoryComponent {
     this.allBookings.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
-
-    console.log('Toutes les réservations aplaties:', this.allBookings);
   }
 
   /**
@@ -85,7 +82,6 @@ export class ChargingStationRentalHistoryComponent {
    */
   onStatusChange(booking: FlattenedBooking, event: Event) {
     const newStatus = (event.target as HTMLSelectElement).value as BookingStatus;
-    console.log("Nouveau statut sélectionné :", newStatus);
   
     if (newStatus === BookingStatus.CANCELLED) {
       const reason = prompt("Indiquez le motif de l'annulation :");
@@ -111,7 +107,6 @@ export class ChargingStationRentalHistoryComponent {
     this.bookingService.updateBookingStatus(booking.id, newStatus, cancelReason)
       .subscribe({
         next: (updated) => {
-          console.log("Statut mis à jour", updated);
   
           booking.status = updated.status;
   

@@ -119,10 +119,8 @@ export class RegisterFormComponent {
           next: (response) => {
             this.router.navigate(['/check']);
             this.registerForm.reset();
-            console.log("Navigation réussite", response)
           }
         });
-        console.log('Inscription réussie',response);
       },
       error: (err) => {
         console.error("Erreur lors de l'inscription", err);

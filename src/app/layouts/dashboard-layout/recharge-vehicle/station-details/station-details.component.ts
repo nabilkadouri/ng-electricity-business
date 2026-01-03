@@ -103,7 +103,6 @@ export class StationDetailsComponent implements OnInit {
 
   // GÉNÉRER LES CRÉNEAUX
   generateSlotsStation(date: Date): void {
-    console.log("generateSlotsStation() — création des slots…");
 
     this.slots = [];
     this.noSlotsAvailable = false;
@@ -113,8 +112,6 @@ export class StationDetailsComponent implements OnInit {
     const filteredSlots = this.chargingStation.timeslots.filter(slot =>
       slot.dayOfWeek.toLowerCase() === selectedDay
     );
-
-    console.log("Timeslots du jour :", filteredSlots);
 
     if (filteredSlots.length === 0) {
       this.noSlotsAvailable = true;
@@ -271,9 +268,8 @@ export class StationDetailsComponent implements OnInit {
 
     this.bookingService.createBooking(bookingRequest).subscribe({
       next: (response) => {
-        console.log('Réservation créée avec succès:', response);
   
-        // ✅ REDIRECTION APRÈS VALIDATION
+        // REDIRECTION APRÈS VALIDATION
         this.router.navigate(['/dashboard/bookings']);
       },
       error: err => {

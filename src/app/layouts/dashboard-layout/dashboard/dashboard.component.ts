@@ -254,7 +254,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       marker.getElement().addEventListener('click', () => {
         this.ngZone.run(() => {
           if (isReservable) {
-            console.log('Click sur station', station.id);
             this.router.navigate(['/dashboard/station-details', station.id]);
           } else {
             alert("Cette borne n'est pas réservable car ses horaires ne sont pas définis.");

@@ -22,18 +22,15 @@ export class ChargingStationWizardComponent {
   onLocationSubmitted(locationId: number): void {
     this.locationStationId = locationId;
     this.currentStep = 2; 
-    console.log('LocationStation ID reçue:', locationId, 'Passage à l\'étape 2.');
   }
 
   onChargingStationSubmitted(stationId: number): void {
     this.chargingStationId = stationId;
     this.currentStep = 3; 
-    console.log('ChargingStation ID reçue:', stationId, 'Passage à l\'étape 3.');
   }
 
   onTimeslotsSubmitted(): void {
     alert('Borne et ses disponibilités ajoutées avec succès !');
-    console.log('Tous les formulaires soumis avec succès. Réinitialisation.');
     this.currentStep = 1; 
     this.locationStationId = null;
     this.chargingStationId = null;

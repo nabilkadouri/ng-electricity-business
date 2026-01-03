@@ -45,7 +45,6 @@ ngOnInit(): void {
     switchMap(term => this.nominatimService.searchAddress(term))
   ).subscribe((results) => {
     this.suggestions = results;
-    console.log(results);
     
   });
     
@@ -257,7 +256,6 @@ addMarkersToMap(stations: CharginStationInterfaceMap[]): void {
       marker.getElement().addEventListener('click', () => {
         this.ngZone.run(() => {
           if (isReservable) {
-            console.log('Click sur station', station.id);
             this.router.navigate(['/dashboard/station-details', station.id]);
           } else {
             alert("Cette borne n'est pas réservable car ses horaires ne sont pas définis.");

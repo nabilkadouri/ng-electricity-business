@@ -56,7 +56,6 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
         pos => {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
-          console.log("Position détectée via navigateur :", lat, lon);
           this.initializeMap(lat, lon);
         },
         err => {
@@ -75,7 +74,6 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
       .then(res => res.json())
       .then(data => {
         const [lat, lon] = data.loc.split(",");
-        console.log("Position estimée par IP :", lat, lon);
         this.initializeMap(parseFloat(lat), parseFloat(lon));
       })
       .catch(err => {
