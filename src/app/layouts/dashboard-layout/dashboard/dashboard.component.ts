@@ -43,6 +43,10 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   stationDetails?: ChargingStationResponseInterface;
   })[] = [];
 
+  private mapInitialized = false;
+  private resizeObserver?: ResizeObserver;
+
+
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
@@ -103,43 +107,50 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
    * Cette version ne gère pas la géolocalisation ni l'affichage de marqueurs pour les bornes de recharge.
    */
   initializeMap(): void {
-    if (!this.mapElement?.nativeElement) {
-      console.error("L'élément DOM de la carte n'est pas trouvé.");
+    if (!this.mapElement?.nativeElement || this.mapInitialized) {
       return;
     }
+  
+    this.mapInitialized = true;
+  
+    const container = this.mapElement.nativeElement;
   
     const defaultLat = this.user.latitude!;
     const defaultLng = this.user.longitude!;
   
     this.map = new maplibregl.Map({
-      container: this.mapElement.nativeElement,
+      container,
       style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
       center: [defaultLng, defaultLat],
       zoom: 11.5,
       attributionControl: false,
     });
   
-    this.map.addControl(
-      new maplibregl.NavigationControl(),
-      'top-right'
-    );
+    this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
   
     new maplibregl.Marker({ color: 'red' })
       .setLngLat([defaultLng, defaultLat])
-      .setPopup(
-        new maplibregl.Popup().setHTML(`<h3>Centre de la carte</h3>`)
-      )
       .addTo(this.map);
   
-    // 🔥 POINT CRUCIAL
     this.map.once('load', () => {
-      // 1️⃣ Force le bon calcul de taille
-      this.map.resize();
-  
-      // 2️⃣ Charge les bornes APRES resize
       this.loadChargingStationsOnMap(defaultLat, defaultLng);
+  
+      // ✅ Resize UNIQUE quand la map est vraiment prête
+      requestAnimationFrame(() => {
+        this.map.resize();
+      });
     });
+  
+    // ✅ Observer la taille du conteneur SANS boucle
+    this.resizeObserver = new ResizeObserver(() => {
+      if (this.map) {
+        this.map.resize();
+      }
+    });
+  
+    this.resizeObserver.observe(container);
   }
+  
   
 
   loadChargingStationsOnMap(latitude: number, longitude: number) {
