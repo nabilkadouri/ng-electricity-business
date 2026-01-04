@@ -31,7 +31,6 @@ export class AuthServiceService {
     return this.http.post<LoginInitialResponse>(`${this.apiURL}/api/auth/login`,credentials).pipe(
       tap(response => {
         this.setTempUserEmail(credentials.email)
-        console.log('Login initial réussi : ', response.message);
       })
     );
   }
@@ -73,7 +72,6 @@ export class AuthServiceService {
         this.clearTempUserEmail();
 
         this.userService.getConnectedUserFromApi().subscribe({
-          next:() => console.log('Détails de l\'utilisateur récupérés et mis en cache après connexion.'),
         error: err => console.error('Échec de la récupération des détails utilisateur après connexion :', err)
         });
       })

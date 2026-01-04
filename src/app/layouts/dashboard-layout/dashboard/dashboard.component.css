@@ -1,0 +1,15 @@
+.map-container {
+    height: 60vh;
+    min-height: 400px;
+    max-height: 700px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  
+  #map {
+    height: 100%;
+    width: 100%;
+  }
+  
