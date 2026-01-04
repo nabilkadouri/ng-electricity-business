@@ -84,10 +84,15 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  
     if (this.map) {
       this.map.remove();
     }
   }
+  
 
   // Méthode qui permet d'afficher la recharge a venir
   get nextBooking(): (BookingResponseInterface & { stationDetails?: ChargingStationResponseInterface }) | undefined {
@@ -149,6 +154,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   
     this.resizeObserver.observe(container);
+    setTimeout(() => {
+      if (this.map) {
+        this.map.resize();
+      }
+    }, 0);    
   }
   
   
