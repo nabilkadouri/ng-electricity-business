@@ -103,45 +103,44 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
    * Cette version ne gère pas la géolocalisation ni l'affichage de marqueurs pour les bornes de recharge.
    */
   initializeMap(): void {
-    if (!this.mapElement || !this.mapElement.nativeElement) {
+    if (!this.mapElement?.nativeElement) {
       console.error("L'élément DOM de la carte n'est pas trouvé.");
       return;
     }
-
-    try {
-      const defaultLat = this.user.latitude!;
-      const defaultLng = this.user.longitude!;
-
-      this.map = new maplibregl.Map({
-        container: this.mapElement.nativeElement,
-        style:
-          'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya', 
-        center: [defaultLng, defaultLat], 
-        zoom: 11.5, 
-        attributionControl: false, 
-      });
-
-      // Ajoute les contrôles de navigation (zoom +/- et boussole) à la carte
-      this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
-
-      new maplibregl.Marker({ color: 'red' })
-        .setLngLat([defaultLng, defaultLat])
-        .setPopup(new maplibregl.Popup().setHTML(`<h3>Centre de la carte</h3>`))
-        .addTo(this.map);
-
-      // Charge les bornes de recharge sur la carte une fois que la carte est prête
-      this.map.on('load', () => {
-        this.loadChargingStationsOnMap(defaultLat, defaultLng);
-      });
-      setTimeout(() => {
-        if (this.map) {
-          this.map.resize();
-        }
-      }, 200);
-    } catch (error) {
-      console.error("Erreur lors de l'initialisation de la carte :", error);
-    }
+  
+    const defaultLat = this.user.latitude!;
+    const defaultLng = this.user.longitude!;
+  
+    this.map = new maplibregl.Map({
+      container: this.mapElement.nativeElement,
+      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
+      center: [defaultLng, defaultLat],
+      zoom: 11.5,
+      attributionControl: false,
+    });
+  
+    this.map.addControl(
+      new maplibregl.NavigationControl(),
+      'top-right'
+    );
+  
+    new maplibregl.Marker({ color: 'red' })
+      .setLngLat([defaultLng, defaultLat])
+      .setPopup(
+        new maplibregl.Popup().setHTML(`<h3>Centre de la carte</h3>`)
+      )
+      .addTo(this.map);
+  
+    // 🔥 POINT CRUCIAL
+    this.map.once('load', () => {
+      // 1️⃣ Force le bon calcul de taille
+      this.map.resize();
+  
+      // 2️⃣ Charge les bornes APRES resize
+      this.loadChargingStationsOnMap(defaultLat, defaultLng);
+    });
   }
+  
 
   loadChargingStationsOnMap(latitude: number, longitude: number) {
     const radiusKm = 20; 
