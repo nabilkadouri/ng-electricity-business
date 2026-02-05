@@ -1,10 +1,9 @@
-
-
 import { BookingResponseInterface } from "./BookingInterface";
 import { LocationStationResponseInterface } from "./LocationStationInterface";
 import { TimeslotsResponseInterface } from "./TimeslotsInterface";
+import { PictureDetailsInterface } from "./PictureDetailsInterface";
 
-import { PictureDetailsInterface} from "./UserInterface";
+
 
 export enum ChargingStationStatus {
     PENDING = 'En attente',
@@ -20,7 +19,7 @@ export interface ChargingStationResponseInterface {
     description: string,
     power: number,
     pricePerHour: number;
-    picture: PictureDetailsInterface;
+    picture?: PictureDetailsInterface | null ;
     status: ChargingStationStatus,
     isAvailable: boolean;
     plugType: string;
@@ -35,7 +34,7 @@ export interface ChargingStationRequestInterface  {
     description?: string,
     power: number,
     pricePerHour: number;
-    picture?: PictureDetailsInterface;
+    picture?: PictureDetailsInterface | null ;
     status?: ChargingStationStatus,
     isAvailable?: boolean;
     locationStationId?: number;
@@ -48,7 +47,7 @@ export interface ChargingStationFormModel {
     description?: string;
     power: number | null;
     pricePerHour: number | null;
-    picture?: PictureDetailsInterface;
+    picture?: PictureDetailsInterface | null;
     status?:ChargingStationStatus
     isAvailable?: boolean;
     plugType?: string;
@@ -66,4 +65,3 @@ export interface CharginStationInterfaceMap {
     locationStation: LocationStationResponseInterface;
     timeslots: TimeslotsResponseInterface[];
 }
-

@@ -1,6 +1,7 @@
 
 import { BookingResponseInterface } from "./BookingInterface";
 import { ChargingStationResponseInterface } from "./ChargingStationInterface";
+import { PictureDetailsInterface } from "./PictureDetailsInterface";
 
 export interface UserResponseInterface {
     id: number,
@@ -19,13 +20,6 @@ export interface UserResponseInterface {
     bookings: BookingResponseInterface[],
     chargingStations: ChargingStationResponseInterface[]
 }
-
-export interface PictureDetailsInterface {
-    src: string,
-    alt: string,
-    main: boolean
-}
-
 
 
 export interface UserEmailUpdateInterface {
