@@ -8,7 +8,7 @@ import { NominatimService } from '../../../../shared/services/geocoding/nominati
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, CommonModule,RouterLink],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
@@ -20,17 +20,23 @@ export class RegisterFormComponent {
   constructor(private fb: FormBuilder, private authService: AuthServiceService, private router: Router, private nominatimService: NominatimService) {
     this.registerForm = this.fb.group({
       name: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required}),
+        nonNullable: true, validators: Validators.required
+      }),
       firstName: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required}),
+        nonNullable: true, validators: Validators.required
+      }),
       email: new FormControl<string>('', {
-        nonNullable: true, validators: [Validators.required, Validators.email]}),
+        nonNullable: true, validators: [Validators.required, Validators.email]
+      }),
       password: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required}),
-      confirmPassword: new FormControl<string>('', { 
-        nonNullable: true, validators: Validators.required}),
+        nonNullable: true, validators: Validators.required
+      }),
+      confirmPassword: new FormControl<string>('', {
+        nonNullable: true, validators: Validators.required
+      }),
       address: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required}),
+        nonNullable: true, validators: Validators.required
+      }),
       postaleCode: new FormControl('', {
         nonNullable: true, validators: [
           Validators.required,
@@ -39,7 +45,8 @@ export class RegisterFormComponent {
         ]
       }),
       city: new FormControl<string>('', {
-        nonNullable: true, validators: Validators.required}),
+        nonNullable: true, validators: Validators.required
+      }),
       latitude: [null],
       longitude: [null],
       phoneNumber: new FormControl('', {
@@ -49,17 +56,17 @@ export class RegisterFormComponent {
           Validators.maxLength(10),
         ]
       })
-    }, { validators: this.mustMatch('password', 'confirmPassword') }); 
+    }, { validators: this.mustMatch('password', 'confirmPassword') });
   }
 
-  
+
   mustMatch(controlName: string, matchingControlName: string) {
     return (control: AbstractControl) => {
       const formGroup = control as FormGroup;
       const passwordControl = formGroup.controls[controlName];
       const confirmPasswordControl = formGroup.controls[matchingControlName];
 
-      if (!passwordControl || !confirmPasswordControl) { 
+      if (!passwordControl || !confirmPasswordControl) {
         return null;
       }
 
@@ -76,17 +83,17 @@ export class RegisterFormComponent {
 
   onSubmit() {
     this.registerForm.markAllAsTouched();
-    
+
     if (this.registerForm.valid) {
       this.isLoadingGeocoding = true;
-      const { address, postaleCode, city} = this.registerForm.value;
+      const { address, postaleCode, city } = this.registerForm.value;
       const fullAddress = `${address}, ${postaleCode}, ${city}`;
 
       this.nominatimService.getCoordinates(fullAddress).subscribe({
-        next:(coordinates) => {
+        next: (coordinates) => {
           this.isLoadingGeocoding = false;
 
-          if(coordinates){
+          if (coordinates) {
             this.registerForm.patchValue({
               latitude: coordinates.latitude,
               longitude: coordinates.longitude
@@ -97,12 +104,12 @@ export class RegisterFormComponent {
           }
         },
         error: (error) => {
-          this.isLoadingGeocoding = false; 
+          this.isLoadingGeocoding = false;
           console.error('Erreur lors du géocodage:', error);
         }
       });
     } else {
-        console.log('Formulaire invalide', this.registerForm.errors);
+      console.log('Formulaire invalide', this.registerForm.errors);
     }
   }
 
@@ -111,8 +118,8 @@ export class RegisterFormComponent {
     this.authService.register(registerData).subscribe({
       next: (response) => {
         const loginData: LoginRequestInterface = {
-          email: registerData.email, 
-          password: registerData.password 
+          email: registerData.email,
+          password: registerData.password
         };
 
         this.authService.login(loginData).subscribe({
