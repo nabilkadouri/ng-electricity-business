@@ -163,7 +163,11 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
           return false;
         });
 
-        this.addMarkersToMap(nearby);
+        const mappedStations = nearby.map(station => ({
+          ...station,
+          picture: station.picture || '' 
+        }));
+        this.addMarkersToMap(mappedStations);
       },
       error: err => {
         console.error("Impossible de charger les bornes :", err);

@@ -57,7 +57,7 @@ export interface ChargingStationFormModel {
 }
 
 export interface CharginStationInterfaceMap {
-    picture: any;
+    picture?: any;
     id:number ;
     nameStation: string;
     power: number,

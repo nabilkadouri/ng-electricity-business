@@ -1,4 +1,5 @@
-import { PictureDetailsInterface } from "./UserInterface";
+import { PictureDetailsInterface } from "./PictureDetailsInterface";
+
 
 
 export enum BookingStatus {

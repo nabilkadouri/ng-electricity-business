@@ -3,7 +3,8 @@ import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import {  ChargingStationRequestInterface, ChargingStationResponseInterface } from '../../models/ChargingStationInterface';
 import { Observable } from 'rxjs';
-import { PictureDetailsInterface } from '../../models/UserInterface';
+import { PictureDetailsInterface } from '../../models/PictureDetailsInterface';
+
 
 
 @Injectable({

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, shareReplay, tap } from 'rxjs';
-import { PictureDetailsInterface, UserEmailUpdateInterface, UserResponseInterface } from '../../models/UserInterface';
+import {  UserEmailUpdateInterface, UserResponseInterface } from '../../models/UserInterface';
 import { environment } from '../../../../environments/environment';
+import { PictureDetailsInterface } from '../../models/PictureDetailsInterface';
 
 @Injectable({
   providedIn: 'root',
