@@ -7,13 +7,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthServiceService);
   const token = authService.getAccessToken();
 
-  const authReq = token
-    ? req.clone({
-        setHeaders: {
+  const authReq = req.clone({
+    withCredentials: true,
+    setHeaders: token
+      ? {
           Authorization: `Bearer ${token}`,
-        },
-      })
-    : req;
+        }
+      : {},
+  });
 
   return next(authReq).pipe(
     catchError((err) => {
@@ -24,3 +25,4 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
+
