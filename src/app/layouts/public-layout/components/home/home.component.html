@@ -1,8 +1,10 @@
 <main>
-  <app-hero/>
-  <app-section-simple-process/>
-  <app-maps/>
-  <app-section-propose-charger/>
-  <app-section-simulator/>
-  <app-section-testimonial/>
+  <app-hero
+    (reserve)="onReserveClick()" 
+    (propose)="onProposeClick()" />
+  <app-section-simple-process />
+  <app-maps (reserve)="onReserveClick()" />
+  <app-section-propose-charger (propose)="onProposeClick()" />
+  <app-section-simulator />
+  <app-section-testimonial />
 </main>

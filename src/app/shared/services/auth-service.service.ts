@@ -30,7 +30,7 @@ export class AuthServiceService {
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+  ) { }
 
   register(
     credentials: RegisterRequestInterface,
@@ -96,7 +96,6 @@ export class AuthServiceService {
           this.saveAccessToken(response.accessToken);
           this.isLoggedIn.set(true);
           this.clearTempUserEmail();
-
           this.userService.getConnectedUserFromApi().subscribe({
             error: (err) =>
               console.error(
@@ -127,4 +126,10 @@ export class AuthServiceService {
   isLogged(): boolean {
     return this.isLoggedIn();
   }
+
+  isAuthenticated(): boolean {
+    return !!this.getAccessToken();
+  }
+  
+  
 }

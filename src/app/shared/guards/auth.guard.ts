@@ -9,12 +9,10 @@ export const authGuard: CanActivateFn = () => {
 
   const user = userService.getUserFromCache();
 
-  //Vérification du user dans le cache
   if(user) {
     return true;
   }
 
-  //Sinon tentative de chargement depuis l'API
   return userService.getConnectedUserFromApi().pipe(
     take(1),
     map((user) => {

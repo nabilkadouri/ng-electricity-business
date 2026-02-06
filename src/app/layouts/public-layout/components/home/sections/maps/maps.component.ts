@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, NgZone, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { point } from '@turf/helpers';
@@ -10,6 +10,7 @@ import { NominatimService } from '../../../../../../shared/services/geocoding/no
 import { ChargingStationService } from '../../../../../../shared/services/entities/charging-station.service';
 import { CharginStationInterfaceMap } from '../../../../../../shared/models/ChargingStationInterface';
 import { UserService } from '../../../../../../shared/services/entities/user.service';
+import { AuthServiceService } from '../../../../../../shared/services/auth-service.service';
 
 @Component({
   selector: 'app-maps',
@@ -29,9 +30,12 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
   suggestions: any[] = [];
   private searchSubject = new Subject<string>();
 
+  @Output() reserve = new EventEmitter<void>();
+
   constructor(
     private nominatimService: NominatimService,
     private chargingStationService: ChargingStationService,
+    private authService: AuthServiceService,
     private userService: UserService,
     private ngZone: NgZone,
     private router: Router
@@ -48,6 +52,8 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.map) this.map.remove();
   }
+
+  
 
   //  Détection de la position utilisateur
   detectUserPosition() {

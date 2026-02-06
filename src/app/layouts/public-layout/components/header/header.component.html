@@ -29,27 +29,27 @@
     <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
       <ul class="flex flex-col justify-center md:items-center p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent space-y-6 md:space-y-0">
         <li>
-          <a routerLink="/" routerLinkActive="active" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          <a routerLink="/" routerLinkActive="active" class="block font-bold  py-2 px-3 text-vert-foncee rounded-sm 
           md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
           active:bg-bleu-electrique active:text-white" aria-current="page">Accueil</a>
         </li>
         <li>
-          <a href="#reserver" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          <a href="#reserver" class="block font-bold py-2 px-3 text-vert-foncee rounded-sm 
           md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
           active:bg-bleu-electrique active:text-white">Réserver</a>
         </li>
         <li>
-          <a href="#proposer" class="block font-medium py-2 px-3 text-text-gris rounded-sm 
+          <a href="#proposer" class="block font-bold  py-2 px-3 text-vert-foncee rounded-sm 
           md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0
           active:bg-bleu-electrique active:text-white">Proposer</a>
         </li>
         <li>
-          <a href="#simulateur" class="block py-2 px-3 text-text-gris rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0">
+          <a href="#simulateur" class="block py-2 px-3 text-vert-foncee font-bold rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-bleu-electrique md:p-0">
             Simulateur
           </a>
         </li>
         <li>
-          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-medium md:hidden inline-block py-2 px-3" *ngIf="!authService.isLogged()">Mon compte</a>
+          <a routerLink="/login" routerLinkActive="active" class="text-bleu-electrique font-bold md:hidden inline-block py-2 px-3" *ngIf="!authService.isLogged()">Mon compte</a>
         </li>
         <li>
           <a routerLink="/register" routerLinkActive="active" class="btn-inscription md:hidden inline-block ms-3" *ngIf="!authService.isLogged()">S'inscrire</a>
