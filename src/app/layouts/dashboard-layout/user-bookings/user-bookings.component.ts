@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { BookingResponseInterface } from '../../../shared/models/BookingInterface';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { RouterLink } from '@angular/router';
 (window as any).saveAs = saveAs;
 
 @Component({
   selector: 'app-user-bookings',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-bookings.component.html',
   styleUrl: './user-bookings.component.css',
 })
@@ -22,7 +23,6 @@ export class UserBookingsComponent implements OnInit {
         this.currentBookings = user.bookings;
       }
     })
-  
   }
   
   exportToExcel() {

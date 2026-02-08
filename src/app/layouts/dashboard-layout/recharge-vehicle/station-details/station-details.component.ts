@@ -8,6 +8,7 @@ import { BookingRequestInterface, BookingResponseInterface, HourlySlotInterface,
 import { endOfDay, isWithinInterval, startOfDay } from 'date-fns';
 import { BookingService } from '../../../../shared/services/entities/booking.service';
 import { UserService } from '../../../../shared/services/entities/user.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-station-details',
@@ -128,8 +129,11 @@ export class StationDetailsComponent implements OnInit {
       let hour = startHour;
       let minute = startMinute;
 
-      while (hour < endHour || (hour === endHour && minute < endMinute)) {
-
+      while (
+        hour < endHour ||
+        (hour === endHour && minute <= endMinute)
+      ) {
+      
         const label = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
 
         const current = new Date(date);
@@ -266,17 +270,17 @@ export class StationDetailsComponent implements OnInit {
       chargingStationId: this.chargingStation.id,
     };
 
-    this.bookingService.createBooking(bookingRequest).subscribe({
-      next: (response) => {
-  
-        // REDIRECTION APRÈS VALIDATION
+    this.bookingService.createBooking(bookingRequest).pipe(
+      switchMap(() => this.userService.getConnectedUserFromApi())
+    ).subscribe({
+      next: () => {
         this.router.navigate(['/dashboard/bookings']);
       },
       error: err => {
         console.error('Erreur reçue du backend :', err);
-        console.error('Message d’erreur :', err.error?.message);
       }
     });
+    
   }
 
   // CONSTRUIRE LA DATE COMPLÈTE (FRONT → BACK)
