@@ -2,62 +2,55 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Coordinates, NominatimResult } from '../../models/LocationStationInterface';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NominatimService {
-  private readonly NOMINATIM_API_URL = 'https://nominatim.openstreetmap.org/search';
 
-  constructor(private http: HttpClient) { }
+  private apiURL = environment.apiUrl;
 
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Récupère les coordonnées d'une adresse (1 résultat)
+   */
   getCoordinates(address: string): Observable<Coordinates | null> {
+
     if (!address) {
-      console.warn('NominatimService: Adresse vide fournie pour le géocodage.');
       return of(null);
     }
 
-    const params = {
-      q: address,
-      format: 'json',
-      limit: '1',
-      addressdetails: '0'
-    };
-
-    return this.http.get<NominatimResult[]>(this.NOMINATIM_API_URL, { params}).pipe(
+    return this.http.get<NominatimResult[]>(
+      `${this.apiURL}/api/geocoding/search`,
+      { params: { q: address } }
+    ).pipe(
       map(response => {
         if (response && response.length > 0) {
-          const result = response[0];
           return {
-            latitude: parseFloat(result.lat),
-            longitude: parseFloat(result.lon)
+            latitude: parseFloat(response[0].lat),
+            longitude: parseFloat(response[0].lon)
           };
-        } else {
-          console.warn('NominatimService: Aucun résultat trouvé pour l\'adresse:', address);
-          return null;
         }
+        return null;
       }),
       catchError(error => {
-        console.error('NominatimService: Erreur lors de l\'appel API Nominatim:', error);
-        return of(null); 
+        console.error('Erreur géocodage:', error);
+        return of(null);
       })
     );
   }
 
   /**
-   * Effectue une recherche d'adresse en utilisant l'API Nominatim d'OpenStreetMap.
-   *
-   * @param query - Le texte saisi par l'utilisateur (ex: début d'une adresse)
-   * @returns Observable<any> - Retourne un tableau d'objets avec les résultats (coordonnées, nom complet, etc.)
+   * Recherche suggestions (autocomplete)
    */
-  searchAddress(query: string):Observable<any> {
-    return this.http.get<any>(this.NOMINATIM_API_URL,{
-      params: {
-        q: query,
-        format: 'json',
-        addresDetails:'1',
-        limit: '5'
-      }
-    });
+  searchAddress(query: string): Observable<NominatimResult[]> {
+
+    return this.http.get<NominatimResult[]>(
+      `${this.apiURL}/api/geocoding/search`,
+      { params: { q: query } }
+    );
   }
 }
+

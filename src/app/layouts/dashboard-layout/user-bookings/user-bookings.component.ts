@@ -24,6 +24,18 @@ export class UserBookingsComponent implements OnInit {
       }
     })
   }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'CONFIRMED':
+        return 'bg-green-100 text-green-600 border-green-300';
+      case 'CANCELLED':
+        return 'bg-red-100 text-red-600 border-red-300';
+      default:
+        return 'bg-orange-100 text-orange-600 border-orange-300';
+    }
+  }
+  
   
   exportToExcel() {
     if (!this.currentBookings || this.currentBookings.length === 0) {

@@ -2,23 +2,26 @@
   <div class="my-28 flex flex-col gap-6 px-4 sm:ml-80 md:p-10">
     <!-- TITRES -->
     <div class="text-center md:text-left">
-      <h1 class="text-3xl font-bold text-vert-foncee">Mes réservations</h1>
-      <p class="text-vert-clair font-medium mt-1">
+      <h1 class="text-vert-foncee text-3xl font-bold">Mes réservations</h1>
+      <p class="text-vert-clair mt-1 font-medium">
         Historique de mes recharges externes
       </p>
     </div>
-    <div class="flex justify-end mb-4">
-      <button  (click)="exportToExcel()" class="bg-green-600 text-white text-sm  px-4 py-2 rounded-md hover:bg-green-700">
+    <div class="mb-4 flex justify-end">
+      <button
+        (click)="exportToExcel()"
+        class="rounded-md bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700"
+      >
         Exporter mes réservations
       </button>
     </div>
 
     <!-- TABLEAU DESKTOP -->
     <div
-      class="hidden md:block overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md"
+      class="hidden overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md md:block"
     >
       <div
-        class="grid grid-cols-6 gap-4 bg-gray-50 px-6 py-4 text-xs font-semibold uppercase tracking-wider text-vert-foncee border-b"
+        class="text-vert-foncee grid grid-cols-6 gap-4 border-b bg-gray-50 px-6 py-4 text-xs font-semibold tracking-wider uppercase"
       >
         <div>Date réservation</div>
         <div>Statut</div>
@@ -30,22 +33,23 @@
 
       <div
         *ngFor="let booking of currentBookings"
-        class="grid grid-cols-6 gap-4 px-6 py-4 border-b hover:bg-gray-50"
+        class="grid grid-cols-6 gap-4 border-b px-6 py-4 hover:bg-gray-50"
       >
         <div class="text-sm">
-          {{ booking.createdAt | date:'shortDate' }}
+          {{ booking.createdAt | date: "shortDate" }}
         </div>
 
         <div>
           <span
-            class="px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-600"
+            class="rounded-full border px-2 py-0.5 text-xs font-semibold"
+            [ngClass]="getStatusClass(booking.status)"
           >
             {{ booking.status }}
           </span>
         </div>
 
         <div>
-          <p class="font-semibold text-text-gris">
+          <p class="text-text-gris font-semibold">
             {{ booking.chargingStation.nameStation }}
           </p>
           <p class="text-sm text-gray-500">
@@ -57,18 +61,16 @@
         </div>
 
         <div class="text-sm">
-          du {{ booking.startDate | date:'shortDate' }}<br />
-          au {{ booking.endDate | date:'shortDate' }}
+          du {{ booking.startDate | date: "shortDate" }}<br />
+          au {{ booking.endDate | date: "shortDate" }}
         </div>
 
         <div class="text-sm">
-          {{ booking.startDate | date:'shortTime' }} →
-          {{ booking.endDate | date:'shortTime' }}
+          {{ booking.startDate | date: "shortTime" }} →
+          {{ booking.endDate | date: "shortTime" }}
         </div>
 
-        <div class="font-bold">
-          {{ booking.totalAmount }}€
-        </div>
+        <div class="font-bold">{{ booking.totalAmount }}€</div>
 
         <div></div>
       </div>
@@ -83,10 +85,11 @@
         <!-- HEADER -->
         <div class="mb-3">
           <p class="text-sm text-gray-500">
-            {{ booking.createdAt | date:'shortDate' }}
+            {{ booking.createdAt | date: "shortDate" }}
           </p>
           <span
-            class="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-600"
+            class="rounded-full border px-2 py-0.5 text-xs font-semibold"
+            [ngClass]="getStatusClass(booking.status)"
           >
             {{ booking.status }}
           </span>
@@ -94,33 +97,31 @@
 
         <!-- BORNE -->
         <div class="mb-3">
-          <p class="font-semibold text-lg text-text-gris">
+          <p class="text-text-gris text-lg font-semibold">
             {{ booking.chargingStation.nameStation }}
           </p>
-          <ul class="mt-1 text-sm text-gray-600 list-disc list-inside">
+          <ul class="mt-1 list-inside list-disc text-sm text-gray-600">
             <li>Puissance : {{ booking.chargingStation.power }} kW</li>
             <li>Prise : {{ booking.chargingStation.plugType }}</li>
           </ul>
         </div>
 
         <!-- DATES -->
-        <div class="text-sm text-gray-600 mb-2">
+        <div class="mb-2 text-sm text-gray-600">
           <p>
-            📅 du {{ booking.startDate | date:'shortDate' }}
-            au {{ booking.endDate | date:'shortDate' }}
+            📅 du {{ booking.startDate | date: "shortDate" }} au
+            {{ booking.endDate | date: "shortDate" }}
           </p>
           <p>
-            ⏰ {{ booking.startDate | date:'shortTime' }} →
-            {{ booking.endDate | date:'shortTime' }}
+            ⏰ {{ booking.startDate | date: "shortTime" }} →
+            {{ booking.endDate | date: "shortTime" }}
           </p>
         </div>
 
         <!-- PRIX -->
-        <div class="flex justify-between items-center pt-2 border-t">
+        <div class="flex items-center justify-between border-t pt-2">
           <span class="text-sm text-gray-500">Prix total</span>
-          <span class="text-lg font-bold">
-            {{ booking.totalAmount }}€
-          </span>
+          <span class="text-lg font-bold"> {{ booking.totalAmount }}€ </span>
         </div>
       </div>
     </div>
@@ -130,7 +131,6 @@
       <a routerLink="/dashboard/rechargeVehicle" class="btn-reserver">
         Ajouter une recharge
       </a>
-      
     </div>
   </div>
 </section>

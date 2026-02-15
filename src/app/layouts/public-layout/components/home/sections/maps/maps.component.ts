@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, NgZone, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 import { point } from '@turf/helpers';
@@ -19,7 +28,6 @@ import { AuthServiceService } from '../../../../../../shared/services/auth-servi
   templateUrl: './maps.component.html',
 })
 export class MapsComponent implements AfterViewInit, OnDestroy {
-  
   @ViewChild('mapElement', { static: false }) mapElement!: ElementRef;
 
   map!: maplibregl.Map;
@@ -38,7 +46,7 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
     private authService: AuthServiceService,
     private userService: UserService,
     private ngZone: NgZone,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngAfterViewInit(): void {
@@ -53,36 +61,34 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
     if (this.map) this.map.remove();
   }
 
-  
-
   //  Détection de la position utilisateur
   detectUserPosition() {
-    if ("geolocation" in navigator) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        pos => {
+        (pos) => {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
           this.initializeMap(lat, lon);
         },
-        err => {
-          console.warn("Permission refusée → Fallback IP...");
+        (err) => {
+          console.warn('Permission refusée → Fallback IP...');
           this.loadIpFallback();
-        }
+        },
       );
     } else {
       this.loadIpFallback();
     }
   }
 
-  // Fallback via API IPINFO (compatible CORS)
+  // Fallback via API IPINFO
   loadIpFallback() {
-    fetch("https://ipinfo.io/json?token=6f0d247e7d40d2") // ← Mets ton token
-      .then(res => res.json())
-      .then(data => {
-        const [lat, lon] = data.loc.split(",");
+    fetch('https://ipinfo.io/json?token=6f0d247e7d40d2')
+      .then((res) => res.json())
+      .then((data) => {
+        const [lat, lon] = data.loc.split(',');
         this.initializeMap(parseFloat(lat), parseFloat(lon));
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Impossible d'obtenir la position par IP", err);
         // Dernier fallback : centre sur Paris
         this.initializeMap(48.8566, 2.3522);
@@ -95,7 +101,8 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
 
     this.map = new maplibregl.Map({
       container: this.mapElement.nativeElement,
-      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
+      style:
+        'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
       center: [lon, lat],
       zoom: 14,
       attributionControl: false,
@@ -117,13 +124,15 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
 
   // Gestion de la barre de recherche
   initializeSearch() {
-    this.searchSubject.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap(term => this.nominatimService.searchAddress(term))
-    ).subscribe(results => {
-      this.suggestions = results;
-    });
+    this.searchSubject
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap((term) => this.nominatimService.searchAddress(term)),
+      )
+      .subscribe((results) => {
+        this.suggestions = results;
+      });
   }
 
   onSearchChange() {
@@ -150,18 +159,21 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
   loadChargingStationsOnMap(lat: number, lon: number) {
     const radiusKm = 20;
 
-    this.chargingStationService.getChargingStations().subscribe({
-      next: stations => {
-        this.markers.forEach(m => m.remove());
+    this.chargingStationService.getAvailableChargingStations().subscribe({
+      next: (stations) => {
+        this.markers.forEach((m) => m.remove());
         this.markers = [];
 
-        const nearby = stations.filter(station => {
-          if (station.locationStation?.latitude && station.locationStation?.longitude) {
+        const nearby = stations.filter((station) => {
+          if (
+            station.locationStation?.latitude &&
+            station.locationStation?.longitude
+          ) {
             const dist = this.getDistance(
               lat,
               lon,
               station.locationStation.latitude,
-              station.locationStation.longitude
+              station.locationStation.longitude,
             );
 
             return dist <= radiusKm;
@@ -169,15 +181,15 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
           return false;
         });
 
-        const mappedStations = nearby.map(station => ({
+        const mappedStations = nearby.map((station) => ({
           ...station,
-          picture: station.picture || '' 
+          picture: station.picture || '',
         }));
         this.addMarkersToMap(mappedStations);
       },
-      error: err => {
-        console.error("Impossible de charger les bornes :", err);
-      }
+      error: (err) => {
+        console.error('Impossible de charger les bornes :', err);
+      },
     });
   }
 
@@ -190,13 +202,13 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
 
   // Ajout des markers de bornes + popup + redirection
   addMarkersToMap(stations: CharginStationInterfaceMap[]) {
-    stations.forEach(station => {
+    stations.forEach((station) => {
       if (!station.locationStation) return;
 
       const marker = new maplibregl.Marker({ color: '#007bff' })
         .setLngLat([
           station.locationStation.longitude,
-          station.locationStation.latitude
+          station.locationStation.latitude,
         ])
         .addTo(this.map);
 
@@ -209,23 +221,28 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
         </div>
       `;
 
-      const popup = new maplibregl.Popup({ closeButton: false }).setHTML(popupHtml);
+      const popup = new maplibregl.Popup({ closeButton: false }).setHTML(
+        popupHtml,
+      );
 
-      marker.getElement().addEventListener('mouseenter', () => popup.addTo(this.map));
+      marker
+        .getElement()
+        .addEventListener('mouseenter', () => popup.addTo(this.map));
       marker.getElement().addEventListener('mouseleave', () => popup.remove());
 
       marker.getElement().addEventListener('click', () => {
         this.ngZone.run(() => {
-      
           if (!this.userService.isLoggedIn()) {
             // Optionnel : message personnalisé
-            alert("Vous devez créer un compte ou vous connecter pour voir les détails d'une borne.");
-            
+            alert(
+              "Vous devez créer un compte ou vous connecter pour voir les détails d'une borne.",
+            );
+
             // Redirection vers l'inscription
             this.router.navigate(['/register']);
-            return; 
+            return;
           }
-      
+
           // Sinon : accès OK aux détails
           this.router.navigate(['/dashboard/station-details', station.id]);
         });
@@ -234,7 +251,4 @@ export class MapsComponent implements AfterViewInit, OnDestroy {
       this.markers.push(marker);
     });
   }
-
-  
-  
 }

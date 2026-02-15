@@ -22,6 +22,7 @@ export interface ChargingStationResponseInterface {
     picture?: PictureDetailsInterface | null ;
     status: ChargingStationStatus,
     isAvailable: boolean;
+    unavailabilityReason?: string;
     plugType: string;
     userId: number;
     locationStation: LocationStationResponseInterface;
@@ -65,3 +66,9 @@ export interface CharginStationInterfaceMap {
     locationStation: LocationStationResponseInterface;
     timeslots: TimeslotsResponseInterface[];
 }
+
+export interface ChargingStationOwnerUpdate {
+    unavailabilityReason?: string;
+    isAvailable?: boolean;
+  }
+  

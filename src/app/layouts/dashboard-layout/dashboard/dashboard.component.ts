@@ -32,7 +32,6 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @ViewChild('mapElement', { static: false }) mapElement!: ElementRef;
 
   userService = inject(UserService);
@@ -40,17 +39,19 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   user!: UserResponseInterface;
   ownedStations: ChargingStationResponseInterface[] = [];
   bookingsWhithStationDetails: (BookingResponseInterface & {
-  stationDetails?: ChargingStationResponseInterface;
+    stationDetails?: ChargingStationResponseInterface;
   })[] = [];
 
   private mapInitialized = false;
   private resizeObserver?: ResizeObserver;
 
-
   map!: maplibregl.Map;
   markers: maplibregl.Marker[] = [];
 
-  constructor(private router: Router, private ngZone: NgZone) {}
+  constructor(
+    private router: Router,
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit(): void {
     this.userService.user$.subscribe((user) => {
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadBookingsStationsDetails();
       } else {
         console.error(
-          "Erreur lors de la récupération des données utilisateur : L'objet utilisateur est null."
+          "Erreur lors de la récupération des données utilisateur : L'objet utilisateur est null.",
         );
       }
     });
@@ -68,38 +69,47 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (!this.mapElement || !this.mapElement.nativeElement) {
-      console.error("L'élément DOM de la carte n'est pas trouvé lors de ngAfterViewInit.");
+      console.error(
+        "L'élément DOM de la carte n'est pas trouvé lors de ngAfterViewInit.",
+      );
       return;
     }
 
-    this.userService.user$.pipe(take(1)).subscribe(user => {
+    this.userService.user$.pipe(take(1)).subscribe((user) => {
       if (user && user.latitude && user.longitude) {
-        this.user = user; 
+        this.user = user;
         this.initializeMap();
       } else {
-        console.warn("Données utilisateur (latitude/longitude) non disponibles pour initialiser la carte.");
+        console.warn(
+          'Données utilisateur (latitude/longitude) non disponibles pour initialiser la carte.',
+        );
       }
     });
   }
-
 
   ngOnDestroy(): void {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-  
+
     if (this.map) {
       this.map.remove();
     }
   }
-  
 
   // Méthode qui permet d'afficher la recharge a venir
-  get nextBooking(): (BookingResponseInterface & { stationDetails?: ChargingStationResponseInterface }) | undefined {
+  get nextBooking():
+    | (BookingResponseInterface & {
+        stationDetails?: ChargingStationResponseInterface;
+      })
+    | undefined {
     const now = new Date();
     return this.bookingsWhithStationDetails
-      .filter(b => new Date(b.startDate) > now)
-      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0];
+      .filter((b) => new Date(b.startDate) > now)
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      )[0];
   }
 
   // Methode qui permet d'afficher la borne en location principale
@@ -115,63 +125,63 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.mapElement?.nativeElement || this.mapInitialized) {
       return;
     }
-  
+
     this.mapInitialized = true;
-  
+
     const container = this.mapElement.nativeElement;
-  
+
     const defaultLat = this.user.latitude!;
     const defaultLng = this.user.longitude!;
-  
+
     this.map = new maplibregl.Map({
       container,
-      style: 'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
+      style:
+        'https://api.maptiler.com/maps/basic-v2/style.json?key=ykoW3p8N2j35JMOfr7ya',
       center: [defaultLng, defaultLat],
       zoom: 11.5,
       attributionControl: false,
     });
-  
+
     this.map.addControl(new maplibregl.NavigationControl(), 'top-right');
-  
+
     new maplibregl.Marker({ color: 'red' })
       .setLngLat([defaultLng, defaultLat])
       .addTo(this.map);
-  
+
     this.map.once('load', () => {
       this.loadChargingStationsOnMap(defaultLat, defaultLng);
-  
+
       // ✅ Resize UNIQUE quand la map est vraiment prête
       requestAnimationFrame(() => {
         this.map.resize();
       });
     });
-  
+
     // ✅ Observer la taille du conteneur SANS boucle
     this.resizeObserver = new ResizeObserver(() => {
       if (this.map) {
         this.map.resize();
       }
     });
-  
+
     this.resizeObserver.observe(container);
     setTimeout(() => {
       if (this.map) {
         this.map.resize();
       }
-    }, 0);    
+    }, 0);
   }
-  
-  
 
   loadChargingStationsOnMap(latitude: number, longitude: number) {
-    const radiusKm = 20; 
-  
-    this.chargingStationService.getChargingStations().subscribe({
+    const radiusKm = 50;
+
+    this.chargingStationService.getAvailableChargingStations().subscribe({
       next: (response: ChargingStationResponseInterface[]) => {
-        this.markers.forEach(marker => marker.remove());
+        this.markers.forEach((marker) => marker.remove());
         this.markers = [];
-  
-        const stations = response.filter((station) => { // 
+
+        const stations = response.filter((station) => {
+          //
           if (
             station.locationStation &&
             station.locationStation.latitude &&
@@ -181,23 +191,25 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
               latitude,
               longitude,
               station.locationStation.latitude,
-              station.locationStation.longitude
+              station.locationStation.longitude,
             );
-            
+
             return distanceCalculated <= radiusKm;
           }
           return false;
         });
-        this.addMarkersToMap(stations); 
+        this.addMarkersToMap(stations);
       },
       error: (err) => {
-        console.error("Erreur lors du chargement des bornes de recharge :", err);
-      }
+        console.error(
+          'Erreur lors du chargement des bornes de recharge :',
+          err,
+        );
+      },
     });
   }
 
   getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
- 
     const from = point([lon1, lat1]);
     const to = point([lon2, lat2]);
 
@@ -219,17 +231,22 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       ) {
         let availabilityMessage: string;
         let availabilityClass: string;
-        let isReservable: boolean = true; 
+        let isReservable: boolean = true;
 
-        if (station.timeslots && station.timeslots.length > 0 && station.timeslots[0]?.startTime && station.timeslots[0]?.endTime) {
+        if (
+          station.timeslots &&
+          station.timeslots.length > 0 &&
+          station.timeslots[0]?.startTime &&
+          station.timeslots[0]?.endTime
+        ) {
           const startTime = station.timeslots[0].startTime.slice(0, 5);
           const endTime = station.timeslots[0].endTime.slice(0, 5);
           availabilityMessage = `Disponible de ${startTime} à ${endTime}`;
-          availabilityClass = 'bg-vert-clair'; 
+          availabilityClass = 'bg-vert-clair';
         } else {
           availabilityMessage = `Aucun horaire défini`;
-          availabilityClass = 'bg-gray-400'; 
-          isReservable = false; 
+          availabilityClass = 'bg-gray-400';
+          isReservable = false;
         }
 
         const popupContent = `
@@ -241,47 +258,52 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
                     <p class="inline-block mt-1 ${availabilityClass} text-white text-xs px-3 py-2 rounded w-full">
                       <span>${availabilityMessage}</span>
                     </p>
-                    ${isReservable ? 
-                      `<p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>` :
-                      `<p class="mt-2 text-center text-red-600 font-semibold">Non réservable (horaires non définis)</p>`
+                    ${
+                      isReservable
+                        ? `<p class="mt-2 text-center text-gray-600">Réserver cette borne maintenant</p>`
+                        : `<p class="mt-2 text-center text-red-600 font-semibold">Non réservable (horaires non définis)</p>`
                     }
                   </div>
               `;
-        
-              const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: [0, -20] })
-              
-                .setHTML(popupContent);
 
-       const marker = new maplibregl.Marker({ color: '#007bff' })
-               .setLngLat([
-                 station.locationStation.longitude,
-                 station.locationStation.latitude,
-               ])
-               .addTo(this.map);
+        const popup = new maplibregl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+          offset: [0, -20],
+        }).setHTML(popupContent);
 
-               // Affiche la popup au survol
-      marker.getElement().addEventListener('mouseenter', () => {
-        popup.addTo(this.map);
-        popup.setLngLat(marker.getLngLat());
-      });
+        const marker = new maplibregl.Marker({ color: '#007bff' })
+          .setLngLat([
+            station.locationStation.longitude,
+            station.locationStation.latitude,
+          ])
+          .addTo(this.map);
 
-      // Cache la popup quand la souris sort du marker
-      marker.getElement().addEventListener('mouseleave', () => {
-        popup.remove();
-      });
-
-      // Redirige vers la page détails au clic sur le marker
-      marker.getElement().addEventListener('click', () => {
-        this.ngZone.run(() => {
-          if (isReservable) {
-            this.router.navigate(['/dashboard/station-details', station.id]);
-          } else {
-            alert("Cette borne n'est pas réservable car ses horaires ne sont pas définis.");
-          }
+        // Affiche la popup au survol
+        marker.getElement().addEventListener('mouseenter', () => {
+          popup.addTo(this.map);
+          popup.setLngLat(marker.getLngLat());
         });
-      });;
 
-      this.markers.push(marker);
+        // Cache la popup quand la souris sort du marker
+        marker.getElement().addEventListener('mouseleave', () => {
+          popup.remove();
+        });
+
+        // Redirige vers la page détails au clic sur le marker
+        marker.getElement().addEventListener('click', () => {
+          this.ngZone.run(() => {
+            if (isReservable) {
+              this.router.navigate(['/dashboard/station-details', station.id]);
+            } else {
+              alert(
+                "Cette borne n'est pas réservable car ses horaires ne sont pas définis.",
+              );
+            }
+          });
+        });
+
+        this.markers.push(marker);
       }
     });
   }

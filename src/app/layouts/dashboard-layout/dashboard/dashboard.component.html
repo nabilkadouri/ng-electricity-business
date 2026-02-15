@@ -86,7 +86,11 @@
             </div>
           
           <div>
-              <img [src]="mainStation?.picture?.src" [alt]="mainStation?.picture?.alt" class="w-30 h-30 me-10">
+            <img
+            [src]="mainStation?.picture?.src || '/images/born.webp'"
+            [alt]="mainStation?.picture?.alt || 'image par defaut'"
+            class="me-10 h-30 w-30"
+          />
           </div>
         </div>
           <a
