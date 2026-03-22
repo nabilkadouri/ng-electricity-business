@@ -1,59 +1,187 @@
-# ElectricityBusiness
+# ⚡ Electricity Business
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+## 📌 Présentation
 
-## Development server
+**Electricity Business** est une application web full-stack permettant de mettre en relation des particuliers possédant une borne de recharge électrique avec des utilisateurs souhaitant recharger leur véhicule.
 
-To start a local development server, run:
+👉 Ce projet est **fictif** et a été réalisé dans le cadre de ma formation **Concepteur Développeur d’Applications (CDA)**.
 
-```bash
+---
+
+## 🎯 Objectifs du projet
+
+- Concevoir une application complète de A à Z
+- Mettre en pratique une architecture professionnelle
+- Développer une API sécurisée
+- Implémenter un front moderne et dynamique
+- Gérer des règles métier complexes (réservations, créneaux, prix)
+
+---
+
+## 🚀 Fonctionnalités principales
+
+### 👤 Gestion des utilisateurs
+- Inscription avec validation par email
+- Connexion sécurisée (JWT)
+- Gestion du profil utilisateur
+
+### 🔌 Gestion des bornes
+- Ajouter / modifier / supprimer une borne
+- Définir les disponibilités et les tarifs
+- Gestion des bornes personnelles
+
+### 📅 Réservation
+- Recherche de bornes via carte interactive
+- Sélection de créneaux horaires disponibles
+- Calcul automatique du prix
+- Historique des réservations
+
+### 📊 Fonctionnalités avancées
+- Export des données (Excel)
+- Génération de reçus
+- Dashboard utilisateur
+- Upload d’images
+
+---
+
+## 🏗️ Architecture du projet
+
+### 🔙 Back-end
+- Java 21 / Spring Boot
+- Architecture en couches :
+  - Controller
+  - Service (Business)
+  - Repository
+  - Entity
+  - DTO / Mapper
+- Sécurité : Spring Security + JWT
+- Base de données : MySQL
+
+👉 Objectifs :
+- Séparation des responsabilités
+- Maintenabilité
+- Testabilité
+- Scalabilité :contentReference[oaicite:0]{index=0}
+
+---
+
+### 🎨 Front-end
+- Angular 19
+- Architecture modulaire (feature-based + shared)
+- Routing + Guards + Interceptors JWT
+
+👉 Organisation :
+- Public layout (pages accessibles sans connexion)
+- Dashboard layout (espace authentifié) :contentReference[oaicite:1]{index=1}
+
+---
+
+## 🛠️ Technologies utilisées
+
+### Back-end
+- Java 21
+- Spring Boot
+- Spring Security
+- JWT
+- JPA / Hibernate
+- Maven
+
+### Front-end
+- Angular
+- TypeScript
+- TailwindCSS
+
+### Outils
+- MySQL
+- Git / GitHub
+- Postman
+- Figma
+
+---
+
+## 🔐 Sécurité
+
+- Authentification JWT
+- Validation des données
+- Gestion des variables d’environnement
+- Protection des données sensibles (env.properties non versionné) :contentReference[oaicite:2]{index=2}
+
+---
+
+## ⚙️ Installation du projet
+
+### 🔧 Back-end
+
+
+# Cloner le projet
+git clone <repo-back>
+
+# Configurer les variables d’environnement (env.properties)
+
+# Lancer l'application
+mvn spring-boot:run
+
+
+### 🔧 Front-end
+
+# Cloner le projet
+git clone <repo-front>
+
+# Installer les dépendances
+npm install
+
+# Lancer le projet
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🧪 Tests
 
-## Code scaffolding
+- Tests unitaires (JUnit)
+- Tests d’intégration
+- Tests fonctionnels sur les endpoints
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 🚀 Déploiement
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Serveur : OVH (Linux)
+- Backend : JAR + systemd
+- Frontend : build Angular
+- HTTPS via Let's Encrypt
+- CI/CD avec GitHub Actions
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 📈 Améliorations possibles
 
-To build the project run:
+- Mise en place de Docker
+- CI/CD complet front + back
+- Optimisation des performances
+- Refactoring architecture
+- Amélioration UX/UI
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📚 Contexte pédagogique
 
-## Running unit tests
+Ce projet a été réalisé dans le cadre de ma formation :
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+🎓 **Titre Professionnel Concepteur Développeur d’Applications (CDA)**
 
-```bash
-ng test
-```
+Il m'a permis de travailler :
 
-## Running end-to-end tests
+- L’architecture logicielle
+- La sécurité applicative
+- La gestion de projet
+- Le développement full-stack
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
-```
+## 👨‍💻 Auteur
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+**Nabil KADOURI**
 
-## Additional Resources
+- Développeur orienté back-end
+- En montée en compétence sur Python / Django / React
+- Objectif : Architecte logiciel
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
