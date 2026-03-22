@@ -204,12 +204,10 @@ export class RechargeVehicleComponent
 
   // Methode qui permet de caluler la distance
   getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    // Créez les points géographiques au format attendu par Turf.js
-    // point([longitude, latitude])
+    
     const from = point([lon1, lat1]);
     const to = point([lon2, lat2]);
-
-    // Calculez la distance en kilomètres.
+    
     const dist = distance(from, to, { units: 'kilometers' });
 
     return dist;

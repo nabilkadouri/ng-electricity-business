@@ -14,7 +14,7 @@ export class NominatimService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Récupère les coordonnées d'une adresse (1 résultat)
+   * Récupère les coordonnées d'une adresse 
    */
   getCoordinates(address: string): Observable<Coordinates | null> {
 
